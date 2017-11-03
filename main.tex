@@ -33,6 +33,13 @@ several attributes that are themselves sophisticated classes that can be called
 as functions: the \texttt{plotter}, the fitter \texttt{specfit}, and the
 continuum fitter \texttt{baseline}.
 
+There are several important subclasses of \texttt{Spectrum}: \texttt{Spectra}
+is a collection of spectra intended to be stitched together (i.e., with
+non-overlapping spectral axes), \texttt{ObsBlock} is a collection of spectra
+with identical spectral axes intended to be operated on as a group, e.g., to
+take an average spectrum, and \texttt{Cube} is a 3D spatial-spatial-spectral
+cube.
+
 \subsection{Plotter}
 The plotter is a basic line plotter.  See the GUI section (\S \ref{sec:gui})
 for more details.
@@ -120,6 +127,18 @@ measured with a single spectrum.  \pyspeckit provides the \texttt{hyperfine}
 model class to handle this class of molecular line transitions, and it includes
 several molecular species specific implementations (HCN, N$_2$H$^+$, NH$_3$,
 H$_2$CO).
+
+\section{Cubes}
+Spectral cubes are growing more important in radio astronomy since they are the
+natural data products produced by interferometers like ALMA and the JVLA.
+While many cube operations are handled well by \texttt{numpy}-based packages
+like \texttt{spectral-cube}\footnote{\url{spectral-cube.readthedocs.io}},
+it is sometimes necessary or desirable to fit a profile to each spectrum
+in a cube.  The \texttt{Cube.fiteach} method is a tool for automated line
+fitting that includes parallelization of the fit.  This tool is not the best
+tested component of \pyspeckit, but it has already seen significant use in
+papers and other tools (e.g.,
+\texttt{multicube}\footnote{\url{https://github.com/vlas-sokolov/multicube}}).
 
 \input{solobib}
 
