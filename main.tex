@@ -1,0 +1,40 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+\usepackage{listings}
+\newcommand{\pyspeckit}{\texttt{pyspeckit}}
+\begin{document}
+
+
+Pyspeckit is a tool and library for spectroscopic analysis. 
+
+
+\section{Introduction}
+Spectroscopy is an important tool for astronomy.
+
+\section{Graphical Design Choices}
+\subsection{GUI development}
+Many astronomers are familiar with IRAF's \texttt{splot} tool, which is useful
+for fitting Gaussian profiles to spectral lines.  It used keyboard interaction
+to specify the fitting region and guesses for fitting the line profile, but for
+most users, gave them access to those results \emph{only} through the GUI.
+
+\texttt{pyspeckit}'s fitting GUI was built to match \texttt{splot}'s
+functionality, but with addition means of interacting with the fitter.  In
+\texttt{splot}, reproducing any given fit is challenging, since subtle changes
+in the cursor position can significantly change the fit result.  In \pyspeckit,
+it is possible to record the results of fits programatically and re-fit using
+those same results.
+
+The GUI was built using \texttt{matplotlib}'s canvas interaction tools.  These
+tools are limited to GUI capabilities that are compatible with all platforms
+(e.g., Qt, Tk, Gtk) and therefore exclude some of the more sophisticated fitting
+tools found in other software (e.g., \texttt{glue}).
+
+\subsection{Plotting}
+Plotting in \pyspeckit is meant to provide the shortest path to
+publication-quality figures.  The default plotting mode uses histogram-style
+line plots and labels axes with \latex-formatted versions of units.
+
+
+\end{document}
