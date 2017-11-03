@@ -2,7 +2,9 @@
 \usepackage[utf8]{inputenc}
 \usepackage{url}
 \usepackage{listings}
-\newcommand{\pyspeckit}{\texttt{pyspeckit}}
+\usepackage{xspace}
+\newcommand{\pyspeckit}{\texttt{pyspeckit}\xspace}
+\newcommand{\astropy}{\texttt{astropy}\xspace}
 \begin{document}
 
 
@@ -12,7 +14,50 @@ Pyspeckit is a tool and library for spectroscopic analysis.
 \section{Introduction}
 Spectroscopy is an important tool for astronomy.
 
+\section{Basic structure}
+The central object in \pyspeckit is a \texttt{Spectrum} object, which has
+associated \texttt{data}, \texttt{error}, and \texttt{xarr}, the latter of
+which represents the spectroscopic axis.  A \texttt{Spectrum} object has
+several attributes that are themselves sophisticated classes that can be called
+as functions: the \texttt{plotter}, the fitter \texttt{specfit}, and the
+continuum fitter \texttt{baseline}.
+
+\subsection{Plotter}
+The plotter is a basic line plotter.  See the GUI section (\S \ref{sec:gui})
+for more details.
+
+\subsection{Fitter}
+The fitting tool in \pyspeckit is the \texttt{Spectrum.specfit} object.
+This object is a class that is created for every \texttt{Spectrum} object.
+The fitter can be used with any of the models included in the model
+registry.
+
+To fit a profile to a spectrum, several optimizers are available.  Two
+implementations of the Levenberg-Marquardt optimization method are provided,
+\texttt{mpfit}\footnote{Originally implemented by Craig Markwardt
+\url{https://www.physics.wisc.edu/~craigm/idl/fitqa.html} and ported to python
+by Mark Rivers and then Sergei Koposov.  The version in pyspeckit has been
+updated somewhat from Koposov's version.} and
+\texttt{lmfit}\footnote{\url{https://lmfit.github.io/lmfit-py/},
+\url{http://dx.doi.org/10.5281/zenodo.11813}}.  Wrappers of
+\texttt{pymc}\footnote{\url{https://pymc-devs.github.io/pymc/}} and
+\texttt{emcee}\footnote{\url{http://dfm.io/emcee/current/},
+\citet{Foreman-Mackey2013a}} are also available, though these tools are better
+for parameter error analysis than for optimization.
+
+The basic approach to fit a spectrum is to assign an error to each pixel in the
+\texttt{data} array by providing a value in the \texttt{sp.error} array.  These
+values are assumed to be $1-\sigma$ Gaussian errors on the data.
+
+One convenience provided by \pyspeckit is also a potential `gotcha': if no
+error is provided, the first time a spectrum is fit, the error will be
+automatically set by computing the standard deviation of the fit residuals.
+Fitting the same spectrum twice may therefore result in different parameter
+errors, but it should never change the fitted parameter values.
+
+
 \section{Graphical Design Choices}
+\label{sec:gui}
 \subsection{GUI development}
 Many astronomers are familiar with IRAF's \texttt{splot} tool, which is useful
 for fitting Gaussian profiles to spectral lines.  It used keyboard interaction
@@ -36,5 +81,33 @@ Plotting in \pyspeckit is meant to provide the shortest path to
 publication-quality figures.  The default plotting mode uses histogram-style
 line plots and labels axes with \latex-formatted versions of units.
 
+When the plotter is active and a model is fit, the model parameters are
+displayed with \latex formatting.  The errors on the parameters, if available,
+are also shown, and these errors are used to decide on how many significant
+figures to display.
+
+\section{\astropy integration}
+Development of \pyspeckit began several years before \astropy began.  Several
+features were therefore implemented that were later replaced by similar
+\astropy features, in particular the unit system.  Unit conversions in
+\pyspeckit are now (as of October 2015) done entirely using the \astropy
+system.
+
+\section{Models}
+While many of \pyspeckit's internal functions are likely to replaced by
+\astropy tools and affiliated packages, the models in \pyspeckit are likely to
+remain useful indefinitely.  The model library in \pyspeckit includes some of
+the most useful general functions (e.g., Gaussian, Lorentzian, and Voigt
+profiles) and a wide range of specific model types.
+
+In radio and millimeter astromomy, there are several molecular line groups that
+consist of several Gaussian profiles separated by a fixed frequency offset.
+These hyperfine line groups are often unique probes of physical parameters
+because in many cases the ``main'' line can become optically thick, while the
+`satellite' lines remain thin, meaning that the line optical depth can be
+measured with a single spectrum.  \pyspeckit provides the \texttt{hyperfine}
+model class to handle this class of molecular line transitions, and it includes
+several molecular species specific implementations (HCN, N$_2$H$^+$, NH$_3$,
+H$_2$CO).
 
 \end{document}
