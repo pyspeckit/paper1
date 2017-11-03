@@ -6,7 +6,7 @@ import argparse
 import os
 import update_bibentries
 
-assert os.path.exists('bibdesk.bib')
+assert os.path.exists('bibdesk.bib') or os.path.exists('extracted.bib')
 
 name = 'main'
 
@@ -37,9 +37,10 @@ def do_everything():
     BIBTEX = os.path.join(args.texpath, 'bibtex')
 
 
-    with open('solobib.tex','w') as fh:
-        fh.write("\\bibliographystyle{aasjournal}\n")
-        fh.write("\\bibliography{bibdesk}")
+    if os.path.exists('bibdesk.bib'):
+        with open('solobib.tex','w') as fh:
+            fh.write("\\bibliographystyle{aasjournal}\n")
+            fh.write("\\bibliography{bibdesk}")
 
     pdfcmd = [PDFLATEX] + pdflatex_args + [args.infile]
     bibcmd = [BIBTEX, args.infile.replace(".tex","")]
@@ -56,8 +57,9 @@ def do_everything():
     if not os.system('bibexport')==0:
         print("bibexport is not installed.")
     else:
-        assert os.system('bibexport -o extracted.bib sgrb2_cores.aux') == 0
-        print("bibexport created extracted.bib")
+        if os.path.exists('bibdesk.bib'):
+            assert os.system('bibexport -o extracted.bib sgrb2_cores.aux') == 0
+            print("bibexport created extracted.bib")
         
         try:
             update_bibentries.update_bibentries()
