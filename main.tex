@@ -1,8 +1,11 @@
-\documentclass{article}
+\documentclass[twocolumn]{aastex61}
+
 \usepackage[utf8]{inputenc}
 \usepackage{url}
 \usepackage{listings}
 \usepackage{xspace}
+\usepackage{natbib}  % Requires natbib.sty, available from http://ads.harvard.edu/pubs/bibtex/astronat/
+
 \newcommand{\pyspeckit}{\texttt{pyspeckit}\xspace}
 \newcommand{\astropy}{\texttt{astropy}\xspace}
 \begin{document}
@@ -79,10 +82,10 @@ tools found in other software (e.g., \texttt{glue}).
 \subsection{Plotting}
 Plotting in \pyspeckit is meant to provide the shortest path to
 publication-quality figures.  The default plotting mode uses histogram-style
-line plots and labels axes with \latex-formatted versions of units.
+line plots and labels axes with \LaTeX-formatted versions of units.
 
 When the plotter is active and a model is fit, the model parameters are
-displayed with \latex formatting.  The errors on the parameters, if available,
+displayed with \LaTeX formatting.  The errors on the parameters, if available,
 are also shown, and these errors are used to decide on how many significant
 figures to display.
 
@@ -109,5 +112,8 @@ measured with a single spectrum.  \pyspeckit provides the \texttt{hyperfine}
 model class to handle this class of molecular line transitions, and it includes
 several molecular species specific implementations (HCN, N$_2$H$^+$, NH$_3$,
 H$_2$CO).
+
+\input{solobib}
+
 
 \end{document}
