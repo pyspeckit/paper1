@@ -45,6 +45,7 @@ The plotter is a basic line plotter.  See the GUI section (\S \ref{sec:gui})
 for more details.
 
 \subsection{Fitter}
+\label{sec:fitters}
 The fitting tool in \pyspeckit is the \texttt{Spectrum.specfit} object.
 This object is a class that is created for every \texttt{Spectrum} object.
 The fitter can be used with any of the models included in the model
@@ -63,15 +64,68 @@ updated somewhat from Koposov's version.} and
 \citet{Foreman-Mackey2013a}} are also available, though these tools are better
 for parameter error analysis than for optimization.
 
+Once a fit is performed, the results of the fit are accessible through the
+\texttt{parinfo} object, which is a dictionary-like structure containing
+the parameter values, errors, and other metadata (e.g., information about
+whether the parameter is fixed, tied to another parameter, or limited).
+Other information about the fit, such as the $\chi^2$ value, are available
+as attributes of the \texttt{specfit} object.
+
+\par{Optimal $\chi^2$}
+There is a tool to compute the `optimal' $\chi^2$, which is the $\chi^2$
+value computed only over the range where the model contains statistically
+significant signal.  By default, the function selects all pixels where
+the model value is greater (in absolute value) than the corresponding error.
+
+
+\subsection{Error Treatment}
+(Can I refer back to anything here?  like, "Error estimation is an important part of astronomy...")
+(the next two paragraphs may be redundant)
+
 The basic approach to fit a spectrum is to assign an error to each pixel in the
 \texttt{data} array by providing a value in the \texttt{sp.error} array.  These
 values are assumed to be $1-\sigma$ Gaussian errors on the data.
 
-One convenience provided by \pyspeckit is also a potential `gotcha': if no
-error is provided, the first time a spectrum is fit, the error will be
-automatically set by computing the standard deviation of the fit residuals.
-Fitting the same spectrum twice may therefore result in different parameter
-errors, but it should never change the fitted parameter values.
+
+The \texttt{Spectrum} objects used by pyspeckit have an attached \texttt{error}
+array, which is meant to hold the $1-\sigma$ independent Gaussian errors on
+each pixel.  While this error representation may be a dramatic
+oversimplification of the true errors for almost all instruments, it is also
+the most commonly used assumptions in most astronomical applications.
+
+The errors are used to determine the best-fit parameters and their errors (see
+\S \ref{sec:fitters}).  They can be displayed as error bars on individual
+pixels or as shaded regions around those pixels using different display modes
+[FIGURE?].
+
+\subsubsection{Automatic Error Estimation}
+If a spectrum is created with no associated errors, \pyspeckit can automatically
+estimate the errors from a fit residual.  If no errors are specified and
+a fit is initiated, the errors will default to being uniformly 1.0, which
+is rarely ever correct, but will result in the appropriate weights and
+therefore the appropriate best-fit parameters with \emph{incorrect} errors.
+
+One common approach in spectroscopy in the limit that there are few pixels with
+signal and many pixels representing only noise is to estimate the errors by the
+standard deviation of the signal-free pixels.  This approach generally assumes
+the noise is constant across the spectrum.  In the case that a single signal
+feature is present in the spectrum, and it can be accurately modeled, the
+standard deviation of the residual spectrum from the model fit will accurately
+represent the uniform errors.  \pyspeckit will automatically replace the errors
+with the standard deviation of the residuals if a fit is performed with
+uninitialized errors; this means that performing a fit on the same data
+(without associated errors) twice will result in the same parameter values both
+times, but different errors the second time.
+
+
+
+
+% {\color{red} this is redundant with the above}
+% One convenience provided by \pyspeckit is also a potential `gotcha': if no
+% error is provided, the first time a spectrum is fit, the error will be
+% automatically set by computing the standard deviation of the fit residuals.
+% Fitting the same spectrum twice may therefore result in different parameter
+% errors, but it should never change the fitted parameter values.
 
 
 \section{Graphical Design Choices}
@@ -112,11 +166,11 @@ features were therefore implemented that were later replaced by similar
 system.
 
 \section{Models}
-While many of \pyspeckit's internal functions are likely to replaced by
+While many of \pyspeckit's internal functions are likely to be replaced by
 \astropy tools and affiliated packages, the models in \pyspeckit are likely to
 remain useful indefinitely.  The model library in \pyspeckit includes some of
-the most useful general functions (e.g., Gaussian, Lorentzian, and Voigt
-profiles) and a wide range of specific model types.
+the most useful general spectral model functions (e.g., Gaussian, Lorentzian,
+and Voigt profiles) and a wide range of specific model types.
 
 In radio and millimeter astromomy, there are several molecular line groups that
 consist of several Gaussian profiles separated by a fixed frequency offset.
