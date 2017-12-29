@@ -18,12 +18,21 @@
 
 
 \begin{abstract}
-Pyspeckit is a tool and library for spectroscopic analysis. 
+Pyspeckit is a tool and library for spectroscopic analysis.  We describe the
+\texttt{pyspeckit} package, highlighting some of its unique capabilities and
+less unique limitations.  Some of the most important assumptions regarding
+error estimation are described here, while details are left in the official
+online documentation.  We  discuss the motivation for the graphical design
+choices.
 \end{abstract}
 
 
 \section{Introduction}
-Spectroscopy is an important tool for astronomy.
+Spectroscopy is an important tool for astronomy.  Spectra are represented as
+the number of photons, or total energy in photons, arriving over a specified
+wavelength (or equivalently, frequency or energy) range.
+
+
 
 \section{Basic structure}
 The central object in \pyspeckit is a \texttt{Spectrum} object, which has
@@ -71,27 +80,31 @@ whether the parameter is fixed, tied to another parameter, or limited).
 Other information about the fit, such as the $\chi^2$ value, are available
 as attributes of the \texttt{specfit} object.
 
-\par{Optimal $\chi^2$}
+\paragraph{Optimal $\chi^2$}
 There is a tool to compute the `optimal' $\chi^2$, which is the $\chi^2$
 value computed only over the range where the model contains statistically
 significant signal.  By default, the function selects all pixels where
 the model value is greater (in absolute value) than the corresponding error.
+In principle, this optimal $\chi^2$ may be helpful for obtaining correctly
+scaled errors (see Section \ref{sec:parerrest}), though this claim has never
+been rigorously tested.
 
 
 \subsection{Error Treatment}
-(Can I refer back to anything here?  like, "Error estimation is an important part of astronomy...")
-(the next two paragraphs may be redundant)
+%(Can I refer back to anything here?  like, "Error estimation is an important part of astronomy...")
+%(the next two paragraphs may be redundant)
 
-The basic approach to fit a spectrum is to assign an error to each pixel in the
-\texttt{data} array by providing a value in the \texttt{sp.error} array.  These
-values are assumed to be $1-\sigma$ Gaussian errors on the data.
+%The basic approach to fit a spectrum is to assign an error to each pixel in the
+%\texttt{data} array by providing a value in the \texttt{sp.error} array.  These
+%values are assumed to be $1-\sigma$ Gaussian errors on the data.
 
 
 The \texttt{Spectrum} objects used by pyspeckit have an attached \texttt{error}
 array, which is meant to hold the $1-\sigma$ independent Gaussian errors on
 each pixel.  While this error representation may be a dramatic
-oversimplification of the true errors for almost all instruments, it is also
-the most commonly used assumptions in most astronomical applications.
+oversimplification of the true errors for almost all instruments (since it
+completely ignores correlation between adjacent pixels), it is also the most
+commonly used assumptions in most astronomical applications.
 
 The errors are used to determine the best-fit parameters and their errors (see
 \S \ref{sec:fitters}).  They can be displayed as error bars on individual
@@ -118,6 +131,23 @@ uninitialized errors; this means that performing a fit on the same data
 times, but different errors the second time.
 
 
+\subsubsection{Parameter error estimation}
+\label{sec:parerrest}
+Parameter errors are adopted from the \texttt{mpfit} or \texttt{lmfit}
+fit results.  The Levenberg-Marquardt algorithm finds a local minimum in
+parameter space, and one of its returns is the parameter covariance matrix.
+This covariance matrix is not directly the covariance of the parameters,
+and must be rescaled to deliver an approximate error.
+
+The standard rescaling is to multiply the covariance by the sum of the squared
+errors divided by the degree of freedom of the fit, usually referred to
+as $\chi^2/N$.  The degree of freedom is assumed to be equal to the number
+of free parameters, e.g., for a 1-dimensional Gaussian, there would be three:
+the amplitude, width, and center.  This approach implicitly assumes that the
+model describes the data well and is an optimal fit.  It also assumes that
+the model is linear with all of the parameters, at least in the region immediately
+surrounding the optimal fit.  These parameters are frequently not satisfied;
+see \citet{Andrae2010a} and \citet{Andrae2010b} for details.
 
 
 % {\color{red} this is redundant with the above}
