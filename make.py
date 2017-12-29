@@ -58,7 +58,7 @@ def do_everything():
         print("bibexport is not installed.")
     else:
         if os.path.exists('bibdesk.bib'):
-            assert os.system('bibexport -o extracted.bib sgrb2_cores.aux') == 0
+            assert os.system('bibexport -o extracted.bib main.aux') == 0
             print("bibexport created extracted.bib")
         
         try:
