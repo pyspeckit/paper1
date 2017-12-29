@@ -61,7 +61,8 @@ The fitter can be used with any of the models included in the model
 registry.
 
 To fit a profile to a spectrum, several optimizers are available.  Two
-implementations of the Levenberg-Marquardt optimization method are provided,
+implementations of the Levenberg-Marquardt optimization method
+\citep{Levenberg1944a,Marquardt1963a} are provided,
 \texttt{mpfit}\footnote{Originally implemented by Craig Markwardt
 \url{https://www.physics.wisc.edu/~craigm/idl/fitqa.html} and ported to python
 by Mark Rivers and then Sergei Koposov.  The version in pyspeckit has been
@@ -134,10 +135,11 @@ times, but different errors the second time.
 \subsubsection{Parameter error estimation}
 \label{sec:parerrest}
 Parameter errors are adopted from the \texttt{mpfit} or \texttt{lmfit}
-fit results.  The Levenberg-Marquardt algorithm finds a local minimum in
-parameter space, and one of its returns is the parameter covariance matrix.
-This covariance matrix is not directly the covariance of the parameters,
-and must be rescaled to deliver an approximate error.
+fit results.  The Levenberg-Marquardt algorithm
+ finds a local minimum in parameter space,
+and one of its returns is the parameter covariance matrix.  This covariance
+matrix is not directly the covariance of the parameters, and must be rescaled
+to deliver an approximate error.
 
 The standard rescaling is to multiply the covariance by the sum of the squared
 errors divided by the degree of freedom of the fit, usually referred to
