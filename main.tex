@@ -18,25 +18,45 @@
 
 
 \begin{abstract}
-Pyspeckit is a tool and library for spectroscopic analysis.  We describe the
-\texttt{pyspeckit} package, highlighting some of its unique capabilities and
-less unique limitations.  Some of the most important assumptions regarding
-error estimation are described here, while details are left in the official
-online documentation.  We  discuss the motivation for the graphical design
-choices.
+\pyspeckit is a tool and library for spectroscopic analysis in Python. We describe the
+\pyspeckit package and highlight some of its unique capabilities such as
+interactively fitting a model to data, akin to the widely-used \texttt{splot} function
+of \texttt{IRAF}. \pyspeckit employs the Levenberg-Marquardt optimization method 
+via \texttt{mpfit} and \texttt{lmfit}, and important assumptions regarding error estimation 
+are described here. Wrappers for \texttt{pymc} and \texttt{emcee} are available, as well as a 
+method to fit lines in spectral cubes. As part of the \astropy affiliated packages, 
+\pyspeckit is open source and welcomes input and collaboration from the community.
 \end{abstract}
 
 
 \section{Introduction}
-Spectroscopy is an important tool for astronomy.  Spectra are represented as
+Spectroscopy is an important tool for astronomy, and we seek to enable Python users
+to quickly and easily analyze spectra.  Spectra are represented as
 the number of photons, or total energy in photons, arriving over a specified
-wavelength (or equivalently, frequency or energy) range.
+wavelength (or equivalently, frequency or energy) range. Emission and 
+absorption lines due to ions, atoms, and molecules bear important information
+via their line flux, line width, and velocity centroid. These parameters
+are typically measured from model fits to the data, such as Gaussians, Lorentzians, and Voigt
+profiles. Historically, \texttt{IRAF} has provided the astronomy community with easy-to-use
+tools for line fittings, but \texttt{IRAF} development ceased xx years ago
+and is currently only supported in Python 2.7 by AstroConda\footnote{http://astroconda.readthedocs.io/en/latest/index.html}.
+
+[It would be interesting to describe the history and purpose of \pyspeckit and \astropy here] 
+Development of \pyspeckit began several years before \astropy began...  Several
+features were therefore implemented that were later replaced by similar
+\astropy features, in particular the unit system.  Unit conversions in
+\pyspeckit are now (as of October 2015) done entirely using the \astropy
+system...
+
+In this paper we briefly outline \texttt{pyspeckit} architecture and highlight its key 
+capabilities. In Section XX...
 
 
 
 \section{Basic structure}
 The central object in \pyspeckit is a \texttt{Spectrum} object, which has
-associated \texttt{data}, \texttt{error}, and \texttt{xarr}, the latter of
+associated \texttt{data} (e.g., flux), \texttt{error}, and \texttt{xarr} (e.g., wavelength,
+frequency, energy), the latter of
 which represents the spectroscopic axis.  A \texttt{Spectrum} object has
 several attributes that are themselves sophisticated classes that can be called
 as functions: the \texttt{plotter}, the fitter \texttt{specfit}, and the
@@ -53,12 +73,16 @@ cube.
 The plotter is a basic line plotter.  See the GUI section (\S \ref{sec:gui})
 for more details.
 
+% Should we include code examples of how to do these things? I think examples
+% creating a Spectrum, plotting it, interactively fitting, and then 
+% printing out parinfo on the command line would be neat.
+
 \subsection{Fitter}
 \label{sec:fitters}
 The fitting tool in \pyspeckit is the \texttt{Spectrum.specfit} object.
 This object is a class that is created for every \texttt{Spectrum} object.
 The fitter can be used with any of the models included in the model
-registry.
+registry, or a custom model can be created and registered.
 
 To fit a profile to a spectrum, several optimizers are available.  Two
 implementations of the Levenberg-Marquardt optimization method
@@ -110,14 +134,16 @@ commonly used assumptions in most astronomical applications.
 The errors are used to determine the best-fit parameters and their errors (see
 \S \ref{sec:fitters}).  They can be displayed as error bars on individual
 pixels or as shaded regions around those pixels using different display modes
-[FIGURE?].
+[A FIGURE HERE COULD SHOW THE RESULTS FROM A CODING EXAMPLE WHERE A spectrum IS
+CREATED AND THEN THE PLOTTER IS CALLED. THE SECOND FIGURE IN THIS PAPER COULD 
+SHOW AN EXAMPLE SPECTRAL LINE FIT ON TOP OF THE DATA].
 
 \subsubsection{Automatic Error Estimation}
-If a spectrum is created with no associated errors, \pyspeckit can automatically
-estimate the errors from a fit residual.  If no errors are specified and
-a fit is initiated, the errors will default to being uniformly 1.0, which
-is rarely ever correct, but will result in the appropriate weights and
-therefore the appropriate best-fit parameters with \emph{incorrect} errors.
+If a \texttt{Spectrum} is created with no associated errors, \pyspeckit can automatically
+estimate the errors from a fit residual. When a fit is initiated on a \texttt{Spectrum}
+with no specified errors, the errors will default to being uniformly 1.0. Uniform
+weighting for each data point is likely not accurate, but will result in the appropriate 
+best-fit parameters with \emph{incorrect} errors.
 
 One common approach in spectroscopy in the limit that there are few pixels with
 signal and many pixels representing only noise is to estimate the errors by the
@@ -148,7 +174,7 @@ of free parameters, e.g., for a 1-dimensional Gaussian, there would be three:
 the amplitude, width, and center.  This approach implicitly assumes that the
 model describes the data well and is an optimal fit.  It also assumes that
 the model is linear with all of the parameters, at least in the region immediately
-surrounding the optimal fit.  These parameters are frequently not satisfied;
+surrounding the optimal fit.  These requirements[?] are frequently not satisfied;
 see \citet{Andrae2010a} and \citet{Andrae2010b} for details.
 
 
@@ -160,16 +186,16 @@ see \citet{Andrae2010a} and \citet{Andrae2010b} for details.
 % errors, but it should never change the fitted parameter values.
 
 
-\section{Graphical Design Choices}
+\section{Graphical Design}
 \label{sec:gui}
 \subsection{GUI development}
 Many astronomers are familiar with IRAF's \texttt{splot} tool, which is useful
-for fitting Gaussian profiles to spectral lines.  It used keyboard interaction
+for fitting Gaussian profiles to spectral lines.  It uses keyboard interaction
 to specify the fitting region and guesses for fitting the line profile, but for
 most users, gave them access to those results \emph{only} through the GUI.
 
 \texttt{pyspeckit}'s fitting GUI was built to match \texttt{splot}'s
-functionality, but with addition means of interacting with the fitter.  In
+functionality, but with additional means of interacting with the fitter.  In
 \texttt{splot}, reproducing any given fit is challenging, since subtle changes
 in the cursor position can significantly change the fit result.  In \pyspeckit,
 it is possible to record the results of fits programatically and re-fit using
@@ -195,33 +221,41 @@ Development of \pyspeckit began several years before \astropy began.  Several
 features were therefore implemented that were later replaced by similar
 \astropy features, in particular the unit system.  Unit conversions in
 \pyspeckit are now (as of October 2015) done entirely using the \astropy
-system.
+system. [I think this information would be better in the introduction]
 
 \section{Models}
 While many of \pyspeckit's internal functions are likely to be replaced by
-\astropy tools and affiliated packages, the models in \pyspeckit are likely to
+\astropy tools and affiliated packages [which internal functions?], the models in \pyspeckit are likely to
 remain useful indefinitely.  The model library in \pyspeckit includes some of
 the most useful general spectral model functions (e.g., Gaussian, Lorentzian,
-and Voigt profiles) and a wide range of specific model types.
+and Voigt profiles) and a wide range of specific model types (e.g., ...).
 
 In radio and millimeter astromomy, there are several molecular line groups that
 consist of several Gaussian profiles separated by a fixed frequency offset.
 These hyperfine line groups are often unique probes of physical parameters
 because in many cases the ``main'' line can become optically thick, while the
-`satellite' lines remain thin, meaning that the line optical depth can be
+``satellite'' lines remain thin, meaning that the line optical depth can be
 measured with a single spectrum.  \pyspeckit provides the \texttt{hyperfine}
 model class to handle this class of molecular line transitions, and it includes
-several molecular species specific implementations (HCN, N$_2$H$^+$, NH$_3$,
-H$_2$CO).
+several molecular species implementations (HCN, N$_2$H$^+$, NH$_3$,
+H$_2$CO). [If this is the beefiest part of pyspeckit, we should include a table
+listing the models and potentially an example for how to customize a model?]
 
 \section{Cubes}
 Spectral cubes are growing more important in radio astronomy since they are the
-natural data products produced by interferometers like ALMA and the JVLA.
+natural data products produced by interferometers like ALMA and the JVLA. [Could 
+also mention that with JWST's 2 IFUs, cubes will be even more commonly available.
+``Spectral cubes will also become more widely available after JWST is commissioned as two of
+its instruments have integral field unit." But STScI has developed its own software
+to handle not only the reduction and assembly of the cube, but also the analysis.
+I don't know much about it, but if I'm remembering something I heard correctly,
+any cube can be analyzed with this software.]
 While many cube operations are handled well by \texttt{numpy}-based packages
 like \texttt{spectral-cube}\footnote{\url{spectral-cube.readthedocs.io}},
 it is sometimes necessary or desirable to fit a profile to each spectrum
 in a cube.  The \texttt{Cube.fiteach} method is a tool for automated line
-fitting that includes parallelization of the fit.  This tool is not the best
+fitting that includes parallelization of the fit. Implementation examples can be
+found in the online documentation. This tool is not the best
 tested component of \pyspeckit, but it has already seen significant use in
 papers and other tools (e.g.,
 \texttt{multicube}\footnote{\url{https://github.com/vlas-sokolov/multicube}}).
