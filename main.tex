@@ -69,6 +69,35 @@ with identical spectral axes intended to be operated on as a group, e.g., to
 take an average spectrum, and \texttt{Cube} is a 3D spatial-spatial-spectral
 cube.
 
+\subsection{Supported data formats}
+
+\pyspeckit{} supports a variety of open and proprietary data formats that have
+been traditionally used to store spectral data products in astronomy.  Reading
+a one-dimensional spectrum from a text file with an optional error column can
+be done using the \texttt{astropy.io.ascii} module in any of its supported
+formats.  The Flexible Image Transport System \citep[FITS;][]{FITS} format is
+supported in \pyspeckit{} with \texttt{astropy.io.fits}.  Initially developed
+by optical astronomers, the FITS standard has incorporated several
+recommendations for various types of data formats used in the astronomy
+community into successive updates to the standard---the latest version of the
+standard being 4.0 from 2016.  Additionally, data files following the Single
+Dish FITS \citep[SDFITS;][]{SDFITS} convention for radio astronomy data as
+produced by the Green Bank Telescope are partially supported in \pyspeckit.
+The Hierarchical Data Format (HDF5) file format has been designed to store and
+organize large amounts of data and offers significant advantages over FITS\@.
+Although not widely used in observational astronomy, the pipeline of the
+Low-Frequency Array (LOFAR) radio telescope uses the HDF5 data format to
+efficiently store large data volumes \citep{LOFAR}.  If the \texttt{h5py}
+package is installed, \pyspeckit{} will support read access to files containing
+spectra in the HDF5 format.  Finally, \pyspeckit{} is capable of reading files
+from some versions of the GILDAS Continuum and Line Analysis Single-dish
+Software format \citep[CLASS;][]{GILDAS}.  Since the CLASS file specification
+is incomplete and will remain private for the foreseeable future, much of the
+data reading in \pyspeckit{} has been reproduced in an approximate manner.  The
+CLASS reader is known to work well with data files from the Arizona Radio
+Observatory telescopes (12-m and 10-m Submillimeter Telescope) and the Atacama
+Pathfinder Experiment (APEX) radio telescope.
+
 \subsection{Plotter}
 The plotter is a basic line plotter.  See the GUI section (\S \ref{sec:gui})
 for more details.
