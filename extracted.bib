@@ -1,5 +1,124 @@
 
 
+@article{Pence2010a,
+  author =        {{Pence}, W.~D. and {Chiappetti}, L. and {Page}, C.~G. and
+                   {Shaw}, R.~A. and {Stobie}, E.},
+  journal =       {\aap},
+  month =         dec,
+  pages =         {A42},
+  title =         {{Definition of the Flexible Image Transport System
+                   (FITS), version 3.0}},
+  volume =        {524},
+  year =          {2010},
+  abstract =      {The Flexible Image Transport System (FITS) has been
+                   used by astronomers for over 30 years as a data
+                   interchange and archiving format; FITS files are now
+                   handled by a wide range of astronomical software
+                   packages. Since the FITS format definition document
+                   (the ``standard'') was last printed in this journal
+                   in 2001, several new features have been developed and
+                   standardized, notably support for 64-bit integers in
+                   images and tables, variable-length arrays in tables,
+                   and new world coordinate system conventions which
+                   provide a mapping from an element in a data array to
+                   a physical coordinate on the sky or within a
+                   spectrum. The FITS Working Group of the International
+                   Astronomical Union has therefore produced this new
+                   version 3.0 of the FITS standard, which is provided
+                   here in its entirety. In addition to describing the
+                   new features in FITS, numerous editorial changes were
+                   made to the previous version to clarify and
+                   reorganize many of the sections. Also included are
+                   some appendices which are not formally part of the
+                   standard. The FITS standard is likely to undergo
+                   further evolution, in which case the latest version
+                   may be found on the FITS Support Office Web site at
+                   <ext-link ext-link-type="uri"
+  xlink:href="http://fits.gsfc.nasa.gov/">http://fits.gsfc.nasa.gov/</ext-link>,
+  which also provides many links to FITS-related resources.},
+  doi =           {10.1051/0004-6361/201015362},
+  eid =           {A42},
+}
+
+@inproceedings{Garwood2000a,
+  author =        {{Garwood}, R.~W.},
+  booktitle =     {Astronomical Data Analysis Software and Systems IX},
+  editor =        {{Manset}, N. and {Veillet}, C. and {Crabtree}, D.},
+  pages =         {243},
+  series =        {Astronomical Society of the Pacific Conference
+                   Series},
+  title =         {{SDFITS: A Standard for Storage and Interchange of
+                   Single Dish Data}},
+  volume =        {216},
+  year =          {2000},
+  abstract =      {SDFITS is a FITS binary table convention for the
+                   interchange of single dish data in radio astronomy.
+                   It is derived from an agreement reached during an
+                   international meeting of interested parties at Green
+                   Bank, West Virginia, in 1989 October.},
+}
+
+@inproceedings{Alexov2012a,
+  author =        {{Alexov}, A. and {Schellart}, P. and {ter Veen}, S. and
+                   {van der Akker}, M. and {B{\"a}hren}, L. and
+                   {Greissmeier}, J.-M. and {Hessels}, J.~W.~T. and
+                   {Mol}, J.~D. and {Renting}, G.~A. and {Swinbank}, J. and
+                   {Wise}, M.},
+  booktitle =     {Astronomical Data Analysis Software and Systems XXI},
+  editor =        {{Ballester}, P. and {Egret}, D. and
+                   {Lorente}, N.~P.~F.},
+  month =         sep,
+  pages =         {283},
+  series =        {Astronomical Society of the Pacific Conference
+                   Series},
+  title =         {{Status of LOFAR Data in HDF5 Format}},
+  volume =        {461},
+  year =          {2012},
+  abstract =      {The Hierarchical Data Format, version 5 (HDF5) is a
+                   data model, library, and file format for storing and
+                   managing data. It is designed for flexible and
+                   efficient I/O and for high volume, complex data. The
+                   Low Frequency Array (LOFAR) project is solving the
+                   challenge of data size and complexity using HDF5.
+                   Most of LOFAR's standard data products will be stored
+                   using HDF5; the beam-formed time-series data and
+                   transient buffer board data have already transitioned
+                   from project-specific binary format to HDF5. We
+                   report on our effort to pave the way towards new
+                   astronomical data encapsulation using HDF5, which can
+                   be used by future ground and space projects. The
+                   LOFAR project has formed a collaboration with NRAO,
+                   the Virtual Astronomical Observatory (VAO) and the
+                   HDF Group to obtain funding for a full-time staff
+                   member to work on documenting and developing
+                   standards for astronomical data written in HDF5. We
+                   hope our effort will enhance HDF5 visibility and
+                   usage within the community, specifically for LSST,
+                   the SKA pathfinders (ASKAP, MeerKAT, MWA, LWA), and
+                   other major new radio telescopes such as EVLA, ALMA,
+                   and eMERLIN.},
+}
+
+@misc{Gildas-Team2013a,
+  author =        {{Gildas Team}},
+  howpublished =  {Astrophysics Source Code Library},
+  month =         may,
+  title =         {{GILDAS: Grenoble Image and Line Data Analysis
+                   Software}},
+  year =          {2013},
+  abstract =      {GILDAS is a collection of software oriented toward
+                   (sub-)millimeter radioastronomical applications
+                   (either single-dish or interferometer). It has been
+                   adopted as the IRAM standard data reduction package
+                   and is jointly maintained by IRAM & CNRS. GILDAS
+                   contains many facilities, most of which are oriented
+                   towards spectral line mapping and many kinds of
+                   3-dimensional data. The code, written in Fortran-90
+                   with a few parts in C/C++ (mainly keyboard
+                   interaction, plotting, widgets), is easily
+                   extensible.},
+}
+
 @article{Levenberg1944a,
   author =        {{Levenberg}, K},
   journal =       {Quarterly of Applied Mathematics},
@@ -117,78 +236,5 @@
                    resampling, and bootstrapping. Finally, a method is
                    outlined how to propagate measurement errors through
                    complex data-reduction pipelines.},
-}
-
-@ARTICLE{FITS,
-   author = {{Pence}, W.~D. and {Chiappetti}, L. and {Page}, C.~G. and {Shaw}, R.~A. and
-  {Stobie}, E.},
-    title = "{Definition of the Flexible Image Transport System (FITS), version 3.0}",
-  journal = {\aap},
- keywords = {instrumentation: miscellaneous, methods: miscellaneous, techniques: miscellaneous, reference systems, standards, astronomical databases: miscellaneous},
-     year = 2010,
-    month = dec,
-   volume = 524,
-      eid = {A42},
-    pages = {A42},
-      doi = {10.1051/0004-6361/201015362},
-   adsurl = {http://adsabs.harvard.edu/abs/2010A%26A...524A..42P},
-  adsnote = {Provided by the SAO/NASA Astrophysics Data System}
-}
-
-@INPROCEEDINGS{SDFITS,
-  author =       {{Garwood}, R.~W.},
-  title =        "{SDFITS: A Standard for Storage and Interchange of
-                  Single Dish Data}",
-  booktitle =    {Astronomical Data Analysis Software and Systems IX},
-  year =         2000,
-  series =       {\aspconf},
-  volume =       216,
-  editor =       {{Manset}, N. and {Veillet}, C. and {Crabtree}, D.},
-  pages =        243,
-  adsurl =       {http://adsabs.harvard.edu/abs/2000ASPC..216..243G},
-  adsnote =      {Provided by the SAO/NASA Astrophysics Data System}
-}
-
-@INPROCEEDINGS{LOFAR,
-   author = {{Alexov}, A. and {Schellart}, P. and {ter Veen}, S. and {van der Akker}, M. and 
-	{B{\"a}hren}, L. and {Greissmeier}, J.-M. and {Hessels}, J.~W.~T. and 
-	{Mol}, J.~D. and {Renting}, G.~A. and {Swinbank}, J. and {Wise}, M.
-	},
-    title = "{Status of LOFAR Data in HDF5 Format}",
-booktitle = {Astronomical Data Analysis Software and Systems XXI},
-     year = 2012,
-   series = {Astronomical Society of the Pacific Conference Series},
-   volume = 461,
-   editor = {{Ballester}, P. and {Egret}, D. and {Lorente}, N.~P.~F.},
-    month = sep,
-    pages = {283},
-   adsurl = {http://adsabs.harvard.edu/abs/2012ASPC..461..283A},
-  adsnote = {Provided by the SAO/NASA Astrophysics Data System}
-}
-
-@MISC{GILDAS_ASCL,
-   author = {{Gildas Team}},
-    title = "{GILDAS: Grenoble Image and Line Data Analysis Software}",
- keywords = {Software},
-howpublished = {Astrophysics Source Code Library},
-     year = 2013,
-    month = may,
-archivePrefix = "ascl",
-   eprint = {1305.010},
-   adsurl = {http://adsabs.harvard.edu/abs/2013ascl.soft05010G},
-  adsnote = {Provided by the SAO/NASA Astrophysics Data System}
-}
-
-@INPROCEEDINGS{GILDAS,
-   author = {{Pety}, J.},
-    title = "{Successes of and Challenges to GILDAS, a State-of-the-Art Radioastronomy Toolkit}",
-booktitle = {SF2A-2005: Semaine de l'Astrophysique Francaise},
-     year = 2005,
-   editor = {{Casoli}, F. and {Contini}, T. and {Hameury}, J.~M. and {Pagani}, L.
-	},
-    month = dec,
-    pages = {721},
-   adsurl = {http://adsabs.harvard.edu/abs/2005sf2a.conf..721P},
-  adsnote = {Provided by the SAO/NASA Astrophysics Data System}
 }
 
