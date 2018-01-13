@@ -164,9 +164,41 @@ commonly used assumptions in most astronomical applications.
 The errors are used to determine the best-fit parameters and their errors (see
 \S \ref{sec:fitters}).  They can be displayed as error bars on individual
 pixels or as shaded regions around those pixels using different display modes
-[A FIGURE HERE COULD SHOW THE RESULTS FROM A CODING EXAMPLE WHERE A spectrum IS
-CREATED AND THEN THE PLOTTER IS CALLED. THE SECOND FIGURE IN THIS PAPER COULD 
-SHOW AN EXAMPLE SPECTRAL LINE FIT ON TOP OF THE DATA].
+
+A typical example is given below, where we generate a spectrum and error
+array using \texttt{numpy} and \texttt{astropy} tools.
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}
+from astropy import units as u
+import numpy as np
+import pyspeckit
+
+xaxis = np.linspace(-25, 25)*u.km/u.s
+sigma = 3.0*u.km/u.s
+data = 5*np.exp(-xaxis**2 /
+                (2*sigma**2))*u.Jy
+error = np.ones_like(data) * 0.2
+sp = pyspeckit.Spectrum(xarr=xaxis,
+                        data=data,
+                        error=error)
+
+sp.plotter(errstyle='fill')
+
+sp.plotter.savefig("example_fig_1.pdf")
+\end{lstlisting}
+\end{minipage}
+
+\begin{figure*}[!htp]
+\includegraphics[scale=1,width=4in]{example_fig_1.pdf}
+\caption{An example plotted spectrum showing the automated unit labeling
+and errors.  The errors are shown with the \texttt{`fill'} style
+and represent symmmetric 1-$\sigma$ Gaussian errors.  }
+\label{fig:example1}
+\end{figure*}
+
+
+
 
 \subsubsection{Automatic Error Estimation}
 If a \texttt{Spectrum} is created with no associated errors, \pyspeckit can automatically
