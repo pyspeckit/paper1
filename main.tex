@@ -35,11 +35,15 @@ to quickly and easily analyze spectra.  Spectra are represented as
 the number of photons, or total energy in photons, arriving over a specified
 wavelength (or equivalently, frequency or energy) range. Emission and 
 absorption lines due to ions, atoms, and molecules bear important information
-via their line flux, line width, and velocity centroid. These parameters
-are typically measured from model fits to the data, such as Gaussians, Lorentzians, and Voigt
-profiles. Historically, \texttt{IRAF} has provided the astronomy community with easy-to-use
-tools for line fittings, but \texttt{IRAF} development ceased xx years ago
-and is currently only supported in Python 2.7 by AstroConda\footnote{http://astroconda.readthedocs.io/en/latest/index.html}.
+via their line flux, line width, and velocity centroid. These parameters are
+typically measured from model fits to the data, such as Gaussians, Lorentzians,
+and Voigt profiles. Historically, \texttt{IRAF} has provided the astronomy
+community with easy-to-use tools for line fittings, but \texttt{IRAF}
+development has mostly ceased in the last several years and is currently only
+supported in Python 2.7 by
+AstroConda\footnote{http://astroconda.readthedocs.io/en/latest/index.html},
+though the PyRAF command language supports both python 2 and python 3 and is
+still maintained.
 
 [It would be interesting to describe the history and purpose of \pyspeckit and \astropy here] 
 Development of \pyspeckit began several years before \astropy began...  Several
@@ -282,8 +286,8 @@ figures to display.
 Development of \pyspeckit began several years before \astropy began.  Several
 features were therefore implemented that were later replaced by similar
 \astropy features, in particular the unit system.  Unit conversions in
-\pyspeckit are now (as of October 2015) done entirely using the \astropy
-system. [I think this information would be better in the introduction]
+\pyspeckit are done entirely using the \astropy system since \pyspeckit v0.1.16
+released in May 2015.
 
 \section{Models}
 While many of \pyspeckit's internal functions are likely to be replaced by
