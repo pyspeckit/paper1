@@ -2,7 +2,7 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage{url}
-\usepackage{listings}
+\usepackage{minted}
 \usepackage{xspace}
 \usepackage{natbib}  % Requires natbib.sty, available from http://ads.harvard.edu/pubs/bibtex/astronat/
 
@@ -173,7 +173,7 @@ A typical example is given below, where we generate a spectrum and error
 array using \texttt{numpy} and \texttt{astropy} tools.
 
 \begin{minipage}{\linewidth}
-\begin{lstlisting}
+\begin{minted}{python}
 from astropy import units as u
 import numpy as np
 import pyspeckit
@@ -190,7 +190,7 @@ sp = pyspeckit.Spectrum(xarr=xaxis,
 sp.plotter(errstyle='fill')
 
 sp.plotter.savefig("example_fig_1.pdf")
-\end{lstlisting}
+\end{minted}
 \end{minipage}
 
 \begin{figure*}[!htp]
