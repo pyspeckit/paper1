@@ -32,7 +32,8 @@ def do_everything():
                 os.remove(fn)
 
     PDFLATEX=os.path.join(args.texpath,'pdflatex')
-    pdflatex_args = "-halt-on-error -synctex=1 --interaction=nonstopmode".split()
+    pdflatex_args = ("-halt-on-error -synctex=1 --interaction=nonstopmode"
+                     " --shell-escape").split()
 
     BIBTEX = os.path.join(args.texpath, 'bibtex')
 

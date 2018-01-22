@@ -2,7 +2,7 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage{url}
-\usepackage{listings}
+\usepackage{minted}
 \usepackage{xspace}
 \usepackage{natbib}  % Requires natbib.sty, available from http://ads.harvard.edu/pubs/bibtex/astronat/
 
@@ -42,7 +42,7 @@ community with easy-to-use tools for line fittings, but \texttt{IRAF}
 development has mostly ceased in the last several years and is currently only
 supported in Python 2.7 by
 AstroConda\footnote{http://astroconda.readthedocs.io/en/latest/index.html},
-though the PyRAF command language supports both python 2 and python 3 and is
+though the PyRAF command language supports both Python 2 and Python 3 and is
 still maintained.
 
 [It would be interesting to describe the history and purpose of \pyspeckit and \astropy here] 
@@ -173,7 +173,7 @@ A typical example is given below, where we generate a spectrum and error
 array using \texttt{numpy} and \texttt{astropy} tools.
 
 \begin{minipage}{\linewidth}
-\begin{lstlisting}
+\begin{minted}{python}
 from astropy import units as u
 import numpy as np
 import pyspeckit
@@ -190,7 +190,7 @@ sp = pyspeckit.Spectrum(xarr=xaxis,
 sp.plotter(errstyle='fill')
 
 sp.plotter.savefig("example_fig_1.pdf")
-\end{lstlisting}
+\end{minted}
 \end{minipage}
 
 \begin{figure*}[!htp]
@@ -264,7 +264,7 @@ most users, gave them access to those results \emph{only} through the GUI.
 functionality, but with additional means of interacting with the fitter.  In
 \texttt{splot}, reproducing any given fit is challenging, since subtle changes
 in the cursor position can significantly change the fit result.  In \pyspeckit,
-it is possible to record the results of fits programatically and re-fit using
+it is possible to record the results of fits programmatically and re-fit using
 those same results.
 
 The GUI was built using \texttt{matplotlib}'s canvas interaction tools.  These
@@ -278,7 +278,7 @@ publication-quality figures.  The default plotting mode uses histogram-style
 line plots and labels axes with \LaTeX-formatted versions of units.
 
 When the plotter is active and a model is fit, the model parameters are
-displayed with \LaTeX formatting.  The errors on the parameters, if available,
+displayed with \LaTeX~formatting.  The errors on the parameters, if available,
 are also shown, and these errors are used to decide on how many significant
 figures to display.
 
