@@ -43,22 +43,50 @@ community with easy-to-use tools for line fittings, but \texttt{IRAF}
 development has mostly ceased in the last several years and is currently only
 supported in Python 2.7 by
 AstroConda\footnote{http://astroconda.readthedocs.io/en/latest/index.html},
-though the PyRAF command language supports both Python 2 and Python 3 and is
-still maintained.
+though the PyRAF command language
+(\url{https://github.com/spacetelescope/pyraf}) supports both Python 2 and
+Python 3 and is still maintained.
 
-[It would be interesting to describe the history and purpose of \pyspeckit and \astropy here] 
-Development of \pyspeckit began several years before \astropy began...  Several
-features were therefore implemented that were later replaced by similar
-\astropy features, in particular the unit system.  Unit conversions in
-\pyspeckit are now (as of October 2015) done entirely using the \astropy
-system...
 
-In this paper we briefly outline \texttt{pyspeckit} architecture and highlight its key 
-capabilities. In Section XX...
+\pyspeckit development began sometime in 2009 with a script called `showspec'
+in the \texttt{agpy} package (which was hosted on google code); i.e., it started as one graduate student's
+project to make a more general tool for plotting, and sometimes fitting
+profiles to, spectra in python.  At the time, IDL was still more popular than
+python at most institutes \citep[][provided the first evidence that
+python had overtaken IDL]{Momcheva2015a}, and there were no publicly available
+and advertised tools for spectral plotting, fitting, and general manipulation
+(Erik Tollerud's \texttt{astropysics} was developed contemporaneously and
+solved many of the same problems as \pyspeckit).
+The \astropy project had its first commit in 2011, so even the basic
+infrastructure for such analysis was not yet established.
+
+\pyspeckit's GUI features were inspired by IRAF's \texttt{splot} tool, while
+the fitting features were inspired in part by \texttt{xspec}
+(\url{https://heasarc.gsfc.nasa.gov/xanadu/xspec/}).  Over subsequent years,
+\pyspeckit grew by incorporating more sophisticated models and improving its
+internal structure.  The package was moved out of \texttt{agpy} and into its
+own repository in 2011, first spending a few years on bitbucket in a mercurial
+repository, then finally moved to github - where it currenly resides - in 2012.
+
+Because \pyspeckit's initial development preceded that of \astropy, some features
+were included that later became redundant.  Most notably, \pyspeckit included
+a limited system for spectroscopic unit conversion.  In 2015, this system
+was completely replaced with \astropy's unit system.  Around the same time,
+the doppler conversion tools (converting from frequency or wavelength to 
+velocity) that existed in \pyspeckit were pushed upstream into \astropy,
+highlighting the mutually beneficial role of \astropy's affiliated
+packaged system \citep{AstropyCollaboration2018}.  \pyspeckit was finally
+accepted as an \astropy affiliated package in 2017.
+
+
+In this paper we briefly outline \texttt{pyspeckit} architecture and highlight
+its key capabilities. In Section \ref{sec:basicstructure}, we  outline the
+basic structure of the package.
 
 
 
 \section{Basic structure}
+\label{sec:basicstructure}
 The central object in \pyspeckit is a \texttt{Spectrum} object, which has
 associated \texttt{data} (e.g., flux), \texttt{error}, and \texttt{xarr} (e.g., wavelength,
 frequency, energy), the latter of
