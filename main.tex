@@ -83,13 +83,15 @@ was completely replaced with \astropy's unit system.  Around the same time,
 the doppler conversion tools (converting from frequency or wavelength to 
 velocity) that existed in \pyspeckit were pushed upstream into \astropy,
 highlighting the mutually beneficial role of \astropy's affiliated
-packaged system \citep{AstropyCollaboration2018}.  \pyspeckit was finally
+packaged system \citep{Price-Whelan2018a}.  \pyspeckit was finally
 accepted as an \astropy affiliated package in 2017.
 
 
 In this paper we briefly outline \texttt{pyspeckit} architecture and highlight
 its key capabilities. In Section \ref{sec:basicstructure}, we  outline the
-basic structure of the package.
+basic structure of the package.  In Section \ref{sec:gui}, we describe the GUI
+system.  In Sections \ref{sec:cubes} and \ref{sec:models}, we outline
+\pyspeckit's cube handling capabilities and model library. 
 
 
 
@@ -351,14 +353,15 @@ displayed with \LaTeX~formatting.  The errors on the parameters, if available,
 are also shown, and these errors are used to decide on how many significant
 figures to display.
 
-\section{\astropy integration}
-Development of \pyspeckit began several years before \astropy began.  Several
-features were therefore implemented that were later replaced by similar
-\astropy features, in particular the unit system.  Unit conversions in
-\pyspeckit are done entirely using the \astropy system since \pyspeckit v0.1.16
-released in May 2015.
+% \section{\astropy integration}
+% Development of \pyspeckit began several years before \astropy began.  Several
+% features were therefore implemented that were later replaced by similar
+% \astropy features, in particular the unit system.  Unit conversions in
+% \pyspeckit are done entirely using the \astropy system since \pyspeckit v0.1.16
+% released in May 2015.
 
 \section{Models}
+\label{sec:models}
 While many of \pyspeckit's internal functions are likely to be replaced by
 \astropy tools and affiliated packages (e.g., the spectrum input and output
 could in the future be handled by \texttt{specutils}), the models in \pyspeckit
@@ -380,6 +383,7 @@ H$_2$CO). {\color{red}If this is the beefiest part of pyspeckit, we should inclu
 listing the models and potentially an example for how to customize a model?}
 
 \section{Cubes}
+\label{sec:cubes}
 Spectral cubes are growing more important in radio astronomy since they are the
 natural data products produced by interferometers like ALMA and the JVLA.
 Optical and infrared data cubes from integral field units (IFUs) like MUSE on
