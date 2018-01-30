@@ -8,6 +8,7 @@
 
 \newcommand{\pyspeckit}{\texttt{pyspeckit}\xspace}
 \newcommand{\astropy}{\texttt{astropy}\xspace}
+\newcommand{\hh}{\ensuremath{\mathrm{H}_2}\xspace}
 \begin{document}
 
 \title{pyspeckit}
@@ -172,6 +173,7 @@ pixels or as shaded regions around those pixels using different display modes
 A typical example is given below, where we generate a spectrum and error
 array using \texttt{numpy} and \texttt{astropy} tools.
 
+\vspace{2mm}
 \begin{minipage}{\linewidth}
 \begin{minted}{python}
 from astropy import units as u
@@ -240,8 +242,10 @@ of free parameters, e.g., for a 1-dimensional Gaussian, there would be three:
 the amplitude, width, and center.  This approach implicitly assumes that the
 model describes the data well and is an optimal fit.  It also assumes that
 the model is linear with all of the parameters, at least in the region immediately
-surrounding the optimal fit.  These requirements[?] are frequently not satisfied;
+surrounding the optimal fit.  These requirements are frequently not satisfied;
 see \citet{Andrae2010a} and \citet{Andrae2010b} for details.
+We show a demonstration of this approximation process in Appendix \ref{appendix:parerrest}
+for the case of a simple Gaussian line profile.
 
 
 % {\color{red} this is redundant with the above}
@@ -291,10 +295,13 @@ released in May 2015.
 
 \section{Models}
 While many of \pyspeckit's internal functions are likely to be replaced by
-\astropy tools and affiliated packages [which internal functions?], the models in \pyspeckit are likely to
-remain useful indefinitely.  The model library in \pyspeckit includes some of
-the most useful general spectral model functions (e.g., Gaussian, Lorentzian,
-and Voigt profiles) and a wide range of specific model types (e.g., ...).
+\astropy tools and affiliated packages (e.g., the spectrum input and output
+could in the future be handled by \texttt{specutils}), the models in \pyspeckit
+are likely to remain useful indefinitely.  The model library in \pyspeckit
+includes some of the most useful general spectral model functions (e.g.,
+Gaussian, Lorentzian, and Voigt profiles) and a wide range of specific model
+types (e.g., ammonia and formaldehyde hyperfine, \hh rotational ladder, and
+recombination line models).
 
 In radio and millimeter astronomy, there are several molecular line groups that
 consist of several Gaussian profiles separated by a fixed frequency offset.
@@ -329,7 +336,78 @@ papers and other tools (e.g.,
 \section{Summary}
 \texttt{pyspeckit} is a versatile tool for spectroscopic analysis.
 
+\section{Final Note}
+This paper was collaboratively written using github as a platform for
+discussion.  Its version history and records of some discussions about its
+content can be found at \url{https://github.com/pyspeckit/paper1}.
+
 \input{solobib}
+
+
+\appendix
+\section{Parameter Error Estimation for a simple 1D Gaussian profile}
+\label{appendix:parerrest}
+As discussed in Section \ref{sec:parerrest}, parameter errors are estimated in
+\pyspeckit by the underlying \texttt{lmfit} or \texttt{mpfit} tools using the
+approximation that the reduced chi-squared is unity, $\chi^2/n=1$.  We
+demonstrate here that, for a simple 1D Gaussian profile, this approximation
+results in a reasonable, but not perfect, recovery of the underlying parameter
+errors.
+
+In Figure \ref{fig:synthspecdemo}, we show a synthetic spectrum with uniform
+Gaussian random noise and perfectly-measured uncorrelated data errors.
+The fitted model is a one-dimensional Gaussian profile with free parameters
+amplitude, center, and width.  The fit results are given in the figure.
+
+The conditions for the $\chi^2/n=1$ approximation to produce a good error
+estimate are at least that the error distribution is Gaussian, the model is
+linear in all parameters, and the model is the correct underlying model
+\citep{Andrae2010b}.
+
+Figure \ref{fig:parerrestdemo} shows the $\chi^2$ values in parameter space
+surrounding the best-fit value.  Along the diagonal, we show the $\chi^2$
+values varying a single parameter while holding the other two parameters fixed,
+i.e., it is the marginal distribution for the free parameter.  The vertical
+dashed lines show the estimated one-sigma errors from the optimizer, while the
+horizontal dashed lines show the value $\Delta\chi^2=1$, which corresponds to
+the 68\% confidence interval for that parameter.  If the $\chi^2/n=1$
+approximation were perfect, the dashed lines would intersect with the solid
+lines.  For the shift parameter, the fit is nearly perfect, while for the
+amplitude and width, it is not.
+
+Off of the diagonal of Figure \ref{fig:parerrestdemo}, we show the
+two-dimensional marginal distributions in which we have held the third
+parameter, the one not labeled, fixed.  Contours are shown at
+$\Delta\chi^2=2.3,6.2,11.8$, corresponding to 68\%, 95\%, and 99.5\% (one, two,
+and three-sigma for a Gaussian) confidence.
+The vertical and horizontal dashed lines show the estimates from the $\chi^2/n=1$
+approximation.
+The shift vs amplitude and shift vs width diagrams both show very good matches.
+However, the width vs amplitude plot indicates that the single-parameter
+errorbars underestimate the true errors because these parameters are
+significantly correlated.  This information is captured in the covariance
+matrix that is used to compute the single-parameter errors, as it has
+significant values in the off-diagonal parts of the matrix.
+
+The source code for this example can be found in the \pyspeckit github
+repository in \texttt{examples/synthetic\_spectrum\_example\_witherrorestimates.py}.
+
+\begin{figure*}[!htp]
+\includegraphics[scale=1,width=7in]{oned_gaussfit_example.pdf}
+\caption{One-dimensional Gaussian profile fit to a synthetic spectrum.
+The parameter values and errors are shown in the upper right.  The number of
+significant figures displayed in both the value and the error is automatically
+set to one digit more than the last significant digit in the error.}
+\label{fig:synthspecdemo}
+\end{figure*}
+
+
+\begin{figure*}[!htp]
+\includegraphics[scale=1,width=7in]{error_estimate_demonstration.pdf}
+\caption{Error estimate figure.  See Appendix \ref{appendix:parerrest} for details.}
+\label{fig:parerrestdemo}
+\end{figure*}
+
 
 
 \end{document}
