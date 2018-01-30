@@ -76,33 +76,43 @@ cube.
 
 \subsection{Supported data formats}
 
-\pyspeckit{} supports a variety of open and proprietary data formats that have
-been traditionally used to store spectral data products in astronomy.  Reading
-a one-dimensional spectrum from a text file with an optional error column can
+\pyspeckit supports a variety of open and proprietary data formats that have
+been traditionally used to store spectral data products in astronomy. 
+We list the currently supported formats here:
+
+\begin{itemize}
+    \item ASCII: Reading a one-dimensional spectrum from a text file with an optional
+        error column can
 be done using the \texttt{astropy.io.ascii} module in any of its supported
-formats.  The Flexible Image Transport System \citep[FITS;][]{Pence2010a} format is
-supported in \pyspeckit{} with \texttt{astropy.io.fits}.  Initially developed
+formats.  
+    \item FITS: The Flexible Image Transport System \citep[FITS;][]{Pence2010a} format is
+supported in \pyspeckit with \texttt{astropy.io.fits}.  Initially developed
 by optical astronomers, the FITS standard has incorporated several
 recommendations for various types of data formats used in the astronomy
 community into successive updates to the standard---the latest version of the
 standard being 4.0 from 2016.  Additionally, data files following the Single
 Dish FITS \citep[SDFITS;][]{Garwood2000a} convention for radio astronomy data as
 produced by the Green Bank Telescope are partially supported in \pyspeckit.
-The Hierarchical Data Format (HDF5) file format has been designed to store and
-organize large amounts of data and offers significant advantages over FITS\@.
-Although not widely used in observational astronomy, the pipeline of the
-Low-Frequency Array (LOFAR) radio telescope uses the HDF5 data format to
-efficiently store large data volumes \citep{Alexov2012a}.  If the \texttt{h5py}
-package is installed, \pyspeckit{} will support read access to files containing
-spectra in the HDF5 format (although there is no specified standard for spectra in
-HDF5).  Finally, \pyspeckit{} is capable of reading files
-from some versions of the GILDAS Continuum and Line Analysis Single-dish
-Software format \citep[CLASS;][]{Gildas-Team2013a}.  Since the CLASS file specification
-is incomplete and will remain private for the foreseeable future, much of the
-data reading in \pyspeckit{} has been reproduced in an approximate manner.  The
-CLASS reader is known to work well with data files from the Arizona Radio
-Observatory telescopes (12-m and 10-m Submillimeter Telescope) and the Atacama
-Pathfinder Experiment (APEX) radio telescope.
+    \item HDF5: The Hierarchical Data Format (HDF5) file format has been
+        designed to store and organize large amounts of data and offers
+        significant advantages over FITS\@.  Although not widely used in
+        observational astronomy, the pipeline of the Low-Frequency Array
+        (LOFAR) radio telescope uses the HDF5 data format to efficiently store
+        large data volumes \citep{Alexov2012a}.  If the \texttt{h5py} package
+        is installed, \pyspeckit will support read access to files containing
+        spectra in the HDF5 format (although there is no specified standard for
+        spectra in HDF5, so additional user effort may be required to create
+        \pyspeckit spectrum objects from the extracted HDF5 data).
+    \item Finally, \pyspeckit is capable of reading files from some versions of
+        the GILDAS Continuum and Line Analysis Single-dish Software format
+        \citep[CLASS;][]{Gildas-Team2013a}.  Since the CLASS file specification
+        is incomplete and will remain private for the foreseeable future, much
+        of the data reading in \pyspeckit has been reproduced in an approximate
+        manner.  The CLASS reader is known to work well with data files from
+        the Arizona Radio Observatory telescopes (12-m and 10-m Submillimeter
+        Telescope) and the Atacama Pathfinder Experiment (APEX) radio
+        telescope.
+\end{itemize}
 
 \subsection{Plotter}
 The plotter is a basic line plotter.  See the GUI section (\S \ref{sec:gui})
@@ -149,6 +159,25 @@ In principle, this optimal $\chi^2$ may be helpful for obtaining correctly
 scaled errors (see Section \ref{sec:parerrest}), though this claim has never
 been rigorously tested.
 
+\subsection{Data Selection}
+An important feature of the spectral fitter is the ability to select the region
+of the spectrum to be fit.  This selection process can either be done manually,
+using the \texttt{selectregion} method to set one or more ranges of data to
+include in the fit, or interactively using the GUI.  By default, the selected
+regions will be highlighted in green.
+
+\subsection{Continuum Fitting}
+The fitting process in \pyspeckit is capable of treating line and continuum
+independently or jointly.  If a model includes continuum, e.g., for the case
+of a 4-parameter Gaussian profile that includes an additive constant, it
+can be fitted through the standard \texttt{specfit} fitter.
+
+However, it is common practice to fit the continuum independently prior to
+fitting lines.  Such practice is necessary when fitting absorption lines
+and practically necessary for heterodyne radio observations where the
+continuum is generally not well-measured.  Following radio convention,
+the \pyspeckit continuum fitting tool is called \texttt{baseline}.
+This module supports polynomial, spline, and power-law fitting.
 
 \subsection{Error Treatment}
 %(Can I refer back to anything here?  like, "Error estimation is an important part of astronomy...")
@@ -207,11 +236,12 @@ and represent symmetric 1-$\sigma$ Gaussian errors.  }
 
 
 \subsubsection{Automatic Error Estimation}
-If a \texttt{Spectrum} is created with no associated errors, \pyspeckit can automatically
-estimate the errors from a fit residual. When a fit is initiated on a \texttt{Spectrum}
-with no specified errors, the errors will default to being uniformly 1.0. Uniform
-weighting for each data point is likely not accurate, but will result in the appropriate 
-best-fit parameters with \emph{incorrect} errors.
+If a \texttt{Spectrum} is created with no associated errors, \pyspeckit can
+automatically estimate the errors from a fit residual. When a fit is initiated
+on a \texttt{Spectrum} with no specified errors, the errors will default to
+being uniformly 1.0. Uniform weighting for each data point is likely not
+accurate, but will result in the appropriate best-fit parameters with
+\emph{incorrect} errors.
 
 One common approach in spectroscopy in the limit that there are few pixels with
 signal and many pixels representing only noise is to estimate the errors by the
@@ -228,12 +258,11 @@ times, but different errors the second time.
 
 \subsubsection{Parameter error estimation}
 \label{sec:parerrest}
-Parameter errors are adopted from the \texttt{mpfit} or \texttt{lmfit}
-fit results.  The Levenberg-Marquardt algorithm
- finds a local minimum in parameter space,
-and one of its returns is the parameter covariance matrix.  This covariance
-matrix is not directly the covariance of the parameters, and must be rescaled
-to deliver an approximate error.
+Parameter errors are adopted from the \texttt{mpfit} or \texttt{lmfit} fit
+results.  The Levenberg-Marquardt algorithm finds a local minimum in parameter
+space, and one of its returns is the parameter covariance matrix.  This
+covariance matrix is not directly the covariance of the parameters, and must be
+rescaled to deliver an approximate error.
 
 The standard rescaling is to multiply the covariance by the sum of the squared
 errors divided by the degree of freedom of the fit, usually referred to
@@ -267,9 +296,9 @@ most users, gave them access to those results \emph{only} through the GUI.
 \texttt{pyspeckit}'s fitting GUI was built to match \texttt{splot}'s
 functionality, but with additional means of interacting with the fitter.  In
 \texttt{splot}, reproducing any given fit is challenging, since subtle changes
-in the cursor position can significantly change the fit result.  In \pyspeckit,
-it is possible to record the results of fits programmatically and re-fit using
-those same results.
+in the cursor position (i.e., the input guess) can significantly change the fit
+result.  In \pyspeckit, it is possible to record the results of fits
+programmatically and re-fit using those same results.
 
 The GUI was built using \texttt{matplotlib}'s canvas interaction tools.  These
 tools are limited to GUI capabilities that are compatible with all platforms
@@ -311,26 +340,23 @@ because in many cases the ``main'' line can become optically thick, while the
 measured with a single spectrum.  \pyspeckit provides the \texttt{hyperfine}
 model class to handle this class of molecular line transitions, and it includes
 several molecular species implementations (HCN, N$_2$H$^+$, NH$_3$,
-H$_2$CO). [If this is the beefiest part of pyspeckit, we should include a table
-listing the models and potentially an example for how to customize a model?]
+H$_2$CO). {\color{red}If this is the beefiest part of pyspeckit, we should include a table
+listing the models and potentially an example for how to customize a model?}
 
 \section{Cubes}
 Spectral cubes are growing more important in radio astronomy since they are the
-natural data products produced by interferometers like ALMA and the JVLA. [Could 
-also mention that with JWST's 2 IFUs, cubes will be even more commonly available.
-``Spectral cubes will also become more widely available after JWST is commissioned as two of
-its instruments have integral field unit." But STScI has developed its own software
-to handle not only the reduction and assembly of the cube, but also the analysis.
-I don't know much about it, but if I'm remembering something I heard correctly,
-any cube can be analyzed with this software.]
+natural data products produced by interferometers like ALMA and the JVLA.
+Optical and infrared data cubes from integral field units (IFUs) like MUSE on
+the VLT, OSIRIS on Keck,  NIFS on Gemini, and NIRSpec on JWST are also becoming
+more common.
+
 While many cube operations are handled well by \texttt{numpy}-based packages
 like \texttt{spectral-cube}\footnote{\url{spectral-cube.readthedocs.io}},
 it is sometimes necessary or desirable to fit a profile to each spectrum
 in a cube.  The \texttt{Cube.fiteach} method is a tool for automated line
 fitting that includes parallelization of the fit. Implementation examples can be
-found in the online documentation. This tool is not the best
-tested component of \pyspeckit, but it has already seen significant use in
-papers and other tools (e.g.,
+found in the online documentation. This tool  has  seen significant use in
+papers and been incorporated into other tools (e.g.,
 \texttt{multicube}\footnote{\url{https://github.com/vlas-sokolov/multicube}}).
 
 \section{Summary}
