@@ -11,7 +11,7 @@
 \newcommand{\hh}{\ensuremath{\mathrm{H}_2}\xspace}
 \begin{document}
 
-\title{pyspeckit}
+\title{{\sc{pyspeckit}:} A spectroscopic analysis and plotting package}
 %\authorrunning{Ginsburg et al}
 
 \author[0000-0001-6431-9633]{Adam Ginsburg}
@@ -470,9 +470,111 @@ set to one digit more than the last significant digit in the error.}
 
 \begin{figure*}[!htp]
 \includegraphics[scale=1,width=7in]{error_estimate_demonstration.pdf}
-\caption{Error estimate figure.  See Appendix \ref{appendix:parerrest} for details.}
+\caption{Error estimate figure.
+In all panels, the vertical
+dashed lines show the estimated one-sigma errors from the optimizer, while the
+horizontal dashed lines show the value $\Delta\chi^2=1$, which corresponds to
+the 68\% confidence interval for that parameter.
+In the off-diagonal panels, contours are shown at $\Delta\chi^2=2.3,6.2,11.8$,
+corresponding to 68\%, 95\%, and 99.5\% (one, two, and three-sigma for a
+Gaussian) confidence.
+See Appendix \ref{appendix:parerrest} for details and interpretation.}
 \label{fig:parerrestdemo}
 \end{figure*}
+
+
+\section{Parameter Error Estimation for Ammonia}
+\label{appendix:parerrestammonia}
+In Section \ref{appendix:parerrest}, we showed the parameter estimation results
+in the case of a modeled 1-dimensional Gaussian.  One of the most commonly used
+models in pyspeckit is the ammonia (\ammonia) hyperfine model, which has several
+additional lines and several parameters governing those lines.
+
+The ammonia inversion transitions are notable for having a well-separated grid
+of hyperfine components whose intensity is governed by quantum mechanics.
+The existence of these additional components often allows for direct estimates
+of the optical depth of the central line, which is thicker than the others,
+and therefore makes column density estimates much more straightforward than
+for other molecular species.
+
+The model for these lines is much more complicated than that for a single Gaussian.
+The model must include a simplified version of the radiative transfer equation
+and must simultaneously produce the predicted emission of several lines.
+Additionally, there are several approximations that are convenient to use
+in different circumstances, so \pyspeckit implements several different
+variants of the \ammonia model.
+
+In this section, we show parameter estimates analagous to those in Section
+\ref{appendix:parerrest}.
+We examine two cases: First, a case where the fitted lines are in local
+thermodynamic equilibrium (LTE), such that the ratios of the 1-1
+to 2-2 line is governed by the rotational temperature $T_{R}$ but the individual
+lines both have $T_{ex}=T_{R}$.  Second, a case where the fitted lines are not
+in LTE, such that $T_{ex,1-1} \neq T_{ex,2-2}$ and $T_{ex} < T_{R}$; in this case,
+we have adopted these values from a RADEX large velocity gradient model
+\citep{van-der-Tak2007a}.
+
+The free parameters in the ammonia model are
+the rotational temperature, $T_{R}$, which governs the relative populations
+of the rotational transitions, the excitation temperature $T_{ex}$, which governs
+the relative populations of the two levels within a single transition,
+the column density, $N(\ammonia)$, which specifies the total column density
+of \ammonia integrated over all states (note that this parameter enters
+the model as $10^N$, i.e., we optimize the log of the column density),
+the line of sight velocity $v_{LOS}$, the line width $\sigma$, and the ortho-to-para
+ratio parametrized as the ortho fraction $F_{ortho}$.  In the examples below,
+we fix $F_{ortho}=0$ and treat only para lines.
+
+
+The fit results from the first case are shown in Figures
+\ref{fig:nh3synthspecdemo} and \ref{fig:nh3parerrestdemo}.  The fit excellently
+recovers the input parameters, but reveals one of the important caveats when
+using any optimization algorithm: in some models, parameters are degenerate,
+and therefore using the diagonal of the covariance matrix to estimate the
+variance can result in incorrect error estimates.  While the errors on most
+parameters appear reasonable, there is a very large error on the excitation
+temperature $T_{ex}$, which is driven by the degeneracy of $T_{ex}$ with
+$N_{tot}$.  The asymmetry of the error on $T_{ex}$ is apparent in Figure
+\ref{fig:nh3parerrestdemo}, but it is not captured by the optimizer's reported
+error results; the asymmetry occurs because $T_{ex}$ is in the exponent in the
+model equations.
+
+In such situations, it can be beneficial to measure the parameter errors
+in different ways.  Using the \texttt{emcee} and \texttt{pymc} wrappers
+can help do this.  Examples of how to use these monte carlo samplers
+to acquire better parameter errors (once an optimization has already
+been performed) are available in the online documentation:
+see \url{http://pyspeckit.readthedocs.io/en/latest/example_pymc.html}.
+
+
+\begin{figure*}[!htp]
+\includegraphics[scale=1,width=7in]{oned_ammonia_LTE_fit_example.pdf}
+\caption{Ammonia model profile fit to a synthetic spectrum.
+The parameter values and errors are shown in the upper right.  The associated
+error estimate triangle diagram is shown in Figure \ref{fig:nh3parerrestdemo}.
+The correct parameters are $T_{R}=T_{ex}=35$, $N=15$, $\sigma=2$, and $v=0$,
+all of which are reasonably recovered.  However, note that $T_{ex} > T_{rot}$
+is generally nonphysical, yet the allowed parameter space for $T_{ex}$ includes
+such values.  See Figure \ref{fig:nh3dtexsynthspecdemo} for an example of how
+to apply such physical constraints.
+}
+\label{fig:nh3synthspecdemo}
+\end{figure*}
+
+
+\begin{figure*}[!htp]
+\includegraphics[scale=1,width=7in]{ammonia_LTE_default_error_estimate_demonstration.pdf}
+\caption{Error estimate figure for the default \ammonia model.  The panels
+are labeled as in Figure \ref{fig:parerrestdemo}.  The most
+relevant panel is the ntot0 vs tex0 panel, which plots the column $N$ against
+the excitation temperature $T_{ex}$: both of these parameters govern the peak
+amplitude of the spectrum, so they are degenerate.  The vertical dashed lines
+do not match the $\Delta\chi^2=1$ positions for $T_{ex}$ or $N$ partly because
+of this degeneracy; the fit errors reported by the Levenberg-Marquardt
+algorithm are larger than the directly computed marginal errors.}
+\label{fig:nh3parerrestdemo}
+\end{figure*}
+
 
 
 
