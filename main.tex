@@ -506,13 +506,14 @@ variants of the \ammonia model.
 
 In this section, we show parameter estimates analagous to those in Section
 \ref{appendix:parerrest}.
-We examine two cases: First, a case where the fitted lines are in local
+We examine a case where the fitted lines are in local
 thermodynamic equilibrium (LTE), such that the ratios of the 1-1
 to 2-2 line is governed by the rotational temperature $T_{R}$ but the individual
-lines both have $T_{ex}=T_{R}$.  Second, a case where the fitted lines are not
-in LTE, such that $T_{ex,1-1} \neq T_{ex,2-2}$ and $T_{ex} < T_{R}$; in this case,
-we have adopted these values from a RADEX large velocity gradient model
-\citep{van-der-Tak2007a}.
+lines both have $T_{ex}=T_{R}$.
+% Second, a case where the fitted lines are not
+% in LTE, such that $T_{ex,1-1} \neq T_{ex,2-2}$ and $T_{ex} < T_{R}$; in this case,
+% we have adopted these values from a RADEX large velocity gradient model
+% \citep{van-der-Tak2007a}.
 
 The free parameters in the ammonia model are
 the rotational temperature, $T_{R}$, which governs the relative populations
@@ -546,6 +547,16 @@ to acquire better parameter errors (once an optimization has already
 been performed) are available in the online documentation:
 see \url{http://pyspeckit.readthedocs.io/en/latest/example_pymc.html}.
 
+More sophisticated examples, including fitting of a non-LTE ammonia spectrum
+in which $T_{ex} < T_{R}$, are available in the example directory
+of \pyspeckit (\url{https://github.com/pyspeckit/pyspeckit/tree/master/examples}),
+specifically
+\url{https://github.com/pyspeckit/pyspeckit/tree/master/examples/synthetic_LTE_ammonia_spectrum_example_witherrorestimates.py}
+and
+\url{https://github.com/pyspeckit/pyspeckit/tree/master/examples/synthetic_nLTE_ammonia_spectrum_example_witherrorestimates.py}.
+These examples also include demonstrations of how to force the optimizer to
+ignore nonphysical values.
+
 
 \begin{figure*}[!htp]
 \includegraphics[scale=1,width=7in]{oned_ammonia_LTE_fit_example.pdf}
@@ -555,8 +566,9 @@ error estimate triangle diagram is shown in Figure \ref{fig:nh3parerrestdemo}.
 The correct parameters are $T_{R}=T_{ex}=35$, $N=15$, $\sigma=2$, and $v=0$,
 all of which are reasonably recovered.  However, note that $T_{ex} > T_{rot}$
 is generally nonphysical, yet the allowed parameter space for $T_{ex}$ includes
-such values.  See Figure \ref{fig:nh3dtexsynthspecdemo} for an example of how
-to apply such physical constraints.
+such values.
+%See Figure \ref{fig:nh3dtexsynthspecdemo} for an example of how
+%to apply such physical constraints.
 }
 \label{fig:nh3synthspecdemo}
 \end{figure*}
