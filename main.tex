@@ -70,7 +70,7 @@ established.
 \pyspeckit's graphical user interface (GUI) features were inspired by IRAF's 
 \texttt{splot} tool, while the fitting features were inspired in part by \texttt{xspec}
 (\url{https://heasarc.gsfc.nasa.gov/xanadu/xspec/}).  Over subsequent years,
-\pyspeckit grew by incorporating new models such as xx and improving its
+\pyspeckit grew by incorporating new models such as {\color{red} XX INSERT MODELS HERE XX} and improving its
 internal structure.  The package was moved out of \texttt{agpy} and into its
 own repository in 2011, first spending a few years on Bitbucket in a mercurial
 repository, then finally moved to GitHub, where it currenly resides, in 2012.
@@ -367,9 +367,8 @@ figures to display.
 \section{Models}
 \label{sec:models}
 While many of \pyspeckit's internal functions are likely to be replaced by
-\astropy tools and affiliated packages (e.g., the spectrum input and output
-could in the future be handled by \texttt{specutils}) [I don't understand what
-is meant by spectrum input and output here], the models in \pyspeckit
+\astropy tools and affiliated packages (e.g., reading and writing files to disk)
+could in the future be handled by \texttt{specutils}), the models in \pyspeckit
 are likely to remain useful indefinitely.  The model library in \pyspeckit
 includes some of the most useful general spectral model functions (e.g.,
 Gaussian, Lorentzian, and Voigt profiles) and a wide range of specific model
@@ -409,7 +408,7 @@ papers and been incorporated into other tools (e.g.,
 one of the \astropy affiliated packages. \pyspeckit can interactively fit a model 
 to a spectrum using the Levenberg-Marquardt optimization method via \texttt{mpfit} and 
 \texttt{lmfit}, and wrappers for \texttt{pymc} and \texttt{emcee} are also available.
-There is also the option to non-interactively fit a model to the many spectra in a
+There is also the option to fit a model to the many spectra in a
 spectral cube. We have described \pyspeckit's methods of error estimation for spectra
 with and without user-provided errors. \pyspeckit has a library of models including Gaussian, 
 Lorentzian, Voigt, and others for specific molecular species; user-created models can 
