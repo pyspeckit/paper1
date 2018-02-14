@@ -55,32 +55,31 @@ though the PyRAF command language
 Python 3 and is still maintained.
 
 
-\pyspeckit development began sometime in 2009 with a script called `showspec'
-in the \texttt{agpy} package (which was hosted on google code); i.e., it
-started as one graduate student's project to make a more general tool for
-plotting, and sometimes fitting profiles to, spectra in python.  At the time,
+\pyspeckit development began in 2009 with a script called `showspec'
+in the \texttt{agpy} package hosted on Google Code. It was created and used by
+a graduate student to plot and sometimes fit profiles to spectra in python. At the time,
 IDL was still more popular than python at most institutes \citep[first evidence
 that python had overtaken IDL in popularity among astronomers was presented in
 ]{Momcheva2015a}, and there were no publicly available and advertised tools for
 spectral plotting, fitting, and general manipulation \cite[\texttt{astropysics}
 was developed contemporaneously and solved many of the same problems as
-\pyspeckit][]{Tollerud2012a}.  The \astropy project had its first commit in
+\pyspeckit][]{Tollerud2012a}. The \astropy project had its first commit in
 2011, so even the basic infrastructure for such analysis was not yet
 established.
 
-\pyspeckit's GUI features were inspired by IRAF's \texttt{splot} tool, while
-the fitting features were inspired in part by \texttt{xspec}
+\pyspeckit's graphical user interface (GUI) features were inspired by IRAF's 
+\texttt{splot} tool, while the fitting features were inspired in part by \texttt{xspec}
 (\url{https://heasarc.gsfc.nasa.gov/xanadu/xspec/}).  Over subsequent years,
-\pyspeckit grew by incorporating more sophisticated models and improving its
+\pyspeckit grew by incorporating new models such as {\color{red} XX INSERT MODELS HERE XX} and improving its
 internal structure.  The package was moved out of \texttt{agpy} and into its
-own repository in 2011, first spending a few years on bitbucket in a mercurial
-repository, then finally moved to github - where it currenly resides - in 2012.
+own repository in 2011, first spending a few years on Bitbucket in a mercurial
+repository, then finally moved to GitHub, where it currenly resides, in 2012.
 
-Because \pyspeckit's initial development preceded that of \astropy, some features
-were included that later became redundant.  Most notably, \pyspeckit included
+Because \pyspeckit's initial development preceded \astropy, some features
+were included that later became redundant with \astropy.  Most notably, \pyspeckit included
 a limited system for spectroscopic unit conversion.  In 2015, this system
 was completely replaced with \astropy's unit system.  Around the same time,
-the doppler conversion tools (converting from frequency or wavelength to 
+the Doppler conversion tools (converting from frequency or wavelength to 
 velocity) that existed in \pyspeckit were pushed upstream into \astropy,
 highlighting the mutually beneficial role of \astropy's affiliated
 packaged system \citep{Price-Whelan2018a}.  \pyspeckit was finally
@@ -140,7 +139,7 @@ produced by the Green Bank Telescope are partially supported in \pyspeckit.
         is installed, \pyspeckit will support read access to files containing
         spectra in the HDF5 format (although there is no specified standard for
         spectra in HDF5, so additional user effort may be required to create
-        \pyspeckit spectrum objects from the extracted HDF5 data).
+        \pyspeckit Spectrum objects from the extracted HDF5 data).
     \item Finally, \pyspeckit is capable of reading files from some versions of
         the GILDAS Continuum and Line Analysis Single-dish Software format
         \citep[CLASS;][]{Gildas-Team2013a}.  Since the CLASS file specification
@@ -153,7 +152,9 @@ produced by the Green Bank Telescope are partially supported in \pyspeckit.
 \end{itemize}
 
 \subsection{Plotter}
-The plotter is a basic line plotter.  See the GUI section (\S \ref{sec:gui})
+The plotter is a basic line plotter. [I think a sentence or two of a summary or
+description is needed here - would it be accurate to say something like "that comprises \pyspeckit's
+graphical user interface?] See the GUI section (\S \ref{sec:gui})
 for more details.
 
 % Should we include code examples of how to do these things? I think examples
@@ -189,7 +190,7 @@ Other information about the fit, such as the $\chi^2$ value, are available
 as attributes of the \texttt{specfit} object.
 
 \paragraph{Optimal $\chi^2$}
-There is a tool to compute the `optimal' $\chi^2$, which is the $\chi^2$
+Specfit computes the `optimal' $\chi^2$, which is the $\chi^2$
 value computed only over the range where the model contains statistically
 significant signal.  By default, the function selects all pixels where
 the model value is greater (in absolute value) than the corresponding error.
@@ -226,16 +227,16 @@ This module supports polynomial, spline, and power-law fitting.
 %values are assumed to be $1-\sigma$ Gaussian errors on the data.
 
 
-The \texttt{Spectrum} objects used by pyspeckit have an attached \texttt{error}
+The \texttt{Spectrum} objects used by \pyspeckit have an attached \texttt{error}
 array, which is meant to hold the $1-\sigma$ independent Gaussian errors on
 each pixel.  While this error representation may be a dramatic
 oversimplification of the true errors for almost all instruments (since it
 completely ignores correlation between adjacent pixels), it is also the most
-commonly used assumptions in most astronomical applications.
+commonly used assumption in most astronomical applications.
 
-The errors are used to determine the best-fit parameters and their errors (see
+The \texttt{error} array is used to determine the best-fit parameters and their errors (see
 \S \ref{sec:fitters}).  They can be displayed as error bars on individual
-pixels or as shaded regions around those pixels using different display modes
+pixels or as shaded regions around those pixels using different display modes.
 
 A typical example is given below, where we generate a spectrum and error
 array using \texttt{numpy} and \texttt{astropy} tools.
@@ -276,20 +277,23 @@ and represent symmetric 1-$\sigma$ Gaussian errors.  }
 \subsubsection{Automatic Error Estimation}
 If a \texttt{Spectrum} is created with no associated errors, \pyspeckit can
 automatically estimate the errors from a fit residual. When a fit is initiated
-on a \texttt{Spectrum} with no specified errors, the errors will default to
+on a \texttt{Spectrum} with no specified errors [I think an example here would be good - just
+to make it clear you're talking about calling specfit. We don't yet have a Specfit code
+example yet, so this can be worked in with that.], 
+the errors will default to
 being uniformly 1.0. Uniform weighting for each data point is likely not
 accurate, but will result in the appropriate best-fit parameters with
 \emph{incorrect} errors.
 
-One common approach in spectroscopy in the limit that there are few pixels with
-signal and many pixels representing only noise is to estimate the errors by the
+In the limit that there are few spectral pixels with signal and many pixels represent only noise, 
+one common approach in spectroscopy is to estimate the errors from the
 standard deviation of the signal-free pixels.  This approach generally assumes
 the noise is constant across the spectrum.  In the case that a single signal
 feature is present in the spectrum, and it can be accurately modeled, the
 standard deviation of the residual spectrum from the model fit will accurately
-represent the uniform errors.  \pyspeckit will automatically replace the errors
-with the standard deviation of the residuals if a fit is performed with
-uninitialized errors; this means that performing a fit on the same data
+represent the uniform errors. After a fit is performed with uninitialized errors,
+\pyspeckit will automatically replace the errors with the standard deviation of the 
+residuals; this means that performing a fit on the same data
 (without associated errors) twice will result in the same parameter values both
 times, but different errors the second time.
 
@@ -350,7 +354,7 @@ line plots and labels axes with \LaTeX-formatted versions of units.
 
 When the plotter is active and a model is fit, the model parameters are
 displayed with \LaTeX~formatting.  The errors on the parameters, if available,
-are also shown, and these errors are used to decide on how many significant
+are also shown, and these errors are used to decide how many significant
 figures to display.
 
 % \section{\astropy integration}
@@ -363,7 +367,7 @@ figures to display.
 \section{Models}
 \label{sec:models}
 While many of \pyspeckit's internal functions are likely to be replaced by
-\astropy tools and affiliated packages (e.g., the spectrum input and output
+\astropy tools and affiliated packages (e.g., reading and writing files to disk)
 could in the future be handled by \texttt{specutils}), the models in \pyspeckit
 are likely to remain useful indefinitely.  The model library in \pyspeckit
 includes some of the most useful general spectral model functions (e.g.,
@@ -379,31 +383,39 @@ because in many cases the ``main'' line can become optically thick, while the
 measured with a single spectrum.  \pyspeckit provides the \texttt{hyperfine}
 model class to handle this class of molecular line transitions, and it includes
 several molecular species implementations (HCN, N$_2$H$^+$, NH$_3$,
-H$_2$CO). {\color{red}If this is the beefiest part of pyspeckit, we should include a table
-listing the models and potentially an example for how to customize a model?}
+H$_2$CO). Models can customizable and examples of registering a new or modified
+model in \pyspeckit are included in the online documentation.
 
 \section{Cubes}
 \label{sec:cubes}
 Spectral cubes are growing more important in radio astronomy since they are the
 natural data products produced by interferometers like ALMA and the JVLA.
-Optical and infrared data cubes from integral field units (IFUs) like MUSE on
-the VLT, OSIRIS on Keck,  NIFS on Gemini, and NIRSpec on JWST are also becoming
-more common.
+Optical and infrared data cubes are also becoming
+more common from integral field units (IFUs) like MUSE on
+the VLT, OSIRIS on Keck, NIFS on Gemini, and NIRSpec and MIRI on JWST.
 
 While many cube operations are handled well by \texttt{numpy}-based packages
 like \texttt{spectral-cube}\footnote{\url{spectral-cube.readthedocs.io}},
-it is sometimes necessary or desirable to fit a profile to each spectrum
+it is sometimes desirable to fit a profile to each spectrum
 in a cube.  The \texttt{Cube.fiteach} method is a tool for automated line
 fitting that includes parallelization of the fit. Implementation examples can be
-found in the online documentation. This tool  has  seen significant use in
+found in the online documentation. This tool  has seen significant use in
 papers and been incorporated into other tools (e.g.,
 \texttt{multicube}\footnote{\url{https://github.com/vlas-sokolov/multicube}}).
 
 \section{Summary}
-\texttt{pyspeckit} is a versatile tool for spectroscopic analysis.
+\texttt{pyspeckit} is a versatile tool for spectroscopic analysis in python and is
+one of the \astropy affiliated packages. \pyspeckit can interactively fit a model 
+to a spectrum using the Levenberg-Marquardt optimization method via \texttt{mpfit} and 
+\texttt{lmfit}, and wrappers for \texttt{pymc} and \texttt{emcee} are also available.
+There is also the option to fit a model to the many spectra in a
+spectral cube. We have described \pyspeckit's methods of error estimation for spectra
+with and without user-provided errors. \pyspeckit has a library of models including Gaussian, 
+Lorentzian, Voigt, and others for specific molecular species; user-created models can 
+also be used with \pyspeckit.
 
 \section{Final Note}
-This paper was collaboratively written using github as a platform for
+This paper was collaboratively written using GitHub as a platform for
 discussion.  Its version history and records of some discussions about its
 content can be found at \url{https://github.com/pyspeckit/paper1}.
 
@@ -425,9 +437,9 @@ Gaussian random noise and perfectly-measured uncorrelated data errors.
 The fitted model is a one-dimensional Gaussian profile with free parameters
 amplitude, center, and width.  The fit results are given in the figure.
 
-The conditions for the $\chi^2/n=1$ approximation to produce a good error
-estimate are at least that the error distribution is Gaussian, the model is
-linear in all parameters, and the model is the correct underlying model
+To produce a good error estimate under the $\chi^2/n=1$ approximation, the error 
+distribution must be Gaussian, the model must be
+linear in all parameters, and the model must be the correct underlying model
 \citep{Andrae2010b}.
 
 Figure \ref{fig:parerrestdemo} shows the $\chi^2$ values in parameter space
@@ -438,7 +450,8 @@ dashed lines show the estimated one-sigma errors from the optimizer, while the
 horizontal dashed lines show the value $\Delta\chi^2=1$, which corresponds to
 the 68\% confidence interval for that parameter.  If the $\chi^2/n=1$
 approximation were perfect, the dashed lines would intersect with the solid
-lines.  For the shift parameter, the fit is nearly perfect, while for the
+lines.  For the centroid[or just pick a common term to use - center/shift/centroid]
+parameter, the fit is nearly perfect, while for the
 amplitude and width, it is not.
 
 Off of the diagonal of Figure \ref{fig:parerrestdemo}, we show the
@@ -487,8 +500,8 @@ See Appendix \ref{appendix:parerrest} for details and interpretation.}
 \label{appendix:parerrestammonia}
 In Section \ref{appendix:parerrest}, we showed the parameter estimation results
 in the case of a modeled 1-dimensional Gaussian.  One of the most commonly used
-models in pyspeckit is the ammonia (\ammonia) hyperfine model, which has several
-additional lines and several parameters governing those lines.
+models in \pyspeckit is the ammonia (\ammonia) hyperfine model, which has several
+additional emission lines and several parameters governing those lines.
 
 The ammonia inversion transitions are notable for having a well-separated grid
 of hyperfine components whose intensity is governed by quantum mechanics.
@@ -523,7 +536,7 @@ the column density, $N(\ammonia)$, which specifies the total column density
 of \ammonia integrated over all states (note that this parameter enters
 the model as $10^N$, i.e., we optimize the log of the column density),
 the line of sight velocity $v_{LOS}$, the line width $\sigma$, and the ortho-to-para
-ratio parametrized as the ortho fraction $F_{ortho}$.  In the examples below,
+ratio parameterized as the ortho fraction $F_{ortho}$.  In the examples below,
 we fix $F_{ortho}=0$ and treat only para lines.
 
 
@@ -542,9 +555,9 @@ model equations.
 
 In such situations, it can be beneficial to measure the parameter errors
 in different ways.  Using the \texttt{emcee} and \texttt{pymc} wrappers
-can help do this.  Examples of how to use these monte carlo samplers
-to acquire better parameter errors (once an optimization has already
-been performed) are available in the online documentation:
+can help do this.  Examples of how to use these Monte Carlo samplers
+to acquire better parameter errors once an optimization has already
+been performed are available in the online documentation:
 see \url{http://pyspeckit.readthedocs.io/en/latest/example_pymc.html}.
 
 More sophisticated examples, including fitting of a non-LTE ammonia spectrum
