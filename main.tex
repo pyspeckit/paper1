@@ -279,10 +279,21 @@ automatically estimate the errors from a fit residual. When a fit is initiated
 on a \texttt{Spectrum} with no specified errors [I think an example here would be good - just
 to make it clear you're talking about calling specfit. We don't yet have a Specfit code
 example yet, so this can be worked in with that.], 
-the errors are set to the default value of 1.0. Thus uniform weighting of the data is likely to be inaccurate, but will result in the appropriate best-fit parameters with \emph{incorrect} errors. \textcolor{red}{This is only true if the data are uniformly weighted but have the incorrect magnitude.  If the data have different weights, the correct parameters are influenced by the relative weights.  (Consider an outlier with large vs. small errors).}
+the errors are set to the default value of 1.0. Thus uniform weighting of the
+data is likely to be inaccurate, but will result in the appropriate best-fit
+parameters with \emph{incorrect} errors. \textcolor{red}{This is only true if
+the data are uniformly weighted but have the incorrect magnitude.  If the data
+have different weights, the correct parameters are influenced by the relative
+weights.  (Consider an outlier with large vs. small errors).}
 
-In the case where there are clear portions of the spectrum which have no significant emission, a common approach in spectroscopy is to estimate the errors from the standard deviation of those signal-free pixels.  This approach generally assumes the noise is constant across the spectrum.  In the case that a single signal feature is present in the spectrum, and it can be accurately modeled, the standard deviation of the residual spectrum from the model fit will accurately
-represent the uniform errors. After a fit is performed with uninitialized errors,
+In the case where there are clear portions of the spectrum which have no
+significant emission, a common approach in spectroscopy is to estimate the
+errors from the standard deviation of those signal-free pixels.  This approach
+generally assumes the noise is constant across the spectrum.  In the case that
+a single signal feature is present in the spectrum, and it can be accurately
+modeled, the standard deviation of the residual spectrum from the model fit
+will accurately represent the uniform errors. After a fit is performed with
+uninitialized errors,
 \pyspeckit will automatically replace the errors with the standard deviation of the 
 residuals; this means that performing a fit on the same data
 (without associated errors) twice will result in the same parameter values both
@@ -299,7 +310,10 @@ rescaled to deliver an approximate error.
 
 The standard rescaling is to multiply the covariance by the sum of the squared
 errors divided by the degree of freedom of the fit, usually referred to
-as $\chi^2/N$.  The number of degrees of freedom is assumed to be equal to the number of free parameters, e.g., for a one-dimensional Gaussian, there would be three: the amplitude, width, and center.  This approach implicitly assumes that the
+as $\chi^2/N$.  The number of degrees of freedom is assumed to be equal to the
+number of free parameters, e.g., for a one-dimensional Gaussian, there would be
+three: the amplitude, width, and center.  This approach implicitly assumes that
+the
 model describes the data well and is an optimal fit.  It also assumes that
 the model is linear with all of the parameters, at least in the region immediately
 surrounding the optimal fit.  These requirements are frequently not satisfied;
@@ -343,7 +357,8 @@ line plots and labels axes with \LaTeX-formatted versions of units.
 
 When the plotter is active and a model is fit, the model parameters are
 displayed with \LaTeX~formatting.  The errors on the parameters, if available,
-are also shown, and these uncertainties are used to decide on the number of significant figures to display.
+are also shown, and these uncertainties are used to decide on the number of
+significant figures to display.
 
 % \section{\astropy integration}
 % Development of \pyspeckit began several years before \astropy began.  Several
@@ -354,15 +369,22 @@ are also shown, and these uncertainties are used to decide on the number of sign
 
 \section{Models}
 \label{sec:models}
-Many of \pyspeckit's internal functions are likely to replaced by the \astropy\ \texttt{specutils} package in the future.  However, the rich suite modeling in \pyspeckit is likely to remain useful indefinitely.  This model library
+Many of \pyspeckit's internal functions are likely to replaced by the \astropy\
+\texttt{specutils} package in the future.  However, the rich suite modeling in
+\pyspeckit is likely to remain useful indefinitely.  This model library
 includes some of the most useful general spectral model functions (e.g.,
 Gaussian, Lorentzian, and Voigt profiles) and a wide range of specific model
-types (e.g., ammonia and formaldehyde hyperfine models, the \hh rotational ladder, and recombination line models).
+types (e.g., ammonia and formaldehyde hyperfine models, the \hh rotational
+ladder, and recombination line models).
 
 In radio and millimeter astronomy, there are several molecular line groups that
 consist of several Gaussian profiles separated by a fixed frequency offset.
 These hyperfine line groups are often unique probes of physical parameters
-because these different features have different, known relative optical depths. In this case, the measured relative amplitudes of these different features allows the optical depth to be measured from a single spectrum.  \pyspeckit provides the \texttt{hyperfine} model class to handle this class of molecular line transitions, and it includes
+because these different features have different, known relative optical depths.
+In this case, the measured relative amplitudes of these different features
+allow the optical depth to be measured from a single spectrum.  \pyspeckit
+provides the \texttt{hyperfine} model class to handle this class of molecular
+line transitions, and it includes
 several molecular species implementations (HCN, N$_2$H$^+$, NH$_3$,
 H$_2$CO). Models can customizable and examples of registering a new or modified
 model in \pyspeckit are included in the online documentation.
@@ -381,17 +403,21 @@ it is sometimes desirable to fit a profile to each spectrum
 in a cube.  The \texttt{Cube.fiteach} method is a tool for automated line
 fitting that includes parallelization of the fit. Implementation examples can be
 found in the online documentation. This tool has seen significant use in
-papers \citep[e.g.,][]{gas-dr1} and has been incorporated into other tools (e.g., \texttt{multicube}\footnote{\url{https://github.com/vlas-sokolov/multicube}}).
+papers \citep[e.g.,][]{gas-dr1} and has been incorporated into other tools
+(e.g.,
+\texttt{multicube}\footnote{\url{https://github.com/vlas-sokolov/multicube}}).
 
 \section{Summary}
-\texttt{pyspeckit} is a versatile tool for spectroscopic analysis in python and is one of the \astropy affiliated packages. \pyspeckit can interactively fit a model 
-to a spectrum using the Levenberg-Marquardt optimization method via \texttt{mpfit} and 
-\texttt{lmfit}, and wrappers for \texttt{pymc} and \texttt{emcee} are also available.
-There is also the option to fit a model to the many spectra in a
-spectral cube. We have described \pyspeckit's methods of error estimation for spectra
-with and without user-provided errors. \pyspeckit has a library of models including Gaussian, 
-Lorentzian, Voigt, and others for specific molecular species; user-created models can 
-also be used with \pyspeckit.
+\texttt{pyspeckit} is a versatile tool for spectroscopic analysis in python and
+is one of the \astropy affiliated packages. \pyspeckit can interactively fit a
+model to a spectrum using the Levenberg-Marquardt optimization method via
+\texttt{mpfit} and \texttt{lmfit}, and wrappers for \texttt{pymc} and
+\texttt{emcee} are also available.  There is also the option to fit a model to
+the many spectra in a spectral cube. We have described \pyspeckit's methods of
+error estimation for spectra with and without user-provided errors. \pyspeckit
+has a library of models including Gaussian, Lorentzian, Voigt, and others for
+specific molecular species; user-created models can also be used with
+\pyspeckit.
 
 \section{Final Note}
 This paper was collaboratively written using GitHub as a platform for
@@ -407,7 +433,9 @@ content can be found at \url{https://github.com/pyspeckit/paper1}.
 As discussed in Section \ref{sec:parerrest}, parameter errors are estimated in
 \pyspeckit by the underlying \texttt{lmfit} or \texttt{mpfit} tools using the
 approximation that the reduced chi-squared is unity, $\chi^2/n=1$.  We
-demonstrate here that, for a simple one-dimensional Gaussian profile, this approximation results in a reasonable, but not perfect, recovery of the underlying parameter errors.
+demonstrate here that, for a simple one-dimensional Gaussian profile, this
+approximation results in a reasonable, but not perfect, recovery of the
+underlying parameter errors.
 
 In Figure \ref{fig:synthspecdemo}, we show a synthetic spectrum with uniform
 Gaussian random noise and perfectly-measured uncorrelated data errors.
@@ -434,15 +462,20 @@ amplitude and width, it is not.
 Off of the diagonal of Figure \ref{fig:parerrestdemo}, we show the
 two-dimensional marginal distributions in which we have held the third
 parameter, the one not labeled, fixed.  Contours are shown at
-$\Delta\chi^2=2.3,6.2,11.8$, corresponding to 68\%, 95\%, and 99.5\% ($1\sigma$, $2\sigma$, and $3\sigma$ for a Gaussian) confidence regions.
-The vertical and horizontal dashed lines show the estimates from the $\chi^2/n=1$
+$\Delta\chi^2=2.3,6.2,11.8$, corresponding to 68\%, 95\%, and 99.5\%
+($1\sigma$, $2\sigma$, and $3\sigma$ for a Gaussian) confidence regions.  The
+vertical and horizontal dashed lines show the estimates from the $\chi^2/n=1$
 approximation.
 The shift vs amplitude and shift vs width diagrams both show very good matches.
 However, the width vs amplitude plot indicates that the single-parameter
 errorbars underestimate the true errors because these parameters are
 significantly correlated.  This information is captured in the covariance
 matrix that is used to compute the single-parameter errors, as it has
-significant values in the off-diagonal parts of the matrix.  More broadly, this approach for estimating parameter uncertainties also relies on the analysis problem fulfilling the conditions for least-squares fitting, namely that the dependent variables are perfectly known and that the model would be the correct representation of perfectly known data.
+significant values in the off-diagonal parts of the matrix.  More broadly, this
+approach for estimating parameter uncertainties also relies on the analysis
+problem fulfilling the conditions for least-squares fitting, namely that the
+dependent variables are perfectly known and that the model would be the correct
+representation of perfectly known data.
 
 The source code for this example can be found in the \pyspeckit github
 repository in \texttt{examples/synthetic\_spectrum\_example\_witherrorestimates.py}.
@@ -465,7 +498,8 @@ dashed lines show the estimated $1\sigma$ errors from the optimizer, while the
 horizontal dashed lines show the value $\Delta\chi^2=1$, which corresponds to
 the 68\% confidence interval for that parameter.
 In the off-diagonal panels, contours are shown at $\Delta\chi^2=2.3,6.2,11.8$,
-corresponding to 68\%, 95\%, and 99.5\% ($1\sigma$, $2\sigma$, and $3\sigma$ for a Gaussian) confidence regions.
+corresponding to 68\%, 95\%, and 99.5\% ($1\sigma$, $2\sigma$, and $3\sigma$
+for a Gaussian) confidence regions.
 See Appendix \ref{appendix:parerrest} for details and interpretation.}
 \label{fig:parerrestdemo}
 \end{figure*}
@@ -478,8 +512,12 @@ in the case of a modeled 1-dimensional Gaussian.  One of the most commonly used
 models in \pyspeckit is the ammonia (\ammonia) hyperfine model, which has several
 additional emission lines and several parameters governing those lines.
 
-The ammonia inversion transitions are notable for having spectrally resolved hyperfine components, the relative weights of which are governed by quantum mechanics \citep{mangum15}. The existence of these additional components often allows for direct estimates
-of the optical depth of the central line, which is optically thicker than the other components, thereby making column density estimates straightforward when compared to other molecular species.
+The ammonia inversion transitions are notable for having spectrally resolved
+hyperfine components, the relative weights of which are governed by quantum
+mechanics \citep{mangum15}. The existence of these additional components often
+allows for direct estimates of the optical depth of the central line, which is
+optically thicker than the other components, thereby making column density
+estimates straightforward when compared to other molecular species.
 
 The model for these lines is more complicated than that for a single Gaussian.
 The model must include a simplified version of the radiative transfer equation
@@ -492,32 +530,37 @@ In this section, we show parameter estimates analagous to those in Section
 \ref{appendix:parerrest}.
 We examine a case where the fitted lines are in local
 thermodynamic equilibrium (LTE), such that the ratios of the $(J,K)=(1,1)$
-to $(2,2)$ line is governed by the rotational temperature $T_\mathrm{R}$ but the individual lines both have $T_{\mathrm{ex}}=T_{\mathrm{R}}$.
+to $(2,2)$ line is governed by the rotational temperature $T_\mathrm{R}$ but
+the individual lines both have $T_{\mathrm{ex}}=T_{\mathrm{R}}$.
 % Second, a case where the fitted lines are not
 % in LTE, such that $T_{ex,1-1} \neq T_{ex,2-2}$ and $T_{ex} < T_{R}$; in this case,
 % we have adopted these values from a RADEX large velocity gradient model
 % \citep{van-der-Tak2007a}.
 
-The free parameters in the ammonia model are
-the rotational temperature, $T_{\mathrm{R}}$, which governs the relative populations of the rotational states, the excitation temperature $T_{\mathrm{ex}}$, which governs
-the relative populations of the two levels within a single inversion transition,
-the column density, $N(\ammonia)$, which specifies the total column density
-of \ammonia integrated over all states (note that this parameter enters
-the model as $10^N$, i.e., we optimize the log of the column density),
-the line-of-sight velocity $v_\mathrm{LoS}$, the line width $\sigma_v$, and the ortho-to-para ratio parameterized as the fraction of ortho-\ammonia $F_{ortho}$.  In the examples below, we fix $F_{ortho}=0$ and treat only para-\ammonia lines.
+The free parameters in the ammonia model are the rotational temperature,
+$T_{\mathrm{R}}$, which governs the relative populations of the rotational
+states, the excitation temperature $T_{\mathrm{ex}}$, which governs the
+relative populations of the two levels within a single inversion transition,
+the column density, $N(\ammonia)$, which specifies the total column density of
+\ammonia integrated over all states (note that this parameter enters the model
+as $10^N$, i.e., we optimize the log of the column density), the line-of-sight
+velocity $v_\mathrm{LoS}$, the line width $\sigma_v$, and the ortho-to-para
+ratio parameterized as the fraction of ortho-\ammonia $F_{ortho}$.  In the
+examples below, we fix $F_{ortho}=0$ and treat only para-\ammonia lines.
 
 
 The fit results from the first case are shown in Figures
-\ref{fig:nh3synthspecdemo} and \ref{fig:nh3parerrestdemo}.  The fit
-recovers the input parameters, but reveals one of the important caveats when
-using any optimization algorithm: in some models, parameters are degenerate,
-and therefore using the diagonal of the covariance matrix to estimate the
-variance can result in incorrect error estimates.  While the errors on most
-parameters appear reasonable, there is a very large error on the excitation
-temperature $T_{\mathrm{ex}}$, which is driven by the degeneracy of $T_{\mathrm{ex}}$ with
-$N_\mathrm{tot}$.  The asymmetry of the error on $T_{\mathrm{ex}}$ is apparent in Figure \ref{fig:nh3parerrestdemo}, but it is not captured by the optimizer's reported
-error results; the asymmetry occurs because $T_{ex}$ is in the exponent in the
-model equations.
+\ref{fig:nh3synthspecdemo} and \ref{fig:nh3parerrestdemo}.  The fit recovers
+the input parameters, but reveals one of the important caveats when using any
+optimization algorithm: in some models, parameters are degenerate, and
+therefore using the diagonal of the covariance matrix to estimate the variance
+can result in incorrect error estimates.  While the errors on most parameters
+appear reasonable, there is a very large error on the excitation temperature
+$T_{\mathrm{ex}}$, which is driven by the degeneracy of $T_{\mathrm{ex}}$ with
+$N_\mathrm{tot}$.  The asymmetry of the error on $T_{\mathrm{ex}}$ is apparent
+in Figure \ref{fig:nh3parerrestdemo}, but it is not captured by the optimizer's
+reported error results; the asymmetry occurs because $T_{ex}$ is in the
+exponent in the model equations.
 
 In such situations, it can be beneficial to measure the parameter errors
 in different ways.  Using the \texttt{emcee} and \texttt{pymc} wrappers
