@@ -9,6 +9,7 @@
 \newcommand{\pyspeckit}{\texttt{pyspeckit}\xspace}
 \newcommand{\astropy}{\texttt{astropy}\xspace}
 \newcommand{\hh}{\ensuremath{\mathrm{H}_2}\xspace}
+\newcommand{\ammonia}{\ensuremath{\mathrm{NH}_3}\xspace}
 \begin{document}
 
 \title{{\sc{pyspeckit}:} A spectroscopic analysis and plotting package}
@@ -72,7 +73,9 @@ established.
 the fitting features were inspired in part by \texttt{xspec}
 (\url{https://heasarc.gsfc.nasa.gov/xanadu/xspec/}).  Over subsequent years,
 \pyspeckit grew by incorporating more sophisticated models and improving its
-internal structure.  The package was moved out of \texttt{agpy} and into its
+internal structure.  
+\authorcomment1{is the package hosting history really needed?}
+The package was moved out of \texttt{agpy} and into its
 own repository in 2011, first spending a few years on bitbucket in a mercurial
 repository, then finally moved to github - where it currenly resides - in 2012.
 
@@ -106,7 +109,7 @@ as functions: the \texttt{plotter}, the fitter \texttt{specfit}, and the
 continuum fitter \texttt{baseline}.
 
 There are several important subclasses of \texttt{Spectrum}: \texttt{Spectra}
-is a collection of spectra intended to be stitched together (i.e., with
+is a collection of spectra i ntended to be stitched together (i.e., with
 non-overlapping spectral axes), \texttt{ObsBlock} is a collection of spectra
 with identical spectral axes intended to be operated on as a group, e.g., to
 take an average spectrum, and \texttt{Cube} is a 3D spatial-spatial-spectral
@@ -146,10 +149,15 @@ produced by the Green Bank Telescope are partially supported in \pyspeckit.
         \citep[CLASS;][]{Gildas-Team2013a}.  Since the CLASS file specification
         is incomplete and will remain private for the foreseeable future, much
         of the data reading in \pyspeckit has been reproduced in an approximate
-        manner.  The CLASS reader is known to work well with data files from
+        manner.  \authorcomment1{Is it possible to mention which range of GILDAS 
+        versions have been tested? Is the problem with possible shifts in frequency 
+        or in amplitude?}
+        The CLASS reader is known to work well with data files from
         the Arizona Radio Observatory telescopes (12-m and 10-m Submillimeter
         Telescope) and the Atacama Pathfinder Experiment (APEX) radio
-        telescope.
+        telescope. 
+        \authorcomment1{What does 'work well' means? Why not say fully 
+        compatible with APEX and ARO?}
 \end{itemize}
 
 \subsection{Plotter}
