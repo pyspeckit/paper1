@@ -106,10 +106,12 @@ frequency, energy), the latter of
 which represents the spectroscopic axis.  A \texttt{Spectrum} object has
 several attributes that are themselves sophisticated classes that can be called
 as functions: the \texttt{plotter}, the fitter \texttt{specfit}, and the
-continuum fitter \texttt{baseline}.
+continuum fitter \texttt{baseline}
+\authorcomment1{is this only for continuum or it allows for normal baselining? 
+If so, it is better to say baseline subtraction.}.
 
 There are several important subclasses of \texttt{Spectrum}: \texttt{Spectra}
-is a collection of spectra i ntended to be stitched together (i.e., with
+is a collection of spectra intended to be stitched together (i.e., with
 non-overlapping spectral axes), \texttt{ObsBlock} is a collection of spectra
 with identical spectral axes intended to be operated on as a group, e.g., to
 take an average spectrum, and \texttt{Cube} is a 3D spatial-spatial-spectral
@@ -124,16 +126,22 @@ We list the currently supported formats here:
 \begin{itemize}
     \item ASCII: Reading a one-dimensional spectrum from a text file with an optional
         error column can
-be done using the \texttt{astropy.io.ascii} module in any of its supported
-formats.  
+	be done using the \texttt{astropy.io.ascii} module in any of its supported
+	formats.  
     \item FITS: The Flexible Image Transport System \citep[FITS;][]{Pence2010a} format is
-supported in \pyspeckit with \texttt{astropy.io.fits}.  Initially developed
-by optical astronomers, the FITS standard has incorporated several
-recommendations for various types of data formats used in the astronomy
-community into successive updates to the standard---the latest version of the
-standard being 4.0 from 2016.  Additionally, data files following the Single
-Dish FITS \citep[SDFITS;][]{Garwood2000a} convention for radio astronomy data as
-produced by the Green Bank Telescope are partially supported in \pyspeckit.
+	supported in \pyspeckit with \texttt{astropy.io.fits}.  Initially developed
+	\authorcomment1{What about citing 
+	\url{http://adsabs.harvard.edu/abs/1981A&AS...44..363W}
+	or 
+	\url{http://adsabs.harvard.edu/abs/2002A&A...395.1061G?}}
+	by optical astronomers, the FITS standard has incorporated several
+	recommendations for various types of data formats used in the astronomy
+	community into successive updates to the standard---the latest version of the
+	standard being 4.0 from 2016.  Additionally, data files following the Single
+	Dish FITS \citep[SDFITS;][]{Garwood2000a} convention for radio astronomy data as
+	produced by the Green Bank Telescope are partially supported in \pyspeckit.
+	\authorcomment1{Is it possible to clarify what is not supported? 
+	Or up to which version of SDFITS it is working?}
     \item HDF5: The Hierarchical Data Format (HDF5) file format has been
         designed to store and organize large amounts of data and offers
         significant advantages over FITS\@.  Although not widely used in
