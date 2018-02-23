@@ -69,6 +69,7 @@ was developed contemporaneously and solved many of the same problems as
 2011, so even the basic infrastructure for such analysis was not yet
 established.
 
+\authorcomment1{Should we define GUI?}
 \pyspeckit's GUI features were inspired by IRAF's \texttt{splot} tool, while
 the fitting features were inspired in part by \texttt{xspec}
 (\url{https://heasarc.gsfc.nasa.gov/xanadu/xspec/}).  Over subsequent years,
@@ -358,12 +359,14 @@ programmatically and re-fit using those same results.
 The GUI was built using \texttt{matplotlib}'s canvas interaction tools.  These
 tools are limited to GUI capabilities that are compatible with all platforms
 (e.g., Qt, Tk, Gtk) and therefore exclude some of the more sophisticated fitting
-tools found in other software (e.g., \texttt{glue}).
+tools found in other software (e.g., \texttt{glue}). 
+\authorcomment1{Add citation to GLUE paper?}
 
 \subsection{Plotting}
 Plotting in \pyspeckit is meant to provide the shortest path to
 publication-quality figures.  The default plotting mode uses histogram-style
-line plots and labels axes with \LaTeX-formatted versions of units.
+line plots\added{, which follows the radio and inteferometric standard,} and 
+labels axes with \LaTeX-formatted versions of units.
 
 When the plotter is active and a model is fit, the model parameters are
 displayed with \LaTeX~formatting.  The errors on the parameters, if available,
@@ -398,6 +401,8 @@ model class to handle this class of molecular line transitions, and it includes
 several molecular species implementations (HCN, N$_2$H$^+$, NH$_3$,
 H$_2$CO). {\color{red}If this is the beefiest part of pyspeckit, we should include a table
 listing the models and potentially an example for how to customize a model?}
+\authorcomment1{I (JEP) agree, it would be really useful to include the list of models 
+already included, and which ones could be used as templates for different types.}
 
 \section{Cubes}
 \label{sec:cubes}
@@ -412,8 +417,10 @@ like \texttt{spectral-cube}\footnote{\url{spectral-cube.readthedocs.io}},
 it is sometimes necessary or desirable to fit a profile to each spectrum
 in a cube.  The \texttt{Cube.fiteach} method is a tool for automated line
 fitting that includes parallelization of the fit. Implementation examples can be
-found in the online documentation. This tool  has  seen significant use in
-papers and been incorporated into other tools (e.g.,
+found in the online documentation. This tool  has  seen significant use in 
+custom made survey pipelines, 
+\citep[e.g.][\url{https://github.com/GBTAmmoniaSurvey/GAS}]{Friesen2017-GAS}, 
+papers and it has been incorporated into other tools (e.g.,
 \texttt{multicube}\footnote{\url{https://github.com/vlas-sokolov/multicube}}).
 
 \section{Summary}
