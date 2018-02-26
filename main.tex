@@ -528,7 +528,7 @@ Additionally, there are several approximations that are convenient to use
 in different circumstances, so \pyspeckit implements several different
 variants of the \ammonia model.
 
-In this section, we show parameter estimates analagous to those in Section
+In this section, we show parameter estimates analogous to those in Section
 \ref{appendix:parerrest}.
 We examine a case where the fitted lines are in local
 thermodynamic equilibrium (LTE), such that the ratios of the 1-1
@@ -612,6 +612,53 @@ algorithm are larger than the directly computed marginal errors.}
 \end{figure*}
 
 
+\section{Comparison of N$_2$H$^+$ (1-0) results with CLASS}
+\label{appendix:N2Hp}
 
+One of the most frequently used line transition used to study dense gas kinematics, 
+in addition to Ammonia, is N$_2$H$^+$ (1-0) at 93.17\,GHz. 
+The transition displays several hyperfine components with well determined 
+relative frequencies and weights. 
+The standard approach is to use the \verb+HFS+ mode within 
+CLASS. 
+Here we show that using the already implemented model in pyspeckit 
+we obtain the same results in both optically thin and thick models.
+
+\begin{deluxetable}{cccc}
+\tablecolumns{4}
+\tablecaption{Best fit parameters in optically thin model\label{table-thin}}
+\tablehead{\colhead{Parameter} &\colhead{Input value} & \colhead{pyspeckit fit} & \colhead{CLASS fit}
+}
+\startdata
+\cutinhead{With all 4 parameters}
+T$_{ex}$ & 9.0 & 2.89591 & 2.88430952541\\  
+$V_c$ & 0.0 & -0.000168891 &-0.004\\ 
+$\sigma_v$ & 0.3 & 0.3033 &0.303207\\
+$\tau_{all}$ & 0.01 & 0.450383 & 0.487 \\
+$Area$ & & & 0.06108\\
+\cutinhead{With all 3 parameters}
+T$_{ex}$ & 9.0 & 3.42535  &  3.42094959703\\
+$V_c$ & 0.0 & -0.00199191 &-0.004\\
+$\sigma_v$ & 0.3 & 0.306108 &0.3066051\\
+$\tau_{all}$ & 0.01 & 0.1& 0.1 \\
+$Area$ & & & 0.06108\\
+\enddata
+\end{deluxetable}
+
+
+\begin{deluxetable}{cccc}
+\tablecolumns{4}
+\tablecaption{Best fit parameters in optically thick model\label{table-thick}}
+\tablehead{\colhead{Parameter} &\colhead{Input value} & \colhead{pyspeckit fit} & \colhead{CLASS fit}
+}
+\startdata
+\cutinhead{With all 4 parameters} 
+T$_{ex}$ & 9.0 & 9.33 & 9.32310036\\
+$V_c$ & 0.0 & -0.000168891 &-0.001\\ 
+$\sigma_v$ & 0.3 & 0.29385 & 0.293440687\\
+$\tau_{all}$ & 9.0 & 8.29 & 8.26 \\
+$Area$ & & & 0.06108\\
+\enddata
+\end{deluxetable}
 
 \end{document}
