@@ -646,7 +646,14 @@ CLASS.
 Here we show that using the already implemented model in pyspeckit 
 we obtain the same results in both optically thin and thick models.
 
+Tables \ref{tab:n2hpthin} and \ref{tab:n2hpthick} show the results of fitting
+an example spectrum in both CLASS and \pyspeckit.  The resulting fits differ by
+$<1\%$ in most parameters, with a slightly greater discrepancy in the velocity
+centroid that we speculate is driven by a difference the optimizer's step size
+for that parameter.
+
 \begin{deluxetable}{cccc}
+    \label{tab:n2hpthin}
 \tablecolumns{4}
 \tablecaption{Best fit parameters in optically thin model\label{table-thin}}
 \tablehead{\colhead{Parameter} &\colhead{Input value} & \colhead{pyspeckit fit} & \colhead{CLASS fit}
@@ -658,7 +665,7 @@ $V_c$ & 0.0 & -0.000168891 &-0.004\\
 $\sigma_v$ & 0.3 & 0.3033 &0.303207\\
 $\tau_{all}$ & 0.01 & 0.450383 & 0.487 \\
 $Area$ & & & 0.06108\\
-\cutinhead{With all 3 parameters}
+\cutinhead{With 3 parameters}
 T$_{ex}$ & 9.0 & 3.42535  &  3.42094959703\\
 $V_c$ & 0.0 & -0.00199191 &-0.004\\
 $\sigma_v$ & 0.3 & 0.306108 &0.3066051\\
@@ -669,6 +676,7 @@ $Area$ & & & 0.06108\\
 
 
 \begin{deluxetable}{cccc}
+    \label{tab:n2hpthick}
 \tablecolumns{4}
 \tablecaption{Best fit parameters in optically thick model\label{table-thick}}
 \tablehead{\colhead{Parameter} &\colhead{Input value} & \colhead{pyspeckit fit} & \colhead{CLASS fit}
