@@ -69,7 +69,6 @@ was developed contemporaneously and solved many of the same problems as
 2011, so even the basic infrastructure for such analysis was not yet
 established.
 
-\authorcomment1{Should we define GUI?}
 \pyspeckit's graphical user interface (GUI) features were inspired by IRAF's 
 \texttt{splot} tool, while the fitting features were inspired in part by \texttt{xspec}
 (\url{https://heasarc.gsfc.nasa.gov/xanadu/xspec/}).  Over subsequent years,
@@ -105,9 +104,10 @@ frequency, energy), the latter of
 which represents the spectroscopic axis.  A \texttt{Spectrum} object has
 several attributes that are themselves sophisticated classes that can be called
 as functions: the \texttt{plotter}, the fitter \texttt{specfit}, and the
-continuum fitter \texttt{baseline}
-\authorcomment1{is this only for continuum or it allows for normal baselining? 
-If so, it is better to say baseline subtraction.}.
+continuum fitter \texttt{baseline}\footnote{It is common in radio astronomy to
+have wide instrumental residual features in the data that need to be fitted and
+removed.  In practical algorithmic terms, fitting a true astrophysical
+continuum and a residual instrumental baseline are indistinguishable.}.
 
 There are several important subclasses of \texttt{Spectrum}: \texttt{Spectra}
 is a collection of spectra intended to be stitched together (i.e., with
@@ -127,20 +127,17 @@ We list the currently supported formats here:
         error column can
 	be done using the \texttt{astropy.io.ascii} module in any of its supported
 	formats.  
-    \item FITS: The Flexible Image Transport System \citep[FITS;][]{Pence2010a} format is
+    \item FITS: The Flexible Image Transport System \citep[FITS;][]{Wells1981a,Greisen2006a,Pence2010a} format is
 	supported in \pyspeckit with \texttt{astropy.io.fits}.  Initially developed
-	\authorcomment1{What about citing 
-	\url{http://adsabs.harvard.edu/abs/1981A&AS...44..363W}
-	or 
-	\url{http://adsabs.harvard.edu/abs/2002A&A...395.1061G?}}
 	by optical astronomers, the FITS standard has incorporated several
 	recommendations for various types of data formats used in the astronomy
 	community into successive updates to the standard---the latest version of the
 	standard being 4.0 from 2016.  Additionally, data files following the Single
 	Dish FITS \citep[SDFITS;][]{Garwood2000a} convention for radio astronomy data as
 	produced by the Green Bank Telescope are partially supported in \pyspeckit.
-	\authorcomment1{Is it possible to clarify what is not supported? 
-	Or up to which version of SDFITS it is working?}
+	% \authorcomment1{Is it possible to clarify what is not supported? 
+    % Or up to which version of SDFITS it is working?} No, I don't know the
+    % answers to this; it would take some real work to find out.
     \item HDF5: The Hierarchical Data Format (HDF5) file format has been
         designed to store and organize large amounts of data and offers
         significant advantages over FITS\@.  Although not widely used in
@@ -156,15 +153,16 @@ We list the currently supported formats here:
         \citep[CLASS;][]{Gildas-Team2013a}.  Since the CLASS file specification
         is incomplete and will remain private for the foreseeable future, much
         of the data reading in \pyspeckit has been reproduced in an approximate
-        manner.  \authorcomment1{Is it possible to mention which range of GILDAS 
-        versions have been tested? Is the problem with possible shifts in frequency 
-        or in amplitude?}
-        The CLASS reader is known to work well with data files from
+        manner.
+        %\authorcomment1{Is it possible to mention which range of GILDAS 
+        %versions have been tested? Is the problem with possible shifts in frequency 
+        %or in amplitude?} 
+        %I don't have the tools needed to perform these tests, but perhaps someone
+        %else might.
+        The CLASS reader is known to be compatible with data files from
         the Arizona Radio Observatory telescopes (12-m and 10-m Submillimeter
         Telescope) and the Atacama Pathfinder Experiment (APEX) radio
         telescope. 
-        \authorcomment1{What does 'work well' means? Why not say fully 
-        compatible with APEX and ARO?}
 \end{itemize}
 
 \subsection{Plotter}
@@ -276,14 +274,13 @@ sp.plotter.savefig("example_fig_1.pdf")
 \end{minted}
 \end{minipage}
 
-\begin{figure*}[!htp]
-\includegraphics[scale=1,width=4in]{example_fig_1.pdf}
+\begin{figure}[!htp]
+\includegraphics[scale=1,width=3.25in]{example_fig_1.pdf}
 \caption{An example plotted spectrum showing the automated unit labeling
 and errors.  The errors are shown with the \texttt{`fill'} style
 and represent symmetric $1-\sigma$ Gaussian errors.  }
-\authorcomment1{this figure appears like a single column, but it uses the full page option, figure*. Is this what you want? I would place it as single column.}}
 \label{fig:example1}
-\end{figure*}
+\end{figure}
 
 
 
@@ -363,8 +360,7 @@ programmatically and re-fit using those same results.
 The GUI was built using \texttt{matplotlib}'s canvas interaction tools.  These
 tools are limited to the GUI capabilities that are compatible with all platforms
 (e.g., Qt, Tk, Gtk) and therefore exclude some of the more sophisticated fitting
-tools found in other software (e.g., \texttt{glue}). 
-\authorcomment1{Add citation to GLUE paper?}
+tools found in other software \citep[e.g., \texttt{glue}][]{Beaumont2014b}. 
 
 \subsection{Plotting}
 Plotting in \pyspeckit is designed to provide a short path to
@@ -405,10 +401,14 @@ line transitions, and it includes
 several molecular species implementations (HCN, N$_2$H$^+$, NH$_3$,
 H$_2$CO). Models can customizable and examples of registering a new or modified
 model in \pyspeckit are included in the online documentation.
-{\color{red}If this is the beefiest part of pyspeckit, we should include a table
+{\color{red}
+TODO: ADD MODEL TABLE, maybe add demo of custom model?  That might be in the
+docs already...
+If this is the beefiest part of pyspeckit, we should include a table
 listing the models and potentially an example for how to customize a model?}
 \authorcomment1{I (JEP) agree, it would be really useful to include the list of models 
 already included, and which ones could be used as templates for different types.}
+
 
 \section{Cubes}
 \label{sec:cubes}
