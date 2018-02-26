@@ -1,0 +1,72 @@
+
+fits read N2Hp_thin.fits
+file out N2Hp_thin.30m single
+write 
+
+file in N2Hp_thin.30m
+find
+get f
+set form full
+set unit v
+plot
+method hfs n2h+10.hfs
+set WINDOW  -9.8 -6.3  -3.0 2.4  4.2 8.6
+base 0
+min hfs
+iter
+iter
+iter
+vis
+file out N2Hp_thin_fit_4par.30m m
+write
+fit\lines 1 "0 0.061 0 0.0 0 0.705 1 0.1"
+min
+iter
+iter
+iter
+iter
+vis
+file out N2Hp_thin_fit_3par.30m m
+write
+
+file in N2Hp_thin_fit_4par.30m
+find
+print fit /output fit_thin_4par.dat
+$more fit_thin_4par.dat
+set mode x -4 16
+set mode y -0.2 2.2
+pl
+vis
+hardcopy N2Hp_CLASS_thin_4par_fit.png /device PNG COLOR
+
+
+file in N2Hp_thin_fit_3par.30m
+find
+print fit /output fit_thin_3par.dat
+$more fit_thin_3par.dat
+
+
+
+
+
+
+
+fits read N2Hp_thick.fits
+file out N2Hp_thick.30m single
+write 
+
+file in N2Hp_thick.30m
+find
+get f
+set form full
+set unit v
+plot
+method hfs n2h+10.hfs
+set WINDOW  -9.8 -6.3  -3.0 2.4  4.2 8.6
+base 0
+fit\lines 1 "0 51 0 0.0 0 0.691 0 8.3"
+min hfs
+iter
+iter
+iter
+vis

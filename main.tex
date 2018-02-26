@@ -69,10 +69,11 @@ was developed contemporaneously and solved many of the same problems as
 2011, so even the basic infrastructure for such analysis was not yet
 established.
 
+\authorcomment1{Should we define GUI?}
 \pyspeckit's graphical user interface (GUI) features were inspired by IRAF's 
 \texttt{splot} tool, while the fitting features were inspired in part by \texttt{xspec}
 (\url{https://heasarc.gsfc.nasa.gov/xanadu/xspec/}).  Over subsequent years,
-\pyspeckit grew by incorporating new models such as {\color{red} XX INSERT MODELS HERE XX} and improving its
+\pyspeckit grew by incorporating more sophisticated models such as {\color{red} XX INSERT MODELS HERE XX} and improving its
 internal structure.  The package was moved out of \texttt{agpy} and into its
 own repository in 2011, first spending a few years on Bitbucket in a mercurial
 repository, then finally moved to GitHub, where it currenly resides, in 2012.
@@ -104,7 +105,9 @@ frequency, energy), the latter of
 which represents the spectroscopic axis.  A \texttt{Spectrum} object has
 several attributes that are themselves sophisticated classes that can be called
 as functions: the \texttt{plotter}, the fitter \texttt{specfit}, and the
-continuum fitter \texttt{baseline}.
+continuum fitter \texttt{baseline}
+\authorcomment1{is this only for continuum or it allows for normal baselining? 
+If so, it is better to say baseline subtraction.}.
 
 There are several important subclasses of \texttt{Spectrum}: \texttt{Spectra}
 is a collection of spectra intended to be stitched together (i.e., with
@@ -122,16 +125,22 @@ We list the currently supported formats here:
 \begin{itemize}
     \item ASCII: Reading a one-dimensional spectrum from a text file with an optional
         error column can
-be done using the \texttt{astropy.io.ascii} module in any of its supported
-formats.  
+	be done using the \texttt{astropy.io.ascii} module in any of its supported
+	formats.  
     \item FITS: The Flexible Image Transport System \citep[FITS;][]{Pence2010a} format is
-supported in \pyspeckit with \texttt{astropy.io.fits}.  Initially developed
-by optical astronomers, the FITS standard has incorporated several
-recommendations for various types of data formats used in the astronomy
-community into successive updates to the standard---the latest version of the
-standard being 4.0 from 2016.  Additionally, data files following the Single
-Dish FITS \citep[SDFITS;][]{Garwood2000a} convention for radio astronomy data as
-produced by the Green Bank Telescope are partially supported in \pyspeckit.
+	supported in \pyspeckit with \texttt{astropy.io.fits}.  Initially developed
+	\authorcomment1{What about citing 
+	\url{http://adsabs.harvard.edu/abs/1981A&AS...44..363W}
+	or 
+	\url{http://adsabs.harvard.edu/abs/2002A&A...395.1061G?}}
+	by optical astronomers, the FITS standard has incorporated several
+	recommendations for various types of data formats used in the astronomy
+	community into successive updates to the standard---the latest version of the
+	standard being 4.0 from 2016.  Additionally, data files following the Single
+	Dish FITS \citep[SDFITS;][]{Garwood2000a} convention for radio astronomy data as
+	produced by the Green Bank Telescope are partially supported in \pyspeckit.
+	\authorcomment1{Is it possible to clarify what is not supported? 
+	Or up to which version of SDFITS it is working?}
     \item HDF5: The Hierarchical Data Format (HDF5) file format has been
         designed to store and organize large amounts of data and offers
         significant advantages over FITS\@.  Although not widely used in
@@ -147,10 +156,15 @@ produced by the Green Bank Telescope are partially supported in \pyspeckit.
         \citep[CLASS;][]{Gildas-Team2013a}.  Since the CLASS file specification
         is incomplete and will remain private for the foreseeable future, much
         of the data reading in \pyspeckit has been reproduced in an approximate
-        manner.  The CLASS reader is known to work well with data files from
+        manner.  \authorcomment1{Is it possible to mention which range of GILDAS 
+        versions have been tested? Is the problem with possible shifts in frequency 
+        or in amplitude?}
+        The CLASS reader is known to work well with data files from
         the Arizona Radio Observatory telescopes (12-m and 10-m Submillimeter
         Telescope) and the Atacama Pathfinder Experiment (APEX) radio
-        telescope.
+        telescope. 
+        \authorcomment1{What does 'work well' means? Why not say fully 
+        compatible with APEX and ARO?}
 \end{itemize}
 
 \subsection{Plotter}
@@ -266,7 +280,8 @@ sp.plotter.savefig("example_fig_1.pdf")
 \includegraphics[scale=1,width=4in]{example_fig_1.pdf}
 \caption{An example plotted spectrum showing the automated unit labeling
 and errors.  The errors are shown with the \texttt{`fill'} style
-and represent symmetric $1\sigma$ Gaussian errors.  }
+and represent symmetric $1-\sigma$ Gaussian errors.  }
+\authorcomment1{this figure appears like a single column, but it uses the full page option, figure*. Is this what you want? I would place it as single column.}}
 \label{fig:example1}
 \end{figure*}
 
@@ -348,12 +363,14 @@ programmatically and re-fit using those same results.
 The GUI was built using \texttt{matplotlib}'s canvas interaction tools.  These
 tools are limited to the GUI capabilities that are compatible with all platforms
 (e.g., Qt, Tk, Gtk) and therefore exclude some of the more sophisticated fitting
-tools found in other software (e.g., \texttt{glue}).
+tools found in other software (e.g., \texttt{glue}). 
+\authorcomment1{Add citation to GLUE paper?}
 
 \subsection{Plotting}
 Plotting in \pyspeckit is designed to provide a short path to
 publication-quality figures.  The default plotting mode uses histogram-style
-line plots and labels axes with \LaTeX-formatted versions of units.
+line plots\added{, which follows the radio and inteferometric standard,} and 
+labels axes with \LaTeX-formatted versions of units.
 
 When the plotter is active and a model is fit, the model parameters are
 displayed with \LaTeX~formatting.  The errors on the parameters, if available,
@@ -388,6 +405,10 @@ line transitions, and it includes
 several molecular species implementations (HCN, N$_2$H$^+$, NH$_3$,
 H$_2$CO). Models can customizable and examples of registering a new or modified
 model in \pyspeckit are included in the online documentation.
+{\color{red}If this is the beefiest part of pyspeckit, we should include a table
+listing the models and potentially an example for how to customize a model?}
+\authorcomment1{I (JEP) agree, it would be really useful to include the list of models 
+already included, and which ones could be used as templates for different types.}
 
 \section{Cubes}
 \label{sec:cubes}
@@ -402,10 +423,13 @@ like \texttt{spectral-cube}\footnote{\url{spectral-cube.readthedocs.io}},
 it is sometimes desirable to fit a profile to each spectrum
 in a cube.  The \texttt{Cube.fiteach} method is a tool for automated line
 fitting that includes parallelization of the fit. Implementation examples can be
-found in the online documentation. This tool has seen significant use in
-papers \citep[e.g.,][]{gas-dr1} and has been incorporated into other tools
-(e.g.,
+found in the online documentation. 
+This tool  has  seen significant use in 
+custom made survey pipelines, 
+\citep[e.g.][\url{https://github.com/GBTAmmoniaSurvey/GAS}]{Friesen2017-GAS}, 
+papers and it has been incorporated into other tools (e.g.,
 \texttt{multicube}\footnote{\url{https://github.com/vlas-sokolov/multicube}}).
+
 
 \section{Summary}
 \texttt{pyspeckit} is a versatile tool for spectroscopic analysis in python and
@@ -526,7 +550,7 @@ Additionally, there are several approximations that are convenient to use
 in different circumstances, so \pyspeckit implements several different
 variants of the \ammonia model.
 
-In this section, we show parameter estimates analagous to those in Section
+In this section, we show parameter estimates analogous to those in Section
 \ref{appendix:parerrest}.
 We examine a case where the fitted lines are in local
 thermodynamic equilibrium (LTE), such that the ratios of the $(J,K)=(1,1)$
@@ -610,6 +634,53 @@ algorithm are larger than the directly computed marginal errors. }
 \end{figure*}
 
 
+\section{Comparison of N$_2$H$^+$ (1-0) results with CLASS}
+\label{appendix:N2Hp}
 
+One of the most frequently used line transition used to study dense gas kinematics, 
+in addition to Ammonia, is N$_2$H$^+$ (1-0) at 93.17\,GHz. 
+The transition displays several hyperfine components with well determined 
+relative frequencies and weights. 
+The standard approach is to use the \verb+HFS+ mode within 
+CLASS. 
+Here we show that using the already implemented model in pyspeckit 
+we obtain the same results in both optically thin and thick models.
+
+\begin{deluxetable}{cccc}
+\tablecolumns{4}
+\tablecaption{Best fit parameters in optically thin model\label{table-thin}}
+\tablehead{\colhead{Parameter} &\colhead{Input value} & \colhead{pyspeckit fit} & \colhead{CLASS fit}
+}
+\startdata
+\cutinhead{With all 4 parameters}
+T$_{ex}$ & 9.0 & 2.89591 & 2.88430952541\\  
+$V_c$ & 0.0 & -0.000168891 &-0.004\\ 
+$\sigma_v$ & 0.3 & 0.3033 &0.303207\\
+$\tau_{all}$ & 0.01 & 0.450383 & 0.487 \\
+$Area$ & & & 0.06108\\
+\cutinhead{With all 3 parameters}
+T$_{ex}$ & 9.0 & 3.42535  &  3.42094959703\\
+$V_c$ & 0.0 & -0.00199191 &-0.004\\
+$\sigma_v$ & 0.3 & 0.306108 &0.3066051\\
+$\tau_{all}$ & 0.01 & 0.1& 0.1 \\
+$Area$ & & & 0.06108\\
+\enddata
+\end{deluxetable}
+
+
+\begin{deluxetable}{cccc}
+\tablecolumns{4}
+\tablecaption{Best fit parameters in optically thick model\label{table-thick}}
+\tablehead{\colhead{Parameter} &\colhead{Input value} & \colhead{pyspeckit fit} & \colhead{CLASS fit}
+}
+\startdata
+\cutinhead{With all 4 parameters} 
+T$_{ex}$ & 9.0 & 9.33 & 9.32310036\\
+$V_c$ & 0.0 & -0.000168891 &-0.001\\ 
+$\sigma_v$ & 0.3 & 0.29385 & 0.293440687\\
+$\tau_{all}$ & 9.0 & 8.29 & 8.26 \\
+$Area$ & & & 0.06108\\
+\enddata
+\end{deluxetable}
 
 \end{document}
