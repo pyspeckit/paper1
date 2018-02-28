@@ -5,15 +5,17 @@ import glob
 import argparse
 import os
 import update_bibentries
+from distutils.spawn import find_executable
 
 assert os.path.exists('bibdesk.bib') or os.path.exists('extracted.bib')
 
 name = 'main'
+texpath = os.path.dirname(find_executable('pdflatex'))
 
 parser = argparse.ArgumentParser(description='Make latex files.')
 parser.add_argument('--referee', default=False,
                     action='store_true', help='referee style?')
-parser.add_argument('--texpath', default='/usr/texbin/',
+parser.add_argument('--texpath', default=texpath,
                     help='path to pdflatex')
 parser.add_argument('--infile', default=name+'.tex')
 parser.add_argument('--outfile', default='auto')
