@@ -22,6 +22,7 @@
 \author{Miguel de Val-Borro}
 \author{Allison Youngblood}
 \author{Erik Rosolowsky}
+\author[0000-0002-3972-1978]{Jaime E. Pineda}
 
 
 
@@ -643,34 +644,52 @@ The transition displays several hyperfine components with well determined
 relative frequencies and weights. 
 The standard approach is to use the \verb+HFS+ mode within 
 CLASS. 
-Here we show that using the already implemented model in pyspeckit 
-we obtain the same results in both optically thin and thick models.
+Here we show that using the already implemented model in \pyspeckit 
+we obtain the same results in both optically thin and thick models, when 
+synthetic spectra are created and white noise is added.
+
+The main difference between the CLASS and \pyspeckit parametrization is that 
+the former does not report excitation temperature ($T_{ex}$), but the area of the 
+line profile. The reported area is $\tau \times T_{ant}$, where 
+\begin{equation}
+T_{ant}=J(T_{ex}) - J(T_{background})~,
+\end{equation}
+where 
+\begin{equation}
+J_{\nu}(T) = \frac{h\,\nu}{k_B} \frac{1}{(e^{h\,\nu/k_B\,T} -1)}~.
+\end{equation}
+We derive the equivalent $T_{ex}$ from the reported line fit parameters. 
+Moreover, in the optically thin case both fits are performed using the common assumption of 
+$\tau=0.1$ as a fixed parameter.
 
 Tables \ref{tab:n2hpthin} and \ref{tab:n2hpthick} show the results of fitting
 an example spectrum in both CLASS and \pyspeckit.  The resulting fits differ by
 $<1\%$ in most parameters, with a slightly greater discrepancy in the velocity
-centroid that we speculate is driven by a difference the optimizer's step size
-for that parameter.
+centroid but consistent within the reported fit uncertainties.
+
+%that we speculate is driven by a difference the optimizer's step size
+%for that parameter.
 
 \begin{deluxetable}{cccc}
     \label{tab:n2hpthin}
 \tablecolumns{4}
-\tablecaption{Best fit parameters in optically thin model\label{table-thin}}
+\tablecaption{Best fit parameters in optically thin model (3 parameters)\label{table-thin}}
 \tablehead{\colhead{Parameter} &\colhead{Input value} & \colhead{pyspeckit fit} & \colhead{CLASS fit}
 }
 \startdata
-\cutinhead{With all 4 parameters}
-T$_{ex}$ & 9.0 & 2.89591 & 2.88430952541\\  
-$V_c$ & 0.0 & -0.000168891 &-0.004\\ 
-$\sigma_v$ & 0.3 & 0.3033 &0.303207\\
-$\tau_{all}$ & 0.01 & 0.450383 & 0.487 \\
-$Area$ & & & 0.06108\\
-\cutinhead{With 3 parameters}
-T$_{ex}$ & 9.0 & 3.42535  &  3.42094959703\\
-$V_c$ & 0.0 & -0.00199191 &-0.004\\
-$\sigma_v$ & 0.3 & 0.306108 &0.3066051\\
-$\tau_{all}$ & 0.01 & 0.1& 0.1 \\
-$Area$ & & & 0.06108\\
+%\cutinhead{With all 4 parameters}
+%T$_{ex}$      & 9.0    & 5.4$\pm$48 & 2.88430952541\\  
+%$V_c$          & 0.0    & 0.0001951 &-0.004\\ 
+%$\sigma_v$  & 0.3    & 0.2948$\pm$0.0074 &0.303207\\
+%$\tau_{all}$   & 0.01 & 0.026$\pm$0.5 & 0.487 \\
+%$Area$ & & & 0.06108\\
+%\cutinhead{With 3 parameters}
+% 1  6.065E-2(1.164E-3)  2.789E-3(6.844E-3)  0.690   (1.409E-2)  0.100   ( 0.00   )
+T$_{ex}$      & 9.0   & 3.454$\pm$0.014     & 3.451\\
+$V_c$          & 0.0   & 0.0016              & 0.0028$\pm$0.0068\\
+$\sigma_v$  & 0.3   & 0.2942$\pm$0.0062 & 0.2930$\pm$0.0060\\
+$\tau_{all}$  & 0.01  & 0.1 & 0.1 \\
+$Area$ & & & 0.0607$\pm$0.0012\\
 \enddata
 \end{deluxetable}
 
@@ -678,16 +697,17 @@ $Area$ & & & 0.06108\\
 \begin{deluxetable}{cccc}
     \label{tab:n2hpthick}
 \tablecolumns{4}
-\tablecaption{Best fit parameters in optically thick model\label{table-thick}}
+\tablecaption{Best fit parameters in optically thick model (4 parameters)\label{table-thick}}
 \tablehead{\colhead{Parameter} &\colhead{Input value} & \colhead{pyspeckit fit} & \colhead{CLASS fit}
 }
 \startdata
-\cutinhead{With all 4 parameters} 
-T$_{ex}$ & 9.0 & 9.33 & 9.32310036\\
-$V_c$ & 0.0 & -0.000168891 &-0.001\\ 
-$\sigma_v$ & 0.3 & 0.29385 & 0.293440687\\
-$\tau_{all}$ & 9.0 & 8.29 & 8.26 \\
-$Area$ & & & 0.06108\\
+%\cutinhead{With all 4 parameters}      
+%1   49.0   ( 2.25   )  ********(6.259E-3)  0.716   (1.492E-2)   8.10   (0.590   )
+T$_{ex}$     & 9.0  & 9.19$\pm$0.19     & 9.1833\\
+$V_c$         & 0.0  & 0.00042 & -0.000$\pm$0.0063\\ 
+$\sigma_v$ & 0.3  & 0.3047$\pm$0.0062 & 0.3041$\pm$0.0063\\
+$\tau_{all}$ & 9.0  & 8.13$\pm$0.59   & 8.10$\pm$0.59\\
+$Area$ & & & 49.0$\pm$2.25\\
 \enddata
 \end{deluxetable}
 

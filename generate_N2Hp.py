@@ -102,7 +102,7 @@ sp_thin_3par = pyspeckit.Spectrum(data=signal_thin, xarr=xarr,
 sp_thin_3par.xarr.refX = rest_freq
 sp_thin_3par.xarr.velocity_convention='radio'
 sp_thin_3par.xarr.convert_to_unit('m/s')
-sp_thin_3par.error[:]=rms
+sp_thin_3par.error[:]=rms_thin
 sp_thin_3par.specfit()
 sp_thin_3par.Registry.add_fitter('n2hp_vtau', pyspeckit.models.n2hp.n2hp_vtau_fitter,4)
 # model (excitation temperature, optical depth, line center, and line width)
@@ -129,8 +129,8 @@ tau=0.487
 Tex_CLASS=T0/np.log(1+T0/(Area/tau +J_nu(2.73,T0)))
 signal_4par_class = pyspeckit.models.n2hp.n2hp_vtau.hyperfine(v_arr, Tbackground=2.73, Tex=Tex_CLASS, tau=tau, 
     xoff_v=-0.004, width=0.714/2.35482)
-signal_4par_fit = pyspeckit.models.n2hp.n2hp_vtau.hyperfine(v_arr, Tex=2.89591, tau=0.450383, 
-    xoff_v=-0.000168891, width=0.3033)
+signal_4par_fit = pyspeckit.models.n2hp.n2hp_vtau.hyperfine(v_arr, Tex=5.4, tau=0.026, 
+    xoff_v=0.0001951, width=0.2948)
 plt.plot(v_arr, signal_velo, color='k', drawstyle='steps-mid')
 plt.plot(v_arr, signal_4par_fit, color='red', drawstyle='steps-mid')
 plt.plot(v_arr, signal_4par_class, color='blue', drawstyle='steps-mid')
@@ -144,12 +144,13 @@ sp_thin_3par.xarr.convert_to_unit('km/s')
 v_arr=sp_thin_3par.xarr
 signal_velo=sp_thin_3par.data
 
-Area=0.058
+Area=6.065E-2
 tau=0.1
+# 1  6.065E-2(1.164E-3)  2.789E-3(6.844E-3)  0.690   (1.409E-2)  0.100   ( 0.00   )
 Tex_CLASS=T0/np.log(1+T0/(Area/tau +J_nu(2.73,T0)))
 
 signal_3par_class = pyspeckit.models.n2hp.n2hp_vtau.hyperfine(v_arr, Tex=Tex_CLASS, tau=0.1, 
-    xoff_v=-0.004, width=0.722/2.35482)
+    xoff_v=-0.004, width=0.690/2.35482)
 signal_3par_fit = pyspeckit.models.n2hp.n2hp_vtau.hyperfine(v_arr, Tex=3.42535, tau=0.1, 
     xoff_v=-0.00199191, width=0.306108)
 plt.close()
@@ -165,16 +166,18 @@ plt.savefig('pyspeckit_N2Hp_compare_thin_3par.png')
 
 
 # plot comparisons
-# optically thin model, without optically thin approximation (4-parameter model)
+# optically thick model  (4-parameter model)
 plt.close()
 sp_thick.xarr.convert_to_unit('km/s')
 v_arr=sp_thick.xarr
 thick_velo=sp_thick.data
-Area=51.1
-tau=8.26
+#  1  6.065E-2(1.164E-3)  2.789E-3(6.844E-3)  0.690   (1.409E-2)  0.100   ( 0.00   )
+
+Area=49.0
+tau=8.10
 Tex_CLASS=T0/np.log(1+T0/(Area/tau +J_nu(2.73,T0)))
 thick_4par_class = pyspeckit.models.n2hp.n2hp_vtau.hyperfine(v_arr, Tbackground=2.73, Tex=Tex_CLASS, tau=tau, 
-    xoff_v=-0.001, width=0.691/2.35482)
+    xoff_v=2.789E-3, width=0.690/2.35482)
 thick_4par_fit = pyspeckit.models.n2hp.n2hp_vtau.hyperfine(v_arr, Tex=9.33, tau=8.29, 
     xoff_v=-0.000168891, width=0.29385)
 plt.plot(v_arr, thick_velo, color='k', drawstyle='steps-mid')
