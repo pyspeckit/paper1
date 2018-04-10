@@ -5,7 +5,7 @@ script: /bin/bash gh-publisher-scripts/gh-publisher.sh
 before_install:
 - sudo apt-get update -y
 - export texpath=/usr/bin
-- sudo pip install pygments
+#- sudo pip install pygments
 - sudo apt-get install -y
      inkscape
      texlive-full
@@ -14,6 +14,10 @@ before_install:
      texlive-latex-recommended
      texlive-xetex
      texlive-publishers
+     python-pygments
+     python-sphinx
+     python3-pygments
+     python3-sphinx
      #- yes "" | sudo add-apt-repository ppa:jonathonf/texlive-2017
      #- sudo apt-get update -y
      #- sudo apt-get install -y
