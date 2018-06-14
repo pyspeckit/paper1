@@ -41,15 +41,14 @@ the community.
 
 
 \section{Introduction}
-Spectroscopy is an important tool for astronomy, and we seek to enable Python users
-to quickly and easily analyze spectra.  Spectra are represented as
+Spectroscopy is an important tool for astronomy. Spectra are represented as
 the number of photons, or total energy in photons, arriving over a specified
 wavelength (or equivalently, frequency or energy) range. Emission and
 absorption lines due to ions, atoms, and molecules bear important information
-via their line flux, line width, and velocity centroid. These parameters are
+via their intensity, width, and velocity centroid. These parameters are
 typically measured from model fits to the data, such as Gaussians, Lorentzians,
 and Voigt profiles. Historically, \texttt{IRAF} has provided the astronomy
-community with easy-to-use tools for line fittings, but \texttt{IRAF}
+community with easy-to-use tools for line fitting, but \texttt{IRAF}
 development has mostly ceased in the last several years and is currently only
 supported in Python 2.7 by
 AstroConda\footnote{http://astroconda.readthedocs.io/en/latest/index.html},
@@ -73,7 +72,7 @@ established.
 \pyspeckit's graphical user interface (GUI) features were inspired by IRAF's
 \texttt{splot} tool, while the fitting features were inspired in part by \texttt{xspec}
 (\url{https://heasarc.gsfc.nasa.gov/xanadu/xspec/}).  Over subsequent years,
-\pyspeckit grew by incorporating more sophisticated models such as {\color{red} XX INSERT MODELS HERE XX} and improving its
+\pyspeckit grew by incorporating more sophisticated models  and improving its
 internal structure.  The package was moved out of \texttt{agpy} and into its
 own repository in 2011, first spending a few years on Bitbucket in a mercurial
 repository, then finally moved to GitHub, where it currenly resides, in 2012.
@@ -107,7 +106,9 @@ several attributes that are themselves sophisticated classes that can be called
 as functions: the \texttt{plotter}, the fitter \texttt{specfit}, and the
 continuum fitter \texttt{baseline}\footnote{It is common in radio astronomy to
 have wide instrumental residual features in the data that need to be fitted and
-removed.  In practical algorithmic terms, fitting a true astrophysical
+removed; this process is called `baseline subtraction'.  In other wavelength
+regimes, this would typically be referred to as continuum fitting or continuum
+subtraction.  In practical algorithmic terms, fitting a true astrophysical
 continuum and a residual instrumental baseline are indistinguishable.}.
 
 There are several important subclasses of \texttt{Spectrum}: \texttt{Spectra}
@@ -129,11 +130,15 @@ We list the currently supported formats here:
 	be done using the \texttt{astropy.io.ascii} module in any of its supported
 	formats.
     \item FITS: The Flexible Image Transport System \citep[FITS;][]{Wells1981a,Greisen2006a,Pence2010a} format is
-	supported in \pyspeckit with \texttt{astropy.io.fits}.  Initially developed
-	by optical astronomers, the FITS standard has incorporated several
-	recommendations for various types of data formats used in the astronomy
-	community into successive updates to the standard---the latest version of the
-	standard being 4.0 from 2016.  Additionally, data files following the Single
+	supported in \pyspeckit with \texttt{astropy.io.fits}.  
+    FITS spectra are expected to have their spectral axis defined using the WCS
+    keywords in the FITS header.  FITS binary tables can also be used.
+    %Initially developed
+	%by optical astronomers, the FITS standard has incorporated several
+	%recommendations for various types of data formats used in the astronomy
+	%community into successive updates to the standard---the latest version of the
+	%standard being 4.0 from 2016.  
+    \item SDFITS: Data files following the Single
 	Dish FITS \citep[SDFITS;][]{Garwood2000a} convention for radio astronomy data as
 	produced by the Green Bank Telescope are partially supported in \pyspeckit.
 	% \authorcomment1{Is it possible to clarify what is not supported?
@@ -151,10 +156,11 @@ We list the currently supported formats here:
         \pyspeckit Spectrum objects from the extracted HDF5 data).
     \item Finally, \pyspeckit is capable of reading files from some versions of
         the GILDAS Continuum and Line Analysis Single-dish Software format
-        \citep[CLASS;][]{Gildas-Team2013a}.  Since the CLASS file specification
-        is incomplete and will remain private for the foreseeable future, much
-        of the data reading in \pyspeckit has been reproduced in an approximate
-        manner.
+        \citep[CLASS;][]{Gildas-Team2013a}.  
+	% Since the CLASS file specification
+        % is incomplete and will remain private for the foreseeable future, much
+        % of the data reading in \pyspeckit has been reproduced in an approximate
+        % manner.
         %\authorcomment1{Is it possible to mention which range of GILDAS
         %versions have been tested? Is the problem with possible shifts in frequency
         %or in amplitude?}
@@ -167,10 +173,12 @@ We list the currently supported formats here:
 \end{itemize}
 
 \subsection{Plotter}
-The plotter is a basic line plotter. [I think a sentence or two of a summary or
-description is needed here - would it be accurate to say something like "that comprises \pyspeckit's
-graphical user interface?] See the GUI section (\S \ref{sec:gui})
-for more details.
+The \texttt{plotter} is a basic plot tool that comprises \pyspeckit's main
+graphical user interface.
+% [I think a sentence or two of a summary or
+% description is needed here - would it be accurate to say something like "that comprises \pyspeckit's
+% graphical user interface?]
+It is described in more detail in the  GUI section (\S \ref{sec:gui}).
 
 % Should we include code examples of how to do these things? I think examples
 % creating a Spectrum, plotting it, interactively fitting, and then
@@ -287,6 +295,7 @@ and represent symmetric $1-\sigma$ Gaussian errors.  }
 
 
 \subsubsection{Automatic Error Estimation}
+{\color{red} Check that this section is not duplicated elsewhere.}
 If a \texttt{Spectrum} is created with no associated errors, \pyspeckit can
 automatically estimate the errors from a fit residual. When a fit is initiated
 on a \texttt{Spectrum} with no specified errors [I think an example here would be good - just
