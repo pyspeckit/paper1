@@ -483,21 +483,21 @@ linear in all parameters, and the model must be the correct underlying model
 
 Figure \ref{fig:parerrestdemo} shows the $\chi^2$ values in parameter space
 surrounding the best-fit value.  Along the diagonal, we show the $\chi^2$
-values varying a single parameter while holding the other two parameters fixed,
-i.e., it is the marginal distribution for the free parameter.  The vertical
-dashed lines show the estimated $1\sigma$ errors from the optimizer, while the
+values for the individual parameters with all others marginalized over
+by taking the minimum $\chi^2$ value over the explored parameter space.  The vertical
+dashed lines show the estimated $1\sigma$ errors reported by the \texttt{mpfit}
+optimizer, while the
 horizontal dashed lines show the value $\Delta\chi^2=1$, which corresponds to
 the 68\% confidence interval for that parameter.  If the $\chi^2/n=1$
 approximation were perfect, the dashed lines would intersect with the solid
-lines.  For the centroid[or just pick a common term to use - center/shift/centroid]
-parameter, the fit is nearly perfect, while for the
-amplitude and width, it is not.
+lines.  
 
 Off of the diagonal of Figure \ref{fig:parerrestdemo}, we show the
-two-dimensional marginal distributions in which we have held the third
-parameter, the one not labeled, fixed.  Contours are shown at
+two-dimensional marginal distributions.  Contours
+are shown at
 $\Delta\chi^2=2.3,6.2,11.8$, corresponding to 68\%, 95\%, and 99.5\%
-($1\sigma$, $2\sigma$, and $3\sigma$ for a Gaussian) confidence regions.  The
+($1\sigma$, $2\sigma$, and $3\sigma$ for a normal distribution) confidence
+regions.  The
 vertical and horizontal dashed lines show the estimates from the $\chi^2/n=1$
 approximation.
 The shift vs amplitude and shift vs width diagrams both show very good matches.
@@ -551,7 +551,7 @@ hyperfine components, the relative weights of which are governed by quantum
 mechanics \citep{mangum15}. The existence of these additional components often
 allows for direct estimates of the optical depth of the central line, which is
 optically thicker than the other components, thereby making column density
-estimates straightforward when compared to other molecular species.
+estimates straightforward compared to other molecular species.
 
 The model for these lines is more complicated than that for a single Gaussian.
 The model must include a simplified version of the radiative transfer equation
@@ -647,15 +647,14 @@ algorithm are larger than the directly computed marginal errors. }
 \section{Comparison of N$_2$H$^+$ (1-0) results with CLASS}
 \label{appendix:N2Hp}
 
-One of the most frequently used line transition used to study dense gas kinematics,
-in addition to Ammonia, is N$_2$H$^+$ (1-0) at 93.17\,GHz.
-The transition displays several hyperfine components with well determined
-relative frequencies and weights.
-The standard approach is to use the \verb+HFS+ mode within
-CLASS.
-Here we show that using the already implemented model in \pyspeckit
-we obtain the same results in both optically thin and thick models, when
-synthetic spectra are created and white noise is added.
+One of the most frequently used line transitions for the study of dense gas
+kinematics is N$_2$H$^+$ (1-0) at 93.17\,GHz. 
+The transition displays several hyperfine components with well determined 
+relative frequencies and weights. 
+The standard approach for analyzing this line has been to use the \verb+HFS+
+mode within CLASS. 
+Here we show that using the N$_2$H$^+$ \texttt{hyperfine} model in \pyspeckit,
+we obtain the same results in both optically thin and thick models.
 
 The main difference between the CLASS and \pyspeckit parametrization is that
 the former does not report excitation temperature ($T_{ex}$), but the area of the
@@ -667,9 +666,9 @@ where
 \begin{equation}
 J_{\nu}(T) = \frac{h\,\nu}{k_B} \frac{1}{(e^{h\,\nu/k_B\,T} -1)}~.
 \end{equation}
-We derive the equivalent $T_{ex}$ from the reported line fit parameters.
-Moreover, in the optically thin case both fits are performed using the common assumption of
-$\tau=0.1$ as a fixed parameter.
+We derive the equivalent $T_{ex}$ from the reported line fit parameters. 
+Moreover, in the optically thin case both fits are performed using the common
+assumption of $\tau=0.1$ as a fixed parameter.
 
 Tables \ref{tab:n2hpthin} and \ref{tab:n2hpthick} show the results of fitting
 an example spectrum in both CLASS and \pyspeckit.  The resulting fits differ by
