@@ -28,10 +28,11 @@
 
 \begin{abstract}
 \pyspeckit is a tool and library for spectroscopic analysis in Python. We
-describe the \pyspeckit package and highlight some of its unique capabilities
+describe the \pyspeckit package and highlight some of its unique capabilities,
 such as interactively fitting a model to data, akin to the widely-used
 \texttt{splot} function of \texttt{IRAF}. \pyspeckit employs the
-Levenberg-Marquardt optimization method via \texttt{mpfit} and \texttt{lmfit},
+Levenberg-Marquardt optimization method via the \texttt{mpfit} and
+\texttt{lmfit} implementations,
 and important assumptions regarding error estimation are described here.
 Wrappers for \texttt{pymc} and \texttt{emcee} are available, as well as a
 method to fit lines in spectral cubes. As part of the \astropy affiliated
@@ -40,34 +41,37 @@ the community.
 \end{abstract}
 
 
-\section{Introduction}
+\section{Introduction and Background}
 Spectroscopy is an important tool for astronomy. Spectra are represented as
 the number of photons, or total energy in photons, arriving over a specified
 wavelength (or equivalently, frequency or energy) range. Emission and
 absorption lines due to ions, atoms, and molecules bear important information
 via their intensity, width, and velocity centroid. These parameters are
-typically measured from model fits to the data, such as Gaussians, Lorentzians,
+typically measured from model fits to the data, such as Gaussian, Lorentzian,
 and Voigt profiles. Historically, \texttt{IRAF} has provided the astronomy
 community with easy-to-use tools for line fitting, but \texttt{IRAF}
 development has mostly ceased in the last several years and is currently only
 supported in Python 2.7 by
-AstroConda\footnote{http://astroconda.readthedocs.io/en/latest/index.html},
-though the PyRAF command language
+AstroConda\footnote{http://astroconda.readthedocs.io/en/latest/index.html,
+The PyRAF command language
 (\url{https://github.com/spacetelescope/pyraf}) supports both Python 2 and
-Python 3 and is still maintained.
+Python 3 and is still maintained}.  The lack of an equivalent available
+tool in Python prompted the creation of \pyspeckit.
 
 
-\pyspeckit development began in 2009 with a script called `showspec'
-in the \texttt{agpy} package hosted on Google Code. It was created and used by
-a graduate student to plot and sometimes fit profiles to spectra in python. At the time,
-IDL was still more popular than python at most institutes \citep[first evidence
+\pyspeckit development began in 2009 with a script called `showspec' in the
+\texttt{agpy} package hosted on Google Code. It was created and used by a
+graduate student to plot and sometimes fit profiles to spectra in python. At
+the time, IDL was still more popular than python at most institutes
+\citep[the first evidence
 that python had overtaken IDL in popularity among astronomers was presented in
-]{Momcheva2015a}, and there were no publicly available and advertised tools for
-spectral plotting, fitting, and general manipulation \cite[\texttt{astropysics}
-was developed contemporaneously and solved many of the same problems as
-\pyspeckit][]{Tollerud2012a}. The \astropy project had its first commit in
-2011, so even the basic infrastructure for such analysis was not yet
-established.
+]{Momcheva2015a}, and there were no publicly available and advertised
+tools for spectral plotting, fitting, and general manipulation
+(\texttt{astropysics}, \citealt{Tollerud2012a}, was developed contemporaneously and
+solved many of the same problems as \pyspeckit). The \astropy package
+\citep{Astropy-Collaboration2013a,Price-Whelan2018a} had its first commit in
+2011, so even the basic infrastructure for such analysis was
+not yet established.
 
 \pyspeckit's graphical user interface (GUI) features were inspired by IRAF's
 \texttt{splot} tool, while the fitting features were inspired in part by \texttt{xspec}
@@ -84,21 +88,21 @@ was completely replaced with \astropy's unit system.  Around the same time,
 the Doppler conversion tools (converting from frequency or wavelength to
 velocity) that existed in \pyspeckit were pushed upstream into \astropy,
 highlighting the mutually beneficial role of \astropy's affiliated
-packaged system \citep{Astropy_2018}.  \pyspeckit was finally
-accepted as an \astropy affiliated package in 2017.
+packaged system \citep{Price-Whelan2018a}.  \pyspeckit became
+an \astropy affiliated package in 2017.
 
 
 In this paper we briefly outline \texttt{pyspeckit} architecture and highlight
 its key capabilities. In Section \ref{sec:basicstructure}, we  outline the
-basic structure of the package.  In Section \ref{sec:gui}, we describe the GUI
-system.  In Sections \ref{sec:cubes} and \ref{sec:models}, we outline
-\pyspeckit's cube handling capabilities and model library.
+structure of the package.  In Section \ref{sec:gui}, we describe the GUI
+system.  In Sections \ref{sec:models} and \ref{sec:cubes}, we outline
+\pyspeckit's cube handling capabilities and model library. 
 
 
 
-\section{Basic structure}
+\section{Package structure}
 \label{sec:basicstructure}
-The central object in \pyspeckit is a \texttt{Spectrum} object, which has
+The central object in \pyspeckit is a \texttt{Spectrum}, which has
 associated \texttt{data} (e.g., flux), \texttt{error}, and \texttt{xarr} (e.g., wavelength,
 frequency, energy), the latter of
 which represents the spectroscopic axis.  A \texttt{Spectrum} object has
@@ -111,7 +115,7 @@ regimes, this would typically be referred to as continuum fitting or continuum
 subtraction.  In practical algorithmic terms, fitting a true astrophysical
 continuum and a residual instrumental baseline are indistinguishable.}.
 
-There are several important subclasses of \texttt{Spectrum}: \texttt{Spectra}
+There are several subclasses of \texttt{Spectrum}: \texttt{Spectra}
 is a collection of spectra intended to be stitched together (i.e., with
 non-overlapping spectral axes), \texttt{ObsBlock} is a collection of spectra
 with identical spectral axes intended to be operated on as a group, e.g., to
@@ -121,18 +125,23 @@ cube.
 \subsection{Supported data formats}
 
 \pyspeckit supports a variety of open and proprietary data formats that have
-been traditionally used to store spectral data products in astronomy.
-We list the currently supported formats here:
+been traditionally used to store spectral data products in astronomy. 
+It is always possible to create a \texttt{Spectrum} object from numpy arrays
+representing the wavelength, flux, and error of the spectrum, but
+the supported file formats listed below make the reading process easier.
 
 \begin{itemize}
-    \item ASCII: Reading a one-dimensional spectrum from a text file with an optional
-        error column can
-	be done using the \texttt{astropy.io.ascii} module in any of its supported
-	formats.
+    \item ASCII: Text files with wavelength, flux, and optional error
+        columns can be read using the \texttt{astropy.io.ascii} module.
+        %one-dimensional spectrum from a text file with an optional error column
+        %can be done using the \texttt{astropy.io.ascii} module in any of its
+        %supported formats.  
     \item FITS: The Flexible Image Transport System \citep[FITS;][]{Wells1981a,Greisen2006a,Pence2010a} format is
 	supported in \pyspeckit with \texttt{astropy.io.fits}.  
     FITS spectra are expected to have their spectral axis defined using the WCS
-    keywords in the FITS header.  FITS binary tables can also be used.
+    keywords in the FITS header.  FITS binary tables with the same
+    wavelength, flux, and optional error column layout as text files
+    can also be read.
     %Initially developed
 	%by optical astronomers, the FITS standard has incorporated several
 	%recommendations for various types of data formats used in the astronomy
@@ -144,17 +153,20 @@ We list the currently supported formats here:
 	% \authorcomment1{Is it possible to clarify what is not supported?
     % Or up to which version of SDFITS it is working?} No, I don't know the
     % answers to this; it would take some real work to find out.
-    \item HDF5: The Hierarchical Data Format (HDF5) file format has been
-        designed to store and organize large amounts of data and offers
-        significant advantages over FITS\@.  Although not widely used in
-        observational astronomy, the pipeline of the Low-Frequency Array
-        (LOFAR) radio telescope uses the HDF5 data format to efficiently store
-        large data volumes \citep{Alexov2012a}.  If the \texttt{h5py} package
-        is installed, \pyspeckit will support read access to files containing
-        spectra in the HDF5 format (although there is no specified standard for
-        spectra in HDF5, so additional user effort may be required to create
-        \pyspeckit Spectrum objects from the extracted HDF5 data).
-    \item Finally, \pyspeckit is capable of reading files from some versions of
+    \item HDF5: 
+        %The Hierarchical Data Format (HDF5) file format has been
+        %designed to store and organize large amounts of data and offers
+        %significant advantages over FITS\@.  Although not widely used in
+        %observational astronomy, the pipeline of the Low-Frequency Array
+        %(LOFAR) radio telescope uses the HDF5 data format to efficiently store
+        %large data volumes \citep{Alexov2012a}.
+        If the \texttt{h5py} package is installed, \pyspeckit will support read
+        access to files containing spectra in the HDF5 format, where the data
+        columns can be specified using keyword arguments.
+        %(although there is no specified standard for
+        %spectra in HDF5, so additional user effort may be required to create
+        %\pyspeckit Spectrum objects from the extracted HDF5 data).
+    \item CLASS: \pyspeckit is capable of reading files from some versions of
         the GILDAS Continuum and Line Analysis Single-dish Software format
         \citep[CLASS;][]{Gildas-Team2013a}.  
 	% Since the CLASS file specification
@@ -215,7 +227,9 @@ as attributes of the \texttt{specfit} object.
 \paragraph{Optimal $\chi^2$}
 Specfit computes the `optimal' $\chi^2$, which is the $\chi^2$
 value computed only over the range where the model contains statistically
-significant signal.  By default, the function selects all pixels where
+significant signal.  This measurement is intended to provide a more
+accurate estimate of the $\chi^2$ value by excluding pixels that are
+not described by the model.  By default, the function selects all pixels where
 the model value is greater (in absolute value) than the corresponding error.
 In principle, this optimal $\chi^2$ may be helpful for obtaining correctly
 scaled errors (see Section \ref{sec:parerrest}), though this claim has never
@@ -225,8 +239,8 @@ been rigorously tested.
 An important feature of the spectral fitter is the ability to select the region
 of the spectrum to be fit.  This selection process can either be done manually,
 using the \texttt{selectregion} method to set one or more ranges of data to
-include in the fit, or interactively using the GUI.  By default, the selected
-regions are then highlighted.
+include in the fit, or interactively using the GUI.   The selected
+regions are then highlighted in the plot window if one is open.
 
 \subsection{Continuum Fitting}
 The fitting process in \pyspeckit is capable of treating line and continuum
@@ -237,7 +251,10 @@ can be fitted through the standard \texttt{specfit} fitter.
 However, it is common practice to fit the continuum independently prior to
 fitting lines.  Such practice is necessary when fitting absorption lines
 and practically necessary for heterodyne radio observations where the
-continuum is usually poorly measured and corrupted by instrumental effects.  Following radio convention, the \pyspeckit continuum fitting tool is called \texttt{baseline}. This module supports polynomial, spline, and power-law fitting.
+continuum is usually poorly measured and corrupted by instrumental effects.
+Following radio convention, the \pyspeckit continuum fitting tool is called
+\texttt{baseline}. This module supports polynomial, spline, and power-law
+fitting.
 
 \subsection{Error Treatment}
 %(Can I refer back to anything here?  like, "Error estimation is an important part of astronomy...")
@@ -251,7 +268,8 @@ continuum is usually poorly measured and corrupted by instrumental effects.  Fol
 The \texttt{Spectrum} objects used by \pyspeckit have an attached \texttt{error}
 array, which is meant to hold the $1\sigma$ independent Gaussian errors on
 each pixel.  While this error representation may be a dramatic
-oversimplification of the true errors for almost all instruments (since it ignores correlations between adjacent data), it is also the most
+oversimplification of the true errors for almost all instruments (since it
+ignores correlations between pixels), it is also the most
 commonly used assumption in astronomical applications.
 
 The \texttt{error} array is used to determine the best-fit parameters and their uncertainties (see
@@ -269,9 +287,9 @@ import numpy as np
 import pyspeckit
 
 xaxis = np.linspace(-25, 25)*u.km/u.s
-sigma = 3.0*u.km/u.s
+sigma_width = 3.0*u.km/u.s
 data = 5*np.exp(-xaxis**2 /
-                (2*sigma**2))*u.Jy
+                (2*sigma_width**2))*u.Jy
 error = np.ones_like(data) * 0.2
 sp = pyspeckit.Spectrum(xarr=xaxis,
                         data=data,
@@ -295,31 +313,26 @@ and represent symmetric $1-\sigma$ Gaussian errors.  }
 
 
 \subsubsection{Automatic Error Estimation}
-{\color{red} Check that this section is not duplicated elsewhere.}
-If a \texttt{Spectrum} is created with no associated errors, \pyspeckit can
-automatically estimate the errors from a fit residual. When a fit is initiated
-on a \texttt{Spectrum} with no specified errors [I think an example here would be good - just
-to make it clear you're talking about calling specfit. We don't yet have a Specfit code
-example yet, so this can be worked in with that.],
-the errors are set to the default value of 1.0. Thus uniform weighting of the
-data is likely to be inaccurate, but will result in the appropriate best-fit
-parameters with \emph{incorrect} errors. \textcolor{red}{This is only true if
-the data are uniformly weighted but have the incorrect magnitude.  If the data
-have different weights, the correct parameters are influenced by the relative
-weights.  (Consider an outlier with large vs. small errors).}
-
-In the case where there are clear portions of the spectrum which have no
-significant emission, a common approach in spectroscopy is to estimate the
+% If a \texttt{Spectrum} is created with no associated errors, \pyspeckit can
+% automatically estimate the errors from a fit residual. When a fit is initiated
+% on a \texttt{Spectrum} with no specified errors [I think an example here would be good - just
+% to make it clear you're talking about calling specfit. We don't yet have a Specfit code
+% example yet, so this can be worked in with that.], 
+% the errors are set to the default value of 1.0. This approch therefore produces
+% uniform weighting of the data, which will result in the appropriate best-fit
+% parameters with \emph{incorrect} errors if the data are indeed uniformly weighted. 
+% This approach should not be adopted if non-uniform errors or weights are required.
+In the case where there are portions of the spectrum that have no
+signal peaks, a common approach in spectroscopy is to estimate the
 errors from the standard deviation of those signal-free pixels.  This approach
-generally assumes the noise is constant across the spectrum.  In the case that
-a single signal feature is present in the spectrum, and it can be accurately
-modeled, the standard deviation of the residual spectrum from the model fit
-will accurately represent the uniform errors. After a fit is performed with
-uninitialized errors,
-\pyspeckit will automatically replace the errors with the standard deviation of the
-residuals; this means that performing a fit on the same data
-(without associated errors) twice will result in the same parameter values both
-times, but different errors the second time.
+assumes the noise is constant across the spectrum.  If all of the peaks present
+in the spectrum are fitted well by the model,
+the standard deviation of the residual spectrum from the model fit will
+accurately represent the uniform errors.     If a fit is performed with
+uninitialized errors, \pyspeckit will automatically replace the errors with the
+standard deviation of the residuals; this means that performing a fit on the
+same data (without associated errors) twice will result in the same parameter
+values both times, but different errors the second time.
 
 
 \subsubsection{Parameter error estimation}
@@ -358,7 +371,7 @@ for the case of a simple Gaussian line profile.
 Many astronomers are familiar with IRAF's \texttt{splot} tool, which is useful
 for fitting Gaussian profiles to spectral lines.  It uses keyboard interaction
 to specify the fitting region and guesses for fitting the line profile, but for
-most use-cases, these parameters could \emph{only} be accessed through the GUI.
+most use cases, these parameters could \emph{only} be accessed through the GUI.
 
 The fitting GUI in \texttt{pyspeckit} was built to match \texttt{splot}'s
 functionality but with additional means of interacting with the fitter.  In
@@ -372,16 +385,18 @@ tools are limited to the GUI capabilities that are compatible with all platforms
 (e.g., Qt, Tk, Gtk) and therefore exclude some of the more sophisticated fitting
 tools found in other software \citep[e.g., \texttt{glue}][]{Beaumont2014b}.
 
+An example walking through typical interactive GUI usage is in the online
+documentation at \url{interactive.html}.
+
 \subsection{Plotting}
 Plotting in \pyspeckit is designed to provide a short path to
 publication-quality figures.  The default plotting mode uses histogram-style
-line plots\added{, which follows the radio and inteferometric standard,} and
-labels axes with \LaTeX-formatted versions of units.
+line plots and labels axes with \LaTeX-formatted versions of units.
 
 When the plotter is active and a model is fit, the model parameters are
-displayed with \LaTeX~formatting.  The errors on the parameters, if available,
-are also shown, and these uncertainties are used to decide on the number of
-significant figures to display.
+displayed with \LaTeX~formatting in the plot legend.  The errors on the
+parameters, if available, are also shown, and these uncertainties are used to
+decide on the number of significant figures to display.
 
 % \section{\astropy integration}
 % Development of \pyspeckit began several years before \astropy began.  Several
@@ -400,12 +415,20 @@ Gaussian, Lorentzian, and Voigt profiles) and a wide range of specific model
 types (e.g., ammonia and formaldehyde hyperfine models, the \hh rotational
 ladder, and recombination line models).
 
-In radio and millimeter astronomy, there are several molecular line groups that
+The base \texttt{Model} class and fitting framework in \pyspeckit provide some
+generally useful features that do not need to be re-implemented.  Any model is
+generalized to a multi-component form automatically; e.g., the Gaussian model
+only describes a single Gaussian spectral component, but the fitting tools
+allow any number of independent Gaussians to be fit.
+
+\paragraph{Hyperfine Line Models} In radio and millimeter spectroscopy, there are
+several molecular line groups that
 consist of several Gaussian profiles separated by a fixed frequency offset.
 These hyperfine line groups are often unique probes of physical parameters
-because these different features have different, known relative optical depths.
+because these features have different, known relative optical depths.
 In this case, the measured relative amplitudes of these different features
-allow the optical depth to be measured from a single spectrum.  \pyspeckit
+allow the optical depth (and, in turn, the column density) to be measured from
+a single spectrum.  \pyspeckit
 provides the \texttt{hyperfine} model class to handle this class of molecular
 line transitions, and it includes
 several molecular species implementations (HCN, N$_2$H$^+$, NH$_3$,
@@ -468,7 +491,7 @@ As discussed in Section \ref{sec:parerrest}, parameter errors are estimated in
 \pyspeckit by the underlying \texttt{lmfit} or \texttt{mpfit} tools using the
 approximation that the reduced chi-squared is unity, $\chi^2/n=1$.  We
 demonstrate here that, for a simple one-dimensional Gaussian profile, this
-approximation results in a reasonable, but not perfect, recovery of the
+approximation results in an excellent recovery of the
 underlying parameter errors.
 
 In Figure \ref{fig:synthspecdemo}, we show a synthetic spectrum with uniform
@@ -489,27 +512,33 @@ dashed lines show the estimated $1\sigma$ errors reported by the \texttt{mpfit}
 optimizer, while the
 horizontal dashed lines show the value $\Delta\chi^2=1$, which corresponds to
 the 68\% confidence interval for that parameter.  If the $\chi^2/n=1$
-approximation were perfect, the dashed lines would intersect with the solid
-lines.  
+approximation is perfect, the dashed lines should intersect with the intersection
+point between the dashed lines, and in this case, they do for all parameters.  
 
 Off of the diagonal of Figure \ref{fig:parerrestdemo}, we show the
 two-dimensional marginal distributions.  Contours
 are shown at
-$\Delta\chi^2=2.3,6.2,11.8$, corresponding to 68\%, 95\%, and 99.5\%
-($1\sigma$, $2\sigma$, and $3\sigma$ for a normal distribution) confidence
+$\Delta\chi^2=1,2.3,6.2,11.8$, corresponding to 39.3\%, 68\%, 95\%, and 99.5\%
+($1\sigma$ when projected to a single parameter, $1\sigma$, $2\sigma$, and
+$3\sigma$ for two parameters, respectively, assuming normal
+distribution) confidence
 regions.  The
 vertical and horizontal dashed lines show the estimates from the $\chi^2/n=1$
-approximation.
-The shift vs amplitude and shift vs width diagrams both show very good matches.
+approximation for a \emph{single} parameter; these are  expected to intersect
+the innermost 1$\sigma$ contour for a single parameter. 
+The shift vs amplitude and shift vs width diagrams are both well-behaved, with error
+contours tracing out a symmetric distribution centered on the true parameters marked
+with an `x'.
 However, the width vs amplitude plot indicates that the single-parameter
 errorbars underestimate the true errors because these parameters are
 significantly correlated.  This information is captured in the covariance
 matrix that is used to compute the single-parameter errors, as it has
-significant values in the off-diagonal parts of the matrix.  More broadly, this
-approach for estimating parameter uncertainties also relies on the analysis
-problem fulfilling the conditions for least-squares fitting, namely that the
-dependent variables are perfectly known and that the model would be the correct
-representation of perfectly known data.
+significant values in the off-diagonal parts of the matrix.  
+% More broadly, this
+% approach for estimating parameter uncertainties also relies on the analysis
+% problem fulfilling the conditions for least-squares fitting, namely that the
+% dependent variables are perfectly known and that the model would be the correct
+% representation of perfectly known data.
 
 The source code for this example can be found in the \pyspeckit github
 repository in \texttt{examples/synthetic\_spectrum\_example\_witherrorestimates.py}.
@@ -531,9 +560,10 @@ In all panels, the vertical
 dashed lines show the estimated $1\sigma$ errors from the optimizer, while the
 horizontal dashed lines show the value $\Delta\chi^2=1$, which corresponds to
 the 68\% confidence interval for that parameter.
-In the off-diagonal panels, contours are shown at $\Delta\chi^2=2.3,6.2,11.8$,
-corresponding to 68\%, 95\%, and 99.5\% ($1\sigma$, $2\sigma$, and $3\sigma$
-for a Gaussian) confidence regions.
+In the off-diagonal panels, contours are shown at $\Delta\chi^2=1,2.3,6.2,11.8$,
+corresponding to 39.3\%, 68\%, 95\%, and 99.5\% ($1\sigma$ for a single parameter,
+then $1\sigma$, $2\sigma$, and $3\sigma$ for two parameters) confidence
+regions.
 See Appendix \ref{appendix:parerrest} for details and interpretation.}
 \label{fig:parerrestdemo}
 \end{figure*}
@@ -610,8 +640,14 @@ specifically
 \url{https://github.com/pyspeckit/pyspeckit/tree/master/examples/synthetic_LTE_ammonia_spectrum_example_witherrorestimates.py}
 and
 \url{https://github.com/pyspeckit/pyspeckit/tree/master/examples/synthetic_nLTE_ammonia_spectrum_example_witherrorestimates.py}.
+
 These examples also include demonstrations of how to force the optimizer to
-ignore nonphysical values.
+ignore nonphysical values while still obtaining useful constraints on the free
+parameters.  Constrained fitting approaches can be helpful in cases like the
+ammonia fit, where high values of $T_{ex}$ where $T_{ex}>T_{rot}$ are
+statistically likely given the model, but physically disallowed; constrained
+fitting allows the known physical limits to rule out bad portions of parameter
+space.
 
 
 \begin{figure*}[!htp]
@@ -622,7 +658,9 @@ error estimate triangle diagram is shown in Figure \ref{fig:nh3parerrestdemo}.
 The correct parameters are $T_{\mathrm{R}}=T_{\mathrm{ex}}=35$, $N=15$, $\sigma_v=2$, and $v=0$,
 all of which are reasonably recovered.  However, note that $T_{\mathrm{ex}} > T_{\mathrm{R}}$
 is generally nonphysical, yet the allowed parameter space for $T_{\mathrm{ex}}$ includes
-such values. \textcolor{red}{EWR: Not showing the empty spectral region would make a nicer visualization, IMHO.}
+such values. 
+This two-panel plot was produced automatically using the
+\texttt{pyspeckit.wrappers.fitnh3.plot\_nh3} command.
 %See Figure \ref{fig:nh3dtexsynthspecdemo} for an example of how
 %to apply such physical constraints.
 }
@@ -633,13 +671,24 @@ such values. \textcolor{red}{EWR: Not showing the empty spectral region would ma
 \begin{figure*}[!htp]
 \includegraphics[scale=1,width=7in]{ammonia_LTE_default_error_estimate_demonstration.pdf}
 \caption{Error estimate figure for the default \ammonia model.  The panels
-are labeled as in Figure \ref{fig:parerrestdemo}.  The most
+are labeled as in Figure \ref{fig:parerrestdemo}.  The centroid velocity panel
+is excluded from this plot because it is independent of the other parameters,
+exhibiting no degeneracy.  The most
 relevant panel is the ntot0 vs tex0 panel, which plots the column $N$ against
 the excitation temperature $T_{\mathrm{ex}}$: both of these parameters govern the peak
-amplitude of the spectrum, so they are degenerate.  The vertical dashed lines
-do not match the $\Delta\chi^2=1$ positions for $T_{\mathrm{ex}}$ or $N$ partly because
-of this degeneracy; the fit errors reported by the Levenberg-Marquardt
-algorithm are larger than the directly computed marginal errors. }
+amplitude of the spectrum, so they are degenerate.  
+The vertical and horizontal dashed lines represent the $\delta\chi^2=1$ and $\pm1\sigma$
+computed errors, respectively.  Their intersection points also intersect
+the blue marginalized $\delta\chi^2$ curve in all of the displayed cases, indicating
+that the approximation of the errors using the $\chi^2/n=1$ assumption is excellent.
+However, the asymmetry seen in the blue $T_{ex}$ curve suggests that the approximation
+for that parameter is likely to break down in some cases because the true
+errors are asymmetric.
+%The vertical dashed lines
+%do not match the $\Delta\chi^2=1$ positions for $T_{\mathrm{ex}}$ or $N$ partly because
+%of this degeneracy; the fit errors reported by the Levenberg-Marquardt
+%algorithm are larger than the directly computed marginal errors. 
+}
 \label{fig:nh3parerrestdemo}
 \end{figure*}
 
