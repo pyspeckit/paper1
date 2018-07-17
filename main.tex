@@ -383,10 +383,10 @@ programmatically and re-fit using those same results.
 The GUI was built using \texttt{matplotlib}'s canvas interaction tools.  These
 tools are limited to the GUI capabilities that are compatible with all platforms
 (e.g., Qt, Tk, Gtk) and therefore exclude some of the more sophisticated fitting
-tools found in other software \citep[e.g., \texttt{glue}][]{Beaumont2014b}.
+tools found in other software \citep[e.g., \texttt{glue};][]{Beaumont2014b}. 
 
 An example walking through typical interactive GUI usage is in the online
-documentation at \url{interactive.html}.
+documentation at \url{interactive.html} in the online documentation.
 
 \subsection{Plotting}
 Plotting in \pyspeckit is designed to provide a short path to
@@ -421,19 +421,9 @@ generalized to a multi-component form automatically; e.g., the Gaussian model
 only describes a single Gaussian spectral component, but the fitting tools
 allow any number of independent Gaussians to be fit.
 
-\paragraph{Hyperfine Line Models} In radio and millimeter spectroscopy, there are
-several molecular line groups that
-consist of several Gaussian profiles separated by a fixed frequency offset.
-These hyperfine line groups are often unique probes of physical parameters
-because these features have different, known relative optical depths.
-In this case, the measured relative amplitudes of these different features
-allow the optical depth (and, in turn, the column density) to be measured from
-a single spectrum.  \pyspeckit
-provides the \texttt{hyperfine} model class to handle this class of molecular
-line transitions, and it includes
-several molecular species implementations (HCN, N$_2$H$^+$, NH$_3$,
-H$_2$CO). Models can customizable and examples of registering a new or modified
+Models are customizable and examples of registering a new or modified
 model in \pyspeckit are included in the online documentation.
+
 {\color{red}
 TODO: ADD MODEL TABLE, maybe add demo of custom model?  That might be in the
 docs already...
@@ -441,6 +431,19 @@ If this is the beefiest part of pyspeckit, we should include a table
 listing the models and potentially an example for how to customize a model?}
 \authorcomment1{I (JEP) agree, it would be really useful to include the list of models
 already included, and which ones could be used as templates for different types.}
+
+\paragraph{Hyperfine Line Models}
+In radio and millimeter spectroscopy, there are several molecular line groups
+that consist of several Gaussian profiles separated by a fixed frequency
+offset.  These hyperfine line groups are often unique probes of physical
+parameters because these features have different, known relative optical
+depths.  In this case, the measured relative amplitudes of these different
+features allow the optical depth (and, in turn, the column density) to be
+measured from a single spectrum.  \pyspeckit provides the \texttt{hyperfine}
+model class to handle this class of molecular line transitions, and it includes
+several molecular species implementations (HCN, N$_2$H$^+$, NH$_3$, H$_2$CO). 
+
+
 
 
 \section{Cubes}
@@ -451,30 +454,38 @@ Optical and infrared data cubes are also becoming
 more common from integral field units (IFUs) like MUSE on
 the VLT, OSIRIS on Keck, NIFS on Gemini, and NIRSpec and MIRI on JWST.
 
+{\color{red}TODO: mention something about mapplot and the general cube loading tools.}
+
 While many cube operations are handled well by \texttt{numpy}-based packages
 like \texttt{spectral-cube}\footnote{\url{spectral-cube.readthedocs.io}},
 it is sometimes desirable to fit a profile to each spectrum
 in a cube.  The \texttt{Cube.fiteach} method is a tool for automated line
-fitting that includes parallelization of the fit. Implementation examples can be
-found in the online documentation.
-This tool  has  seen significant use in
-custom made survey pipelines,
-\citep[e.g.][\url{https://github.com/GBTAmmoniaSurvey/GAS}]{Friesen2017-GAS},
-papers and it has been incorporated into other tools (e.g.,
+fitting that includes parallelization of the fit.  Examples can be
+found in the online documentation. 
+This tool  has  seen significant use in 
+custom made survey pipelines, 
+\citep[e.g.][\url{https://github.com/GBTAmmoniaSurvey/GAS}]{Friesen2017-GAS}, 
+ and it has been incorporated into other tools (e.g.,
 \texttt{multicube}\footnote{\url{https://github.com/vlas-sokolov/multicube}}).
 
 
 \section{Summary}
 \texttt{pyspeckit} is a versatile tool for spectroscopic analysis in python and
-is one of the \astropy affiliated packages. \pyspeckit can interactively fit a
+is one of the \astropy affiliated packages.
+{\color{red} we have escribed the fitting and plotting tools provided in pyspeckit...}
+
+\sout{\pyspeckit can interactively fit a
 model to a spectrum using the Levenberg-Marquardt optimization method via
 \texttt{mpfit} and \texttt{lmfit}, and wrappers for \texttt{pymc} and
-\texttt{emcee} are also available.  There is also the option to fit a model to
+\texttt{emcee} are also available.}
+There is also the option to fit a model to
 the many spectra in a spectral cube. We have described \pyspeckit's methods of
-error estimation for spectra with and without user-provided errors. \pyspeckit
+error estimation for spectra with and without user-provided errors. 
+\sout{\pyspeckit
 has a library of models including Gaussian, Lorentzian, Voigt, and others for
 specific molecular species; user-created models can also be used with
-\pyspeckit.
+\pyspeckit.}
+{\color{red} we have summarized the currently implemented models...}
 
 \section{Final Note}
 This paper was collaboratively written using GitHub as a platform for
