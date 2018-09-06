@@ -23,7 +23,7 @@
 \author{Allison Youngblood}
 \author{Erik Rosolowsky}
 \author[0000-0002-3972-1978]{Jaime E. Pineda}
-
+\author[0000-0002-3713-6337]{Brigitta M. Sip\H{o}cz}
 
 
 \begin{abstract}
@@ -44,7 +44,7 @@ the community.
 Spectroscopy is an important tool for astronomy, and we seek to enable Python users
 to quickly and easily analyze spectra.  Spectra are represented as
 the number of photons, or total energy in photons, arriving over a specified
-wavelength (or equivalently, frequency or energy) range. Emission and 
+wavelength (or equivalently, frequency or energy) range. Emission and
 absorption lines due to ions, atoms, and molecules bear important information
 via their line flux, line width, and velocity centroid. These parameters are
 typically measured from model fits to the data, such as Gaussians, Lorentzians,
@@ -70,7 +70,7 @@ was developed contemporaneously and solved many of the same problems as
 2011, so even the basic infrastructure for such analysis was not yet
 established.
 
-\pyspeckit's graphical user interface (GUI) features were inspired by IRAF's 
+\pyspeckit's graphical user interface (GUI) features were inspired by IRAF's
 \texttt{splot} tool, while the fitting features were inspired in part by \texttt{xspec}
 (\url{https://heasarc.gsfc.nasa.gov/xanadu/xspec/}).  Over subsequent years,
 \pyspeckit grew by incorporating more sophisticated models such as {\color{red} XX INSERT MODELS HERE XX} and improving its
@@ -82,10 +82,10 @@ Because \pyspeckit's initial development preceded \astropy, some features
 were included that later became redundant with \astropy.  Most notably, \pyspeckit included
 a limited system for spectroscopic unit conversion.  In 2015, this system
 was completely replaced with \astropy's unit system.  Around the same time,
-the Doppler conversion tools (converting from frequency or wavelength to 
+the Doppler conversion tools (converting from frequency or wavelength to
 velocity) that existed in \pyspeckit were pushed upstream into \astropy,
 highlighting the mutually beneficial role of \astropy's affiliated
-packaged system \citep{Price-Whelan2018a}.  \pyspeckit was finally
+packaged system \citep{Astropy_2018}.  \pyspeckit was finally
 accepted as an \astropy affiliated package in 2017.
 
 
@@ -93,7 +93,7 @@ In this paper we briefly outline \texttt{pyspeckit} architecture and highlight
 its key capabilities. In Section \ref{sec:basicstructure}, we  outline the
 basic structure of the package.  In Section \ref{sec:gui}, we describe the GUI
 system.  In Sections \ref{sec:cubes} and \ref{sec:models}, we outline
-\pyspeckit's cube handling capabilities and model library. 
+\pyspeckit's cube handling capabilities and model library.
 
 
 
@@ -120,14 +120,14 @@ cube.
 \subsection{Supported data formats}
 
 \pyspeckit supports a variety of open and proprietary data formats that have
-been traditionally used to store spectral data products in astronomy. 
+been traditionally used to store spectral data products in astronomy.
 We list the currently supported formats here:
 
 \begin{itemize}
     \item ASCII: Reading a one-dimensional spectrum from a text file with an optional
         error column can
 	be done using the \texttt{astropy.io.ascii} module in any of its supported
-	formats.  
+	formats.
     \item FITS: The Flexible Image Transport System \citep[FITS;][]{Wells1981a,Greisen2006a,Pence2010a} format is
 	supported in \pyspeckit with \texttt{astropy.io.fits}.  Initially developed
 	by optical astronomers, the FITS standard has incorporated several
@@ -136,7 +136,7 @@ We list the currently supported formats here:
 	standard being 4.0 from 2016.  Additionally, data files following the Single
 	Dish FITS \citep[SDFITS;][]{Garwood2000a} convention for radio astronomy data as
 	produced by the Green Bank Telescope are partially supported in \pyspeckit.
-	% \authorcomment1{Is it possible to clarify what is not supported? 
+	% \authorcomment1{Is it possible to clarify what is not supported?
     % Or up to which version of SDFITS it is working?} No, I don't know the
     % answers to this; it would take some real work to find out.
     \item HDF5: The Hierarchical Data Format (HDF5) file format has been
@@ -155,15 +155,15 @@ We list the currently supported formats here:
         is incomplete and will remain private for the foreseeable future, much
         of the data reading in \pyspeckit has been reproduced in an approximate
         manner.
-        %\authorcomment1{Is it possible to mention which range of GILDAS 
-        %versions have been tested? Is the problem with possible shifts in frequency 
-        %or in amplitude?} 
+        %\authorcomment1{Is it possible to mention which range of GILDAS
+        %versions have been tested? Is the problem with possible shifts in frequency
+        %or in amplitude?}
         %I don't have the tools needed to perform these tests, but perhaps someone
         %else might.
         The CLASS reader is known to be compatible with data files from
         the Arizona Radio Observatory telescopes (12-m and 10-m Submillimeter
         Telescope) and the Atacama Pathfinder Experiment (APEX) radio
-        telescope. 
+        telescope.
 \end{itemize}
 
 \subsection{Plotter}
@@ -173,7 +173,7 @@ graphical user interface?] See the GUI section (\S \ref{sec:gui})
 for more details.
 
 % Should we include code examples of how to do these things? I think examples
-% creating a Spectrum, plotting it, interactively fitting, and then 
+% creating a Spectrum, plotting it, interactively fitting, and then
 % printing out parinfo on the command line would be neat.
 
 \subsection{Fitter}
@@ -291,7 +291,7 @@ If a \texttt{Spectrum} is created with no associated errors, \pyspeckit can
 automatically estimate the errors from a fit residual. When a fit is initiated
 on a \texttt{Spectrum} with no specified errors [I think an example here would be good - just
 to make it clear you're talking about calling specfit. We don't yet have a Specfit code
-example yet, so this can be worked in with that.], 
+example yet, so this can be worked in with that.],
 the errors are set to the default value of 1.0. Thus uniform weighting of the
 data is likely to be inaccurate, but will result in the appropriate best-fit
 parameters with \emph{incorrect} errors. \textcolor{red}{This is only true if
@@ -307,7 +307,7 @@ a single signal feature is present in the spectrum, and it can be accurately
 modeled, the standard deviation of the residual spectrum from the model fit
 will accurately represent the uniform errors. After a fit is performed with
 uninitialized errors,
-\pyspeckit will automatically replace the errors with the standard deviation of the 
+\pyspeckit will automatically replace the errors with the standard deviation of the
 residuals; this means that performing a fit on the same data
 (without associated errors) twice will result in the same parameter values both
 times, but different errors the second time.
@@ -361,12 +361,12 @@ programmatically and re-fit using those same results.
 The GUI was built using \texttt{matplotlib}'s canvas interaction tools.  These
 tools are limited to the GUI capabilities that are compatible with all platforms
 (e.g., Qt, Tk, Gtk) and therefore exclude some of the more sophisticated fitting
-tools found in other software \citep[e.g., \texttt{glue}][]{Beaumont2014b}. 
+tools found in other software \citep[e.g., \texttt{glue}][]{Beaumont2014b}.
 
 \subsection{Plotting}
 Plotting in \pyspeckit is designed to provide a short path to
 publication-quality figures.  The default plotting mode uses histogram-style
-line plots\added{, which follows the radio and inteferometric standard,} and 
+line plots\added{, which follows the radio and inteferometric standard,} and
 labels axes with \LaTeX-formatted versions of units.
 
 When the plotter is active and a model is fit, the model parameters are
@@ -407,7 +407,7 @@ TODO: ADD MODEL TABLE, maybe add demo of custom model?  That might be in the
 docs already...
 If this is the beefiest part of pyspeckit, we should include a table
 listing the models and potentially an example for how to customize a model?}
-\authorcomment1{I (JEP) agree, it would be really useful to include the list of models 
+\authorcomment1{I (JEP) agree, it would be really useful to include the list of models
 already included, and which ones could be used as templates for different types.}
 
 
@@ -424,10 +424,10 @@ like \texttt{spectral-cube}\footnote{\url{spectral-cube.readthedocs.io}},
 it is sometimes desirable to fit a profile to each spectrum
 in a cube.  The \texttt{Cube.fiteach} method is a tool for automated line
 fitting that includes parallelization of the fit. Implementation examples can be
-found in the online documentation. 
-This tool  has  seen significant use in 
-custom made survey pipelines, 
-\citep[e.g.][\url{https://github.com/GBTAmmoniaSurvey/GAS}]{Friesen2017-GAS}, 
+found in the online documentation.
+This tool  has  seen significant use in
+custom made survey pipelines,
+\citep[e.g.][\url{https://github.com/GBTAmmoniaSurvey/GAS}]{Friesen2017-GAS},
 papers and it has been incorporated into other tools (e.g.,
 \texttt{multicube}\footnote{\url{https://github.com/vlas-sokolov/multicube}}).
 
@@ -467,7 +467,7 @@ Gaussian random noise and perfectly-measured uncorrelated data errors.
 The fitted model is a one-dimensional Gaussian profile with free parameters
 amplitude, center, and width.  The fit results are given in the figure.
 
-To produce a good error estimate under the $\chi^2/n=1$ approximation, the error 
+To produce a good error estimate under the $\chi^2/n=1$ approximation, the error
 distribution must be Gaussian, the model must be
 linear in all parameters, and the model must be the correct underlying model
 \citep{Andrae2010b}.
@@ -638,28 +638,28 @@ algorithm are larger than the directly computed marginal errors. }
 \section{Comparison of N$_2$H$^+$ (1-0) results with CLASS}
 \label{appendix:N2Hp}
 
-One of the most frequently used line transition used to study dense gas kinematics, 
-in addition to Ammonia, is N$_2$H$^+$ (1-0) at 93.17\,GHz. 
-The transition displays several hyperfine components with well determined 
-relative frequencies and weights. 
-The standard approach is to use the \verb+HFS+ mode within 
-CLASS. 
-Here we show that using the already implemented model in \pyspeckit 
-we obtain the same results in both optically thin and thick models, when 
+One of the most frequently used line transition used to study dense gas kinematics,
+in addition to Ammonia, is N$_2$H$^+$ (1-0) at 93.17\,GHz.
+The transition displays several hyperfine components with well determined
+relative frequencies and weights.
+The standard approach is to use the \verb+HFS+ mode within
+CLASS.
+Here we show that using the already implemented model in \pyspeckit
+we obtain the same results in both optically thin and thick models, when
 synthetic spectra are created and white noise is added.
 
-The main difference between the CLASS and \pyspeckit parametrization is that 
-the former does not report excitation temperature ($T_{ex}$), but the area of the 
-line profile. The reported area is $\tau \times T_{ant}$, where 
+The main difference between the CLASS and \pyspeckit parametrization is that
+the former does not report excitation temperature ($T_{ex}$), but the area of the
+line profile. The reported area is $\tau \times T_{ant}$, where
 \begin{equation}
 T_{ant}=J(T_{ex}) - J(T_{background})~,
 \end{equation}
-where 
+where
 \begin{equation}
 J_{\nu}(T) = \frac{h\,\nu}{k_B} \frac{1}{(e^{h\,\nu/k_B\,T} -1)}~.
 \end{equation}
-We derive the equivalent $T_{ex}$ from the reported line fit parameters. 
-Moreover, in the optically thin case both fits are performed using the common assumption of 
+We derive the equivalent $T_{ex}$ from the reported line fit parameters.
+Moreover, in the optically thin case both fits are performed using the common assumption of
 $\tau=0.1$ as a fixed parameter.
 
 Tables \ref{tab:n2hpthin} and \ref{tab:n2hpthick} show the results of fitting
@@ -678,8 +678,8 @@ centroid but consistent within the reported fit uncertainties.
 }
 \startdata
 %\cutinhead{With all 4 parameters}
-%T$_{ex}$      & 9.0    & 5.4$\pm$48 & 2.88430952541\\  
-%$V_c$          & 0.0    & 0.0001951 &-0.004\\ 
+%T$_{ex}$      & 9.0    & 5.4$\pm$48 & 2.88430952541\\
+%$V_c$          & 0.0    & 0.0001951 &-0.004\\
 %$\sigma_v$  & 0.3    & 0.2948$\pm$0.0074 &0.303207\\
 %$\tau_{all}$   & 0.01 & 0.026$\pm$0.5 & 0.487 \\
 %$Area$ & & & 0.06108\\
@@ -701,10 +701,10 @@ $Area$ & & & 0.0607$\pm$0.0012\\
 \tablehead{\colhead{Parameter} &\colhead{Input value} & \colhead{pyspeckit fit} & \colhead{CLASS fit}
 }
 \startdata
-%\cutinhead{With all 4 parameters}      
+%\cutinhead{With all 4 parameters}
 %1   49.0   ( 2.25   )  ********(6.259E-3)  0.716   (1.492E-2)   8.10   (0.590   )
 T$_{ex}$     & 9.0  & 9.19$\pm$0.19     & 9.1833\\
-$V_c$         & 0.0  & 0.00042 & -0.000$\pm$0.0063\\ 
+$V_c$         & 0.0  & 0.00042 & -0.000$\pm$0.0063\\
 $\sigma_v$ & 0.3  & 0.3047$\pm$0.0062 & 0.3041$\pm$0.0063\\
 $\tau_{all}$ & 9.0  & 8.13$\pm$0.59   & 8.10$\pm$0.59\\
 $Area$ & & & 49.0$\pm$2.25\\
