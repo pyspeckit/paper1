@@ -1,0 +1,53 @@
+Dear Adam,
+
+Title: pyspeckit: A spectroscopic analysis and plotting package, (#AAS36803)
+
+
+I am the data editor assigned to your accepted manuscript.
+
+- Should the submitted "CLASS" file (fit_N2Hp.class) for the NH2+ fitting be included as data behind a Figure? Should it be paired with a similar pyspeckit python file and with which figure should it be included? If it is provided as data behind a figure then can you supply me with a short readme describing the contents of this file?
+
+
+- For your code snippets you use 'minted' to achieve color syntax highlighting. Right now the only way we support colorized code is as an "image" embedded inline to the final text. I can put in a transfer note to convert this to a "table" and remove the color OR leave it as a colorized image. We are aware we need to get this situation sorted out with author's manuscripts. Let me know your preference.
+
+
+- There are a number of software mentions that should have citations added to them. Here is a list that I found. There may be others not yet mentioned in the text but that represent dependencies for pyspeckit that could be listed in a \software{} tag w/o adding to the current text:
+
+mpfit: 2009ASPC..411..251M
+lmfit: 2014zndo.....11813N Is there a specific lmfit version that pyspeckit depends upon and that you want to cite?
+pymc3: 10.7717/peerj-cs.55
+spectral-cube: 2019zndo...3558614G (v0.4.5)
+
+dependencies not otherwise mentioned in the text
+numpy
+matplotlib
+
+
+
+- There are also a number of software mentions that may or may not require citation because they are mentioned in passing. If software citations parallel article citations and often article references have little or no substantive meaning outside of a bare mention then I would advise adding these citations as well:
+
+nestfit: 10.5281/zenodo.4470028 (v0.2)
+multicube: cite the github URL: https://github.com/vlas-sokolov/multicube
+
+
+- I also note that the preferred citations for scouse/scousepy (2016MNRAS.457.2675H, 2019MNRAS.485.2457H) are not given in this manuscript.
+
+
+- Because of the large number of github links used in this manuscript to link to external files, I would ask that you mint a DOI for pyspeckit/pyspeckit and pyspeckit/pyspeckit-tests to insert into the manuscript along side these links. You may provide these DOIs however you wish, but I note that the github<=>zenodo link for pyspeckit broke down a few years ago.
+
+
+Please review this material and respond at your earliest convenience. New file changes can be sent directly to me. We cannot finalize your manuscript in the submission portal nor forward your materials to the production office for page proofs until this data review is complete.
+
+
+Thank you.
+
+- Gus
+
+----------
+August (Gus) Muench
+Data Editor
+American Astronomical Society
+august.muench@aas.org
+(202) 328-2010 x118
+
+The mission of the American Astronomical Society is to enhance and share humanity's scientific understanding of the Universe.
