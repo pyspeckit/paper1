@@ -71,7 +71,6 @@ development has mostly ceased in the last several years.
 % The PyRAF command language
 % (\url{https://github.com/spacetelescope/pyraf}) supports both Python 2 and
 % Python 3 and is still maintained}.  
-% For more details, see https://github.com/pyspeckit/paper1/issues/4
 The lack of an equivalent available
 tool in Python prompted the creation of \pyspeckit.
 
@@ -142,7 +141,7 @@ cube.
 
 \pyspeckit supports a variety of open and proprietary data formats that have
 been traditionally used to store spectroscopic data products in astronomy. 
-It is always possible to create a \texttt{Spectrum} object from numpy \citep{vanderWalt2011,Harris2020} arrays
+It is always possible to create a \texttt{Spectrum} object from numpy arrays
 representing the wavelength, flux, and error of the spectrum, but
 the supported file formats listed below make the reading process easier.
 
@@ -222,13 +221,13 @@ registry, or a custom model can be created and registered.
 To fit a profile to a spectrum, several optimizers are available.  Two
 implementations of the Levenberg-Marquardt optimization method
 \citep{Levenberg1944a,Marquardt1963a} are provided,
-\texttt{mpfit}\footnote{Originally implemented by Craig Markwardt \citet{Markwardt2009}
+\texttt{mpfit}\footnote{Originally implemented by Craig Markwardt
 \url{https://pages.physics.wisc.edu/~craigm/idl/fitting.html} and ported to python
 by Mark Rivers and then Sergei Koposov.  The version in pyspeckit has been
 updated somewhat from Koposov's version.} and
-\texttt{lmfit} \citep{Newville2014}\footnote{\url{https://lmfit.github.io/lmfit-py/},
+\texttt{lmfit}\footnote{\url{https://lmfit.github.io/lmfit-py/},
 \url{http://dx.doi.org/10.5281/zenodo.11813}}.  Wrappers of
-\texttt{pymc} \citep{Salvatier2016}\footnote{\url{https://pymc-devs.github.io/pymc/}} and
+\texttt{pymc}\footnote{\url{https://pymc-devs.github.io/pymc/}} and
 \texttt{emcee}\footnote{\url{http://dfm.io/emcee/current/},
 \citet{Foreman-Mackey2013a}} are also available, though these tools are better
 for parameter error analysis than for optimization.
@@ -442,8 +441,7 @@ Gaussian, Lorentzian, and Voigt profiles) and a wide range of specific model
 types (e.g., ammonia and formaldehyde hyperfine models, the \hh rotational
 ladder, and recombination line models).  These models can be easily used
 within \pyspeckit, but they can also be used completely independent from
-it (e.g., \url{https://nestfit.readthedocs.io/en/latest/quickstart.html}, \citealt{brian_svoboda_2021_4470028}).
-Several of the models rely on \texttt{scipy} \citep{Virtanen2020} for either special functions or multidimensional interpolation.
+it (e.g., \url{https://nestfit.readthedocs.io/en/latest/quickstart.html}).
 
 The base \texttt{Model} class and fitting framework in \pyspeckit provide some
 generally useful features that do not need to be re-implemented.  Any model is
@@ -527,7 +525,7 @@ as the cube's \texttt{.spectrum} object. This basic interaction allows for data 
 but is not efficient for fitting each spectrum of a cube.
 
 While many cube operations are handled well by \texttt{numpy}-based packages
-like \texttt{spectral-cube} \citep{Robitaille2016,Ginsburg2019}\footnote{\url{https://spectral-cube.readthedocs.io}},
+like \texttt{spectral-cube}\footnote{\url{https://spectral-cube.readthedocs.io}},
 it is sometimes desirable to fit a profile to each spectrum
 in a cube.  The \texttt{Cube.fiteach} method is a tool for automated line
 fitting that includes parallelization of the fit.  Examples can be
@@ -536,7 +534,7 @@ This tool  has  seen significant use in
 custom made survey pipelines, where the library of spectral models is particularly useful
 \citep[e.g,][\url{https://github.com/GBTAmmoniaSurvey/GAS}]{Friesen2017}. 
  It has also been incorporated into other tools, e.g.,
-\texttt{multicube}\footnote{\url{https://github.com/vlas-sokolov/multicube}}, SCOUSE \citep[][see Appendix \ref{appendix:scouse}]{Henshaw2016,Henshaw2019}, \texttt{make\_cube} \citep{Youngblood2016}, and \texttt{pyspecnest}\footnote{\url{https://github.com/vlas-sokolov/pyspecnest}} \citep{Sokolov2020-pyspecnest}.
+\texttt{multicube}\footnote{\url{https://github.com/vlas-sokolov/multicube}}, SCOUSE \citep[][see Appendix \ref{appendix:scouse}]{Henshaw2016,Henshaw2020}, \texttt{make\_cube} \citep{Youngblood2016}, \texttt{pyspecnest}\footnote{\url{https://github.com/vlas-sokolov/pyspecnest}} \citep{Sokolov2020-pyspecnest}.
 
 
 
