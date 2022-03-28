@@ -1,4 +1,4 @@
-\documentclass[twocolumn,linenumbers]{aastex63}
+\documentclass[twocolumn]{aastex63}
 
 \usepackage[utf8]{inputenc}
 \usepackage{url}
@@ -35,16 +35,13 @@
 \affiliation{Max-Planck-Institut f\"ur extraterrestrische Physik, Giessenbachstrasse 1, D-85748 Garching, Germany}
 
 \author[0000-0002-3713-6337]{Brigitta M. Sip\H{o}cz}
-\affiliation{IPAC, MC 100-22, Caltech, 1200E. California Blvd. Pasadena, CA 91125}
-
-\author[0000-0001-9656-7682]{Jonathan D. Henshaw}
-\affiliation{Max-Planck-Institut f\"ur Astronomie, Königstuhl 17, 69117, Heidelberg, Germany}
+\affiliation{dd}
 
 \begin{abstract}
 \pyspeckit is a toolkit and library for spectroscopic analysis in Python. We
 describe the \pyspeckit package and highlight some of its capabilities,
 such as interactively fitting a model to data, akin to the historically widely-used
-\texttt{splot} function in \texttt{IRAF}. \pyspeckit employs the
+\texttt{splot} function of \texttt{IRAF}. \pyspeckit employs the
 Levenberg-Marquardt optimization method via the \texttt{mpfit} and
 \texttt{lmfit} implementations,
 and important assumptions regarding error estimation are described here.
@@ -71,7 +68,6 @@ development has mostly ceased in the last several years.
 % The PyRAF command language
 % (\url{https://github.com/spacetelescope/pyraf}) supports both Python 2 and
 % Python 3 and is still maintained}.  
-% For more details, see https://github.com/pyspeckit/paper1/issues/4
 The lack of an equivalent available
 tool in Python prompted the creation of \pyspeckit.
 
@@ -96,7 +92,7 @@ not yet established.
 \pyspeckit grew by incorporating more sophisticated models  and improving its
 internal structure.  The package was moved out of \texttt{agpy} and into its
 own repository in 2011, first spending a few years on Bitbucket in a mercurial
-repository, then finally moved to GitHub in 2012, where it currently resides (\url{https://github.com/pyspeckit/pyspeckit/}).
+repository, then finally moved to GitHub in 2012, where it currently resides (\url{https://github.com/pyspeckit/}).
 
 Because \pyspeckit's initial development preceded \astropy, some features
 were included that later became redundant with \astropy.  Most notably, \pyspeckit included
@@ -106,34 +102,30 @@ the Doppler conversion tools (converting from frequency or wavelength to
 velocity) that existed in \pyspeckit were pushed upstream into \astropy,
 highlighting the mutually beneficial role of \astropy's affiliated
 packaged system \citep{AstropyCollaboration2018}.  \pyspeckit became
-an \astropy affiliated package in 2017 (An affiliated package is an astronomy-related Python package that is not part of the astropy core package, and is not managed by the project but is a part of the Astropy Project community\footnote{\url{https://www.astropy.org/affiliated/}}).
+an \astropy affiliated package in 2017.
 
 
-In this paper we briefly outline \texttt{pyspeckit}'s architecture and highlight
+In this paper we briefly outline \texttt{pyspeckit} architecture and highlight
 its key capabilities. In Section \ref{sec:basicstructure}, we  outline the
 structure of the package.  In Section \ref{sec:gui}, we describe the GUI
 system.  In Sections \ref{sec:models} and \ref{sec:cubes}, we outline
 \pyspeckit's cube handling capabilities and model library. 
-The appendices describe parameter error estimation for Gaussians (Appendix \ref{appendix:parerrest}) and for the ammonia model \ref{appendix:parerrestammonia}).
-Appendix \ref{appendix:N2Hp} describes a benchmarking test of the N$_2$H+ model against the CLASS version.
-Appendix \ref{appendix:ltemodel} describes a framework for local-thermodynamic-equilibrium-based multi-transition modeling.
-Finally, Appendix \ref{appendix:scouse} describes the integration of \texttt{pyspeckit} into \texttt{ScousePy}.
 
 
 
 \section{Package structure}
 \label{sec:basicstructure}
 The central object in \pyspeckit is a \texttt{Spectrum}, which has
-associated \texttt{data} (e.g., flux), \texttt{error} (assumed to be symmetric, 1$\sigma$, Gaussian uncertainty), and \texttt{xarr} (e.g., wavelength,
+associated \texttt{data} (e.g., flux), \texttt{error}, and \texttt{xarr} (e.g., wavelength,
 frequency, energy), the latter of
 which represents the spectroscopic axis.  A \texttt{Spectrum} object has
-several attributes that are themselves classes that can be called
+several attributes that are themselves sophisticated classes that can be called
 as functions: the \texttt{plotter}, the fitter \texttt{specfit}, and the
 continuum fitter \texttt{baseline}.
 
 There are several subclasses of \texttt{Spectrum}: \texttt{Spectra}
 is a collection of spectra intended to be stitched together (i.e., with
-non-overlapping spectral axes, e.g., for Echelle spectra), \texttt{ObsBlock} is a collection of spectra
+non-overlapping spectral axes), \texttt{ObsBlock} is a collection of spectra
 with identical spectral axes intended to be operated on as a group, e.g., to
 take an average spectrum, and \texttt{Cube} is a 3D spatial-spatial-spectral
 cube.
@@ -141,8 +133,8 @@ cube.
 \subsection{Supported data formats}
 
 \pyspeckit supports a variety of open and proprietary data formats that have
-been traditionally used to store spectroscopic data products in astronomy. 
-It is always possible to create a \texttt{Spectrum} object from numpy \citep{vanderWalt2011,Harris2020} arrays
+been traditionally used to store spectral data products in astronomy. 
+It is always possible to create a \texttt{Spectrum} object from numpy arrays
 representing the wavelength, flux, and error of the spectrum, but
 the supported file formats listed below make the reading process easier.
 
@@ -165,7 +157,7 @@ the supported file formats listed below make the reading process easier.
 	%standard being 4.0 from 2016.  
     \item SDFITS: Data files following the Single
 	Dish FITS \citep[SDFITS;][]{Garwood2000a} convention for radio astronomy data as
-	produced by the Green Bank Telescope are partly supported in \pyspeckit.
+	produced by the Green Bank Telescope are partially supported in \pyspeckit.
 	% \authorcomment1{Is it possible to clarify what is not supported?
     % Or up to which version of SDFITS it is working?} No, I don't know the
     % answers to this; it would take some real work to find out.
@@ -194,7 +186,7 @@ the supported file formats listed below make the reading process easier.
         %or in amplitude?}
         %I don't have the tools needed to perform these tests, but perhaps someone
         %else might.
-        The CLASS reader has been tested with data files from
+        The CLASS reader is known to be compatible with data files from
         the Arizona Radio Observatory telescopes (12-m and 10-m Submillimeter
         Telescope) and the Atacama Pathfinder Experiment (APEX) radio
         telescope.
@@ -222,13 +214,13 @@ registry, or a custom model can be created and registered.
 To fit a profile to a spectrum, several optimizers are available.  Two
 implementations of the Levenberg-Marquardt optimization method
 \citep{Levenberg1944a,Marquardt1963a} are provided,
-\texttt{mpfit}\footnote{Originally implemented by Craig Markwardt \citet{Markwardt2009}
+\texttt{mpfit}\footnote{Originally implemented by Craig Markwardt
 \url{https://pages.physics.wisc.edu/~craigm/idl/fitting.html} and ported to python
 by Mark Rivers and then Sergei Koposov.  The version in pyspeckit has been
 updated somewhat from Koposov's version.} and
-\texttt{lmfit} \citep{Newville2014}\footnote{\url{https://lmfit.github.io/lmfit-py/},
+\texttt{lmfit}\footnote{\url{https://lmfit.github.io/lmfit-py/},
 \url{http://dx.doi.org/10.5281/zenodo.11813}}.  Wrappers of
-\texttt{pymc} \citep{Salvatier2016}\footnote{\url{https://pymc-devs.github.io/pymc/}} and
+\texttt{pymc}\footnote{\url{https://pymc-devs.github.io/pymc/}} and
 \texttt{emcee}\footnote{\url{http://dfm.io/emcee/current/},
 \citet{Foreman-Mackey2013a}} are also available, though these tools are better
 for parameter error analysis than for optimization.
@@ -248,7 +240,7 @@ accurate estimate of the $\chi^2$ value by excluding pixels that are
 not described by the model.  By default, the function selects all pixels where
 the model value is greater (in absolute value) than the corresponding error.
 In principle, this optimal $\chi^2$ may be helpful for obtaining correctly
-scaled errors (see Section \ref{sec:autoerror}), though this claim has never
+scaled errors (see Section \ref{sec:parerrest}), though this claim has never
 been rigorously tested.
 
 \subsection{Data Selection}
@@ -278,7 +270,6 @@ subtraction.  In practical algorithmic terms, fitting a true astrophysical
 continuum and a residual instrumental baseline are indistinguishable.
 
 \subsection{Error Treatment}
-\label{sec:errtreatment}
 %(Can I refer back to anything here?  like, "Error estimation is an important part of astronomy...")
 %(the next two paragraphs may be redundant)
 
@@ -335,7 +326,6 @@ and represent symmetric $1-\sigma$ Gaussian errors.  }
 
 
 \subsubsection{Automatic Error Estimation}
-\label{sec:autoerror}
 % If a \texttt{Spectrum} is created with no associated errors, \pyspeckit can
 % automatically estimate the errors from a fit residual. When a fit is initiated
 % on a \texttt{Spectrum} with no specified errors [I think an example here would be good - just
@@ -348,18 +338,14 @@ and represent symmetric $1-\sigma$ Gaussian errors.  }
 In the case where there are portions of the spectrum that have no
 signal peaks, a common approach in spectroscopy is to estimate the
 errors from the standard deviation of those signal-free pixels.  This approach
-assumes the noise is constant across the spectrum.
-
-If all of the peaks present
+assumes the noise is constant across the spectrum.  If all of the peaks present
 in the spectrum are fitted well by the model,
 the standard deviation of the residual spectrum from the model fit will
 accurately represent the uniform errors.     If a fit is performed with
-uninitialized errors, they will initially default to a constant value of unity. 
-\pyspeckit will then automatically replace the errors with the
-standard deviation of the residuals, so they remain constant but will have a value that is related to the data.
-This means that performing a fit on the
+uninitialized errors, \pyspeckit will automatically replace the errors with the
+standard deviation of the residuals; this means that performing a fit on the
 same data (without associated errors) twice will result in the same parameter
-values both times but different errors the second time.
+values both times, but different errors the second time.
 
 
 \subsubsection{Parameter error estimation}
@@ -395,7 +381,8 @@ for the case of a simple Gaussian line profile.
 \section{Graphical Design}
 \label{sec:gui}
 \subsection{GUI development}
-Many astronomers are familiar with IRAF's \texttt{splot} tool, which is useful
+Many astronomers are familiar with IRAF's \texttt{splot} tool \sout{(or at least, they were at
+the time this document was first drafted)}, which is useful
 for fitting Gaussian profiles to spectral lines.  It uses keyboard interaction
 to specify the fitting region and guesses for fitting the line profile, but for
 most use cases, these parameters could \emph{only} be accessed through the GUI.
@@ -413,7 +400,7 @@ tools are limited to the GUI capabilities that are compatible with all platforms
 tools found in other software \citep[e.g., \texttt{glue};][]{Beaumont2014b}. 
 
 An example walking through typical interactive GUI usage is in the online
-documentation at \url{https://pyspeckit.readthedocs.io/en/latest/interactive.html}.
+documentation at \url{interactive.html} in the online documentation.
 
 \subsection{Plotting}
 Plotting in \pyspeckit is designed to provide a short path to
@@ -442,8 +429,7 @@ Gaussian, Lorentzian, and Voigt profiles) and a wide range of specific model
 types (e.g., ammonia and formaldehyde hyperfine models, the \hh rotational
 ladder, and recombination line models).  These models can be easily used
 within \pyspeckit, but they can also be used completely independent from
-it (e.g., \url{https://nestfit.readthedocs.io/en/latest/quickstart.html}, \citealt{brian_svoboda_2021_4470028}).
-Several of the models rely on \texttt{scipy} \citep{Virtanen2020} for either special functions or multidimensional interpolation.
+it (e.g., \url{https://nestfit.readthedocs.io/en/latest/quickstart.html}).
 
 The base \texttt{Model} class and fitting framework in \pyspeckit provide some
 generally useful features that do not need to be re-implemented.  Any model is
@@ -504,7 +490,7 @@ features allow the optical depth (and, in turn, the column density) to be
 measured from a single spectrum.  \pyspeckit provides the \texttt{hyperfine}
 model class to handle this class of molecular line transitions, and it includes
 several molecular species implementations (e.g., HCN, N$_2$H$^+$, NH$_3$, H$_2$CO). 
-In this implementation, the excitation temperature of each of the hyperfine components is assumed to be the same, which is the most commonly used assumption but may be violated in some cases.
+In this implementation, the excitation temperature of each of the hyperfine components is assumed to be the same, which is the most commonly used assumption.
 
 
 
@@ -527,7 +513,7 @@ as the cube's \texttt{.spectrum} object. This basic interaction allows for data 
 but is not efficient for fitting each spectrum of a cube.
 
 While many cube operations are handled well by \texttt{numpy}-based packages
-like \texttt{spectral-cube} \citep{Robitaille2016,Ginsburg2019}\footnote{\url{https://spectral-cube.readthedocs.io}},
+like \texttt{spectral-cube}\footnote{\url{https://spectral-cube.readthedocs.io}},
 it is sometimes desirable to fit a profile to each spectrum
 in a cube.  The \texttt{Cube.fiteach} method is a tool for automated line
 fitting that includes parallelization of the fit.  Examples can be
@@ -536,7 +522,7 @@ This tool  has  seen significant use in
 custom made survey pipelines, where the library of spectral models is particularly useful
 \citep[e.g,][\url{https://github.com/GBTAmmoniaSurvey/GAS}]{Friesen2017}. 
  It has also been incorporated into other tools, e.g.,
-\texttt{multicube}\footnote{\url{https://github.com/vlas-sokolov/multicube}}, SCOUSE \citep[][see Appendix \ref{appendix:scouse}]{Henshaw2016,Henshaw2019}, \texttt{make\_cube} \citep{Youngblood2016}, and \texttt{pyspecnest}\footnote{\url{https://github.com/vlas-sokolov/pyspecnest}} \citep{Sokolov2020-pyspecnest}.
+\texttt{multicube}\footnote{\url{https://github.com/vlas-sokolov/multicube}}, SCOUSE \citep{Henshaw2016,Henshaw2020}, \texttt{make\_cube} \citep{Youngblood2016}, \texttt{pyspecnest}\footnote{\url{https://github.com/vlas-sokolov/pyspecnest}} \citep{Sokolov2020-pyspecnest}.
 
 
 
@@ -572,7 +558,6 @@ is one of the \astropy affiliated packages.
 \acknowledgments
 %
 JEP acknowledges the support by the Max Planck Society. 
-AG acknowledges support from the NSF under grant AST 2008101.
 
 
 \input{solobib}
@@ -636,7 +621,7 @@ significant values in the off-diagonal parts of the matrix.
 % representation of perfectly known data.
 
 The source code for this example can be found in the \pyspeckit github
-repository in \texttt{examples/synthetic\_spectrum\_example\_witherrorestimates.py}\footnote{\url{https://github.com/pyspeckit/pyspeckit/blob/master/examples/synthetic_spectrum_example_witherrorestimates.py}}.
+repository in \texttt{examples/synthetic\_spectrum\_example\_witherrorestimates.py}.
 
 \begin{figure*}[!htp]
 \includegraphics[scale=1,width=7in]{oned_gaussfit_example.pdf}
@@ -666,23 +651,23 @@ See Appendix \ref{appendix:parerrest} for details and interpretation.}
 
 \section{Parameter Error Estimation for Ammonia}
 \label{appendix:parerrestammonia}
-In Appendix \ref{appendix:parerrest}, we showed the parameter estimation results
+In Section \ref{appendix:parerrest}, we showed the parameter estimation results
 in the case of a modeled 1-dimensional Gaussian.  One of the most commonly used
 models in \pyspeckit is the ammonia (\ammonia) hyperfine model, which has several
 additional emission lines and several parameters governing those lines.
 
 The ammonia inversion transitions are notable for having spectrally resolved
-hyperfine components under typical Galactic molecular gas conditions, the relative weights of which are governed by quantum
+hyperfine components, the relative weights of which are governed by quantum
 mechanics \citep{Mangum2015}. The existence of these additional components often
 allows for direct estimates of the optical depth of the central line, which is
 optically thicker than the other components, thereby making column density
-estimates from a single spectral band relatively straightforward.
+estimates straightforward compared to other molecular species.
 
 The model for these lines is more complicated than that for a single Gaussian.
 The model must include a simplified version of the radiative transfer equation
 and must simultaneously produce the predicted emission of several lines.
-Additionally, there are several approximations for the relative line strengths that are convenient to use
-under different circumstances, so \pyspeckit implements several different
+Additionally, there are several approximations that are convenient to use
+in different circumstances, so \pyspeckit implements several different
 variants of the \ammonia model.
 
 In this section, we show parameter estimates analogous to those in Section
@@ -864,7 +849,6 @@ $Area$ & & & 49.0$\pm$2.25\\
 \end{deluxetable}
 
 \section{LTE Model}
-\label{appendix:ltemodel}
 
 \pyspeckit includes tools to model generic local thermodynamic equilibrium (LTE) emission lines.
 The modeling tools include wrappers to retrieve the appropriate molecular line parameters from the JPL \citep{Pickett1998} or CDMS\footnote{\url{https://spec.jpl.nasa.gov/}} \citep{Muller2005} spectroscopy databases via their astroquery interfaces \citep{Ginsburg2019}.
@@ -914,35 +898,8 @@ We additionally benchmarked two more complicated molecules, CH$_3$OH and CH$_3$C
 
 % \textcolor{red}{TODO: molsim comparison - right now we have systematic 6\% offset b/c of FWWM issue}
 
-\section{\texttt{ScousePy}}
-\label{appendix:scouse}
 
-\texttt{ScousePy} is a tool for the decomposition of data cubes with multi-component spectral lines, and makes use of \pyspeckit's fitting functionality (\S \ref{sec:fitters}). Broadly speaking, spectral decomposition algorithms can be divided into two classes: bottom-up and top-down. The former treat the decomposition of individual spectra independently from one another, while the latter approach uses spatial averaging to estimate initial guesses for the decomposition of individual spectra. \texttt{ScousePy} follows the latter of these two approaches.  \texttt{ScousePy}
-\begin{enumerate}
-    \item 
-breaks a data cube into sub-regions of user-defined size.  A spatially averaged spectrum is extracted from each sub-region. 
-    \item uses  derivative spectroscopy to estimate the number of components and the properties of those individual components in each spatially-averaged spectrum. These initial guesses are passed to \pyspeckit's \texttt{specfit} to perform the fit. 
-    \item uses the output solution (\texttt{specfit.fitter.params}) from the average spectrum as new initial guesses for fitting the individual spectra contained within the averaging region.
-    \item displays the results in an interface that enables quality assessment and re-fitting if necessary.
-\end{enumerate}
 
-\texttt{ScousePy} makes use of \pyspeckit's \texttt{specfit} in two main ways.
-First, non-interactively, with initial guesses supplied to \texttt{specfit} via \texttt{specfit.guesses}.
-Second, \texttt{ScousePy} also makes use of \pyspeckit's interactive fitting functionality, which uses keyboard and mouse interaction to provide \texttt{specfit.guesses}.
-
-An example of the \texttt{ScousePy.ScouseFitter} GUI is shown in Figure \ref{fig:scousepydemo}. This figure shows the Gaussian decomposition of a two component spectrum. \texttt{ScousePy} provides initial guesses to \pyspeckit's \texttt{specfit} using derivative spectroscopy, in which:
-\begin{enumerate}  
-\item the input spectrum is smoothed using \texttt{astropy.convolution.Gaussian1DKernel} (see \texttt{ScousePy.DSpec}).
-\item the first to fourth order derivatives of the smoothed spectrum are computed and used to determine the number of components and their amplitudes, centroids, and widths (see lollipops in the top left panel). 
-\end{enumerate}
-These values are then supplied to \texttt{specfit} via \texttt{specfit.guesses}. The fit is performed using \texttt{lmfit}, and the result is displayed in the information panel. The buttons on the right hand side of the GUI can be used to enter \pyspeckit's interactive fitter functionality via ``fit (manual)'' \footnote{Note that this example analysis has been performed using \texttt{ScousePy.ScouseFitter} in its stand-alone mode, which can be used for the decomposition of an individual spectrum or lists of spectra. The same procedure is followed during cube fitting.}. The relevant fit information produced by \pyspeckit (or further derived from the quantities output by \texttt{specfit}) are located in a dictionary called \texttt{ScousePy.ScouseFitter.modelstore}. Further information on the \pyspeckit \ methodology used by \texttt{ScousePy} can be found in the documentation for \texttt{ScousePy.ScouseFitter} and \texttt{ScousePy.Decomposer} (see \url{https://scousepy.readthedocs.io/en/latest/}). 
-
-\begin{figure*}[!htp]
-\includegraphics[scale=1,width=7in]{scousepy.png}
-\caption{Gaussian decomposition of a two-component spectrum performed by \texttt{ScousePy} using \pyspeckit. The top-left panel shows the spectrum (black), the same spectrum smoothed with a Gaussian 1D kernel (dotted black line) using \texttt{astropy.convolution.Gaussian1DKernel}, which is used for the derivative spectroscopy (right panel), the location and amplitude of the initial guesses determined from derivative spectroscopy (black lollipops) and supplied to \texttt{specfit}, the best fitting model solution (green and magenta lines indicate individual components and the total model), the residual spectrum after subtracting the model (orange line), and the $3\sigma$ noise level determined from \texttt{ScousePy.getnoise}. The top-right panel shows the first to fourth derivatives of the smoothed spectrum (dotted black line).
-These derivatives are used to estimate the number of components and their amplitudes, widths, and centroids (\texttt{ScousePy.DSpec}). The information panel at the bottom shows the output information from \pyspeckit. This information includes the model parameters and their uncertainties and goodness-of-fit statistics. The buttons on the right can be used to control \pyspeckit \ either non-interactively using ``fit (dspec)'' or interactively using ``fit (manual)''. }
-\label{fig:scousepydemo}
-\end{figure*}
 
 \end{document}
 
