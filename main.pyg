@@ -1,0 +1,16 @@
+from astropy import units as u
+import numpy as np
+import pyspeckit
+
+xaxis = np.linspace(-25, 25)*u.km/u.s
+sigma_width = 3.0*u.km/u.s
+data = 5*np.exp(-xaxis**2 /
+                (2*sigma_width**2))*u.Jy
+error = np.ones_like(data) * 0.2
+sp = pyspeckit.Spectrum(xarr=xaxis,
+                        data=data,
+                        error=error)
+
+sp.plotter(errstyle='fill')
+
+sp.plotter.savefig("example_fig_1.pdf")

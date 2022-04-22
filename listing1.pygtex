@@ -1,0 +1,18 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{from} \PYG{n+nn}{astropy} \PYG{k+kn}{import} \PYG{n}{units} \PYG{k}{as} \PYG{n}{u}
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{import} \PYG{n+nn}{pyspeckit}
+
+\PYG{n}{xaxis} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linspace}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{25}\PYG{p}{,} \PYG{l+m+mi}{25}\PYG{p}{)}\PYG{o}{*}\PYG{n}{u}\PYG{o}{.}\PYG{n}{km}\PYG{o}{/}\PYG{n}{u}\PYG{o}{.}\PYG{n}{s}
+\PYG{n}{sigma\PYGZus{}width} \PYG{o}{=} \PYG{l+m+mf}{3.0}\PYG{o}{*}\PYG{n}{u}\PYG{o}{.}\PYG{n}{km}\PYG{o}{/}\PYG{n}{u}\PYG{o}{.}\PYG{n}{s}
+\PYG{n}{data} \PYG{o}{=} \PYG{l+m+mi}{5}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{exp}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{xaxis}\PYG{o}{**}\PYG{l+m+mi}{2} \PYG{o}{/}
+                \PYG{p}{(}\PYG{l+m+mi}{2}\PYG{o}{*}\PYG{n}{sigma\PYGZus{}width}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{))}\PYG{o}{*}\PYG{n}{u}\PYG{o}{.}\PYG{n}{Jy}
+\PYG{n}{error} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{ones\PYGZus{}like}\PYG{p}{(}\PYG{n}{data}\PYG{p}{)} \PYG{o}{*} \PYG{l+m+mf}{0.2}
+\PYG{n}{sp} \PYG{o}{=} \PYG{n}{pyspeckit}\PYG{o}{.}\PYG{n}{Spectrum}\PYG{p}{(}\PYG{n}{xarr}\PYG{o}{=}\PYG{n}{xaxis}\PYG{p}{,}
+                        \PYG{n}{data}\PYG{o}{=}\PYG{n}{data}\PYG{p}{,}
+                        \PYG{n}{error}\PYG{o}{=}\PYG{n}{error}\PYG{p}{)}
+
+\PYG{n}{sp}\PYG{o}{.}\PYG{n}{plotter}\PYG{p}{(}\PYG{n}{errstyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}fill\PYGZsq{}}\PYG{p}{)}
+
+\PYG{n}{sp}\PYG{o}{.}\PYG{n}{plotter}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}example\PYGZus{}fig\PYGZus{}1.pdf\PYGZdq{}}\PYG{p}{)}
+\end{Verbatim}
